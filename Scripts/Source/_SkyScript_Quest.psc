@@ -4,6 +4,10 @@ scriptName _SkyScript_Quest extends Quest hidden
 ; Initialization and Save Game Loading
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+Quest function GetSkyrimScriptingQuest() global
+    return Quest.GetQuest("SkyrimScripting") as Quest
+endFunction
+
 event OnInit()
     CurrentlyInstalledVersion = SkyScript.GetVersion()
     _SkyScript_Events.RunStartupScripts()

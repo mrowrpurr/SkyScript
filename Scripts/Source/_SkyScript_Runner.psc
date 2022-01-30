@@ -1,8 +1,24 @@
 scriptName _SkyScript_Runner hidden
 
-function RunAction(int scriptAction) global
-    ; SCRIPT LOOKUP!
-    Debug.MessageBox("Will run action! " + _SkyScript_Log.ToJson(scriptAction))
+function RunAction(int actionInfo) global
+    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
+
+    bool handled = false
+    int handlerIndex = 0
+    while (! handled) && handlerIndex < handlers.HandlerCount
+        SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
+        if handler
+            if handler.Match(actionInfo)
+                handled = true
+                handler.Execute(actionInfo)
+            endIf
+        endIf
+        handlerIndex += 1
+    endWhile
+
+    if ! handled
+        Debug.MessageBox("Action unsupported: " + _SkyScript_Log.ToJson(actionInfo))
+    endIf
 endFunction
 
 function RunActionArray(int actionList) global
