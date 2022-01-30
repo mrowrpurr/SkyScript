@@ -8,6 +8,16 @@ string function DirectoryPath() global
     return "Data/SkyScript"
 endFunction
 
-function RunScript(string filePath) global
-    ; TODO
+int function Run(string filePath) global
+    int scriptInstance = _SkyScript_ScriptInstance.Initialize()
+
+    return scriptInstance
+endFunction
+
+function Pause(int scriptInstance) global
+
+endFunction
+
+function Resume(int scriptInstance) global
+
 endFunction
