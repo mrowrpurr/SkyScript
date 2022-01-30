@@ -10,30 +10,19 @@
     Package="false"
     Final="false">
     <Variables>
-        <!-- Set the name of your mod: -->
-        <Variable Name="ModName" Value="CHANGE THE MOD NAME HERE" />
-        <!-- The folder where you store all of your mods -->
+        <Variable Name="ModName" Value="SkyScript" />
         <Variable Name="ModsFolder" Value="C:\Users\mrowr\Dropbox\Skyrim\Mods" />
-        <!-- Optional folder with additional source code for imports -->
         <Variable Name="ImportsFolder" Value="C:\Users\mrowr\Dropbox\Skyrim\Imports" />
     </Variables>
     <Imports>
         <Import>@ImportsFolder\SKSE64\Scripts\Source</Import>
         <Import>@ModsFolder\SkyUnit\Scripts\Source</Import>
-        <Import>@ModsFolder\FormHelper\Scripts\Source</Import>
-        <!-- <Import>@ImportsFolder\PapyrusUtil\Scripts\Source</Import> -->
         <Import>@ImportsFolder\UIExtensions\scripts\source</Import>
+        <Import>@ImportsFolder\PapyrusUtil\scripts\source</Import>
         <Import>@ImportsFolder\JContainers\scripts\source</Import>
-        <!-- <Import>@ImportsFolder\LibFire\Scripts\Source</Import> -->
-        <!-- <Import>@ImportsFolder\iWantWidgets\Source\Scripts</Import> -->
-        <!-- <Import>@ImportsFolder\iWantStatusBars\Source\Scripts</Import> -->
-        <!-- <Import>@ImportsFolder\FISSES\scripts\source</Import> -->
         <Import>@ImportsFolder\SkyUI_SDK\Scripts\Source</Import>
         <Import>@ImportsFolder\ConsoleUtil</Import>
-        <!-- <Import>@ImportsFolder\PapyrusExtender\source\scripts</Import> -->
-
-        <!-- Change this to be your default Skyrim install directory's Scripts\Source path  -->
-        <Import>C:\Steam\steamapps\common\Skyrim Special Edition\Data\Scripts\Source</Import>
+        <Import>C:\Steam\steamapps\common\Skyrim Special Edition - Modding\Data\Scripts\Source</Import>
     </Imports>
     <Folders>
         <!-- Relative path to folder containing .psc Papyrus source code files for this project -->

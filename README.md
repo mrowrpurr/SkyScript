@@ -1,10 +1,18 @@
-> Framework for Defining Actions to Perform in Skyrim (for bots)
+# SkyScript
 
-![Sky Actions](Images/SkyActions.png)
+## Special Folders:
 
-![Sky Actions](Images/SkyActions_White.png)
+```
+Data\SkyScript\Startup\*.json
+```
 
-## Goals:
+## _MAYBE_ Event Folders
+
+```
+Data\SkyScript\Player\ItemAdded\*.json
+```
+
+## TODO
 
 - [ ] MessageBox on game load
 - [ ] Can run MCM recording actions (TODO)
