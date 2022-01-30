@@ -1,6 +1,21 @@
 scriptName _SkyScript_Quest extends Quest hidden
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Generic MessageBox
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Message property SkyrimScripting_Message_Generic auto
+GlobalVariable property SkyrimScripting_Message_Generic_Back auto
+GlobalVariable property SkyrimScripting_Message_Generic_Yes auto
+GlobalVariable property SkyrimScripting_Message_Generic_No auto
+GlobalVariable property SkyrimScripting_Message_Generic_Default auto
+GlobalVariable property SkyrimScripting_Message_Generic_Continue auto
+GlobalVariable property SkyrimScripting_Message_Generic_Next auto
+GlobalVariable property SkyrimScripting_Message_Generic_Exit auto
+GlobalVariable property SkyrimScripting_Message_Generic_Cancel auto
+Form property SkyrimScripting_MessageText_BaseForm auto
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Initialization and Save Game Loading
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
