@@ -1,9 +1,11 @@
 scriptName _SkyScript_StdlibActionHandler extends SkyScriptActionHandler
 
-bool Function Match(int actionInfo)
-    
-endFunction
+event RegisterActions()
+    RegisterAction("msgbox")
+endEvent
 
-int function Execute(int actionInfo)
-    
+int function Execute(string actionName, int actionInfo)
+    if actionName == "msgbox"
+        Debug.MessageBox(GetString(actionInfo, "text"))
+    endIf
 endFunction

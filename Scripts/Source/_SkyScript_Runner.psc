@@ -1,23 +1,22 @@
 scriptName _SkyScript_Runner hidden
 
+; TODO allow for DSLs
 function RunAction(int actionInfo) global
-    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
+    string actionName = JMap.getStr(actionInfo, "action")
+    SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
 
-    bool handled = false
-    int handlerIndex = 0
-    while (! handled) && handlerIndex < handlers.HandlerCount
-        SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
-        if handler
-            if handler.Match(actionInfo)
-                handled = true
-                handler.Execute(actionInfo)
-            endIf
-        endIf
-        handlerIndex += 1
+    ; Wait up to 1 second for a handler to become available for action (TODO make configurable)
+    float currentTime = Utility.GetCurrentRealTime()
+    while (! handler) && (Utility.GetCurrentRealTime() - currentTime < 1.0)
+        handler = _SkyScript_ActionNames.HandlerForAction(actionName)
+        Utility.WaitMenuMode(0.05)
     endWhile
 
-    if ! handled
-        Debug.MessageBox("Action unsupported: " + _SkyScript_Log.ToJson(actionInfo))
+    if handler
+        handler.Execute(actionName, actionInfo)
+    else
+        ; MiscUtil.PrintConsole("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo))
+        Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo))
     endIf
 endFunction
 

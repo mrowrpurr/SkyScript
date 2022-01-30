@@ -17,6 +17,10 @@ int function GetStore() global
     return store
 endFunction
 
+int function Get(string path) global
+    return JDB.solveObj(GetPath(path))
+endFunction
+
 int function Store(string path, int object) global
     JDB.solveObjSetter(GetPath(path), object, createMissingKeys = true) 
     return object
@@ -33,4 +37,13 @@ int function StoreDirectory(string path, string directory) global
     else
         return Clear(path)
     endIf
+endFunction
+
+int function FindOrCreateMap(string path) global
+    int object = Get(path)
+    if ! object
+        object = JMap.object()
+        Store(path, object)
+    endIf
+    return object
 endFunction
