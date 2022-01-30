@@ -10,6 +10,7 @@ endFunction
 
 event OnInit()
     CurrentlyInstalledVersion = SkyScript.GetVersion()
+    Utility.WaitMenuMode(0.5) ; TODO configure
     _SkyScript_Events.RunStartupScripts()
 endEvent
 

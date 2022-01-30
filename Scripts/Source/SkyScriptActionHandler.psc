@@ -7,6 +7,11 @@ event OnInit()
     RegisterActions()
 endEvent
 
+bool function MatchAction(int actionInfo)
+    ; Intended to be optionally overriden
+    return false
+endFunction
+
 event RegisterActions()
     ; Intended to be overriden
 endEvent
