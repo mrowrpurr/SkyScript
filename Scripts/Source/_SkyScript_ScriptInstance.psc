@@ -8,6 +8,7 @@ int function InitializeFromFile(string filepath) global
                 int scriptInstance = Initialize()
                 SetActionArray(scriptInstance, actionsFromFile)
                 SetFilepath(scriptInstance, filepath)
+                Debug.MessageBox("Init from file " + scriptInstance)
                 return scriptInstance
             elseIf JValue.isMap(actionsFromFile) || JValue.isIntegerMap(actionsFromFile) || JValue.isFormMap(actionsFromFile)
                 int scriptInstance = Initialize()

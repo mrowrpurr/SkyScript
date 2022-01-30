@@ -41,7 +41,7 @@ function RunDirectoryScripts(int scripts, string directoryPath) global
         int i = 0
         while i < filePaths.Length
             string filePath = filePaths[i]
-            SkyScript.Run(directoryPath + "/" + filePath)
+            SkyScript.RunFile(directoryPath + "/" + filePath)
             i += 1
         endWhile
     endIf
