@@ -25,6 +25,22 @@ function RegisterAction(string actionName)
     _SkyScript_ActionNames.Register(actionName, HandlerId)
 endFunction
 
+bool function HasField(int actionInfo, string field)
+    return JMap.hasKey(actionInfo, field)
+endFunction
+
 string function GetString(int actionInfo, string field)
     return JMap.getStr(actionInfo, field)
+endFunction
+
+float function GetFloat(int actionInfo, string field)
+    return JMap.getFlt(actionInfo, field)
+endFunction
+
+int function GetInt(int actionInfo, string field)
+    return JMap.getInt(actionInfo, field)
+endFunction
+
+bool function GetBool(int actionInfo, string field)
+    return JMap.getInt(actionInfo, field) || JMap.getStr(actionInfo, field)
 endFunction
