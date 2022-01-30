@@ -9,8 +9,8 @@ string function DirectoryPath() global
 endFunction
 
 int function Run(string filePath) global
-    int scriptInstance = _SkyScript_ScriptInstance.Initialize()
-
+    int scriptInstance = _SkyScript_ScriptInstance.InitializeFromFile(filePath)
+    Debug.MessageBox("This will run " + _SkyScript_ScriptInstance.GetFilepath(scriptInstance))
     return scriptInstance
 endFunction
 

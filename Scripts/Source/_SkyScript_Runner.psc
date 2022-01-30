@@ -1,6 +1,5 @@
 scriptName _SkyScript_Runner hidden
 
-; TODO allow for DSLs
 function RunAction(int actionInfo) global
     string actionName = JMap.getStr(actionInfo, "action")
     SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
@@ -36,13 +35,13 @@ function RunActionArray(int actionList) global
     endIf
 endFunction
 
-function RunDirectoryScripts(int scripts) global
+function RunDirectoryScripts(int scripts, string directoryPath) global
     if scripts
-        string[] fileNames = JMap.allKeysPArray(scripts)
+        string[] filePaths = JMap.allKeysPArray(scripts)
         int i = 0
-        while i < fileNames.Length
-            string fileName = fileNames[i]
-            RunActionArray(JMap.getObj(scripts, fileName))
+        while i < filePaths.Length
+            string filePath = filePaths[i]
+            SkyScript.Run(directoryPath + "/" + filePath)
             i += 1
         endWhile
     endIf

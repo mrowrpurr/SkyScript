@@ -38,24 +38,24 @@ int function Get(int scriptInstance) global
 endFunction
 
 string function GetFilepath(int scriptInstance) global
-    return JMap.getStr(Get(scriptInstance), "filepath")
+    return JMap.getStr(scriptInstance, "filepath")
 endFunction
 
 function SetFilepath(int scriptInstance, string filepath) global
-    JMap.setStr(Get(scriptInstance), "filepath", filepath)
+    JMap.setStr(scriptInstance, "filepath", filepath)
     JMap.setStr(GetVariableMap(scriptInstance), "SCRIPT_FILE", filepath)
 endFunction
 
 int function GetActionArray(int scriptInstance) global
-    return JMap.getObj(Get(scriptInstance), "actions")
+    return JMap.getObj(scriptInstance, "actions")
 endFunction
 
 function SetActionArray(int scriptInstance, int actionArray) global
-    JMap.setObj(Get(scriptInstance), "actions", actionArray)
+    JMap.setObj(scriptInstance, "actions", actionArray)
 endFunction
 
 int function GetVariableMap(int scriptInstance) global
-    return JMap.getObj(_RunningScriptInstances(), "variables")
+    return JMap.getObj(scriptInstance, "variables")
 endFunction
 
 int function _RunningScriptInstances() global
