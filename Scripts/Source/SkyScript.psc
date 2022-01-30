@@ -10,7 +10,7 @@ endFunction
 
 int function Run(string filePath) global
     int scriptInstance = _SkyScript_ScriptInstance.InitializeFromFile(filePath)
-    Debug.MessageBox("This will run " + _SkyScript_ScriptInstance.GetFilepath(scriptInstance))
+    _SkyScript_Runner.RunActionArray(_SkyScript_ScriptInstance.GetActionArray(scriptInstance))
     return scriptInstance
 endFunction
 
