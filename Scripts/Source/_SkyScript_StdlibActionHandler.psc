@@ -6,6 +6,7 @@ event RegisterActions()
     RegisterAction("fadetoblack")
     RegisterAction("fadefromblack")
     RegisterAction("wait")
+    RegisterAction("closeracemenu")
 endEvent
 
 int function Execute(string actionName, int actionInfo)
@@ -20,6 +21,8 @@ int function Execute(string actionName, int actionInfo)
             FadeFromBlack(actionInfo)
         elseIf actionName == "wait"
             Wait(actionInfo)
+        elseIf actionName == "closeracemenu"
+            CloseRaceMenu(actionInfo)
         endIf
     elseIf JMap.hasKey(actionInfo, "msgbox")
         MessageBox(actionInfo)
@@ -76,4 +79,16 @@ function Wait(int actionInfo)
     else
         Utility.Wait(time)
     endIf
+endFunction
+
+function CloseRaceMenu(int actionInfo)
+    ; This 100% assumes that you're in RaceMenu
+    int enter = 28
+    int accept = 19 ; R
+    Input.TapKey(accept)
+    Utility.WaitMenuMode(0.1)
+    Input.TapKey(enter)
+    Utility.WaitMenuMode(0.1)
+    Input.TapKey(enter)
+    Debug.MessageBox("CLOSING RACE MENU ????")
 endFunction
