@@ -1,8 +1,13 @@
 scriptName _SkyScript_Runner hidden
 
 function ResumeScriptInstance(int scriptInstance) global
+    _SkyScript_ScriptInstance.MarkAsRunning(scriptInstance)
     int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
     RunActionArray(scriptInstance, currentActionIndex)
+    _SkyScript_ScriptInstance.MarkAsNotRunning(scriptInstance)
+    if _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)
+        _SkyScript_ScriptInstance.Dispose(scriptInstance)
+    endIf
 endFunction
 
 function RunAction(int actionInfo) global

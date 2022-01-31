@@ -12,12 +12,19 @@ int function Initialize(string filepath) global
     return _SkyScript_ScriptInstance.InitializeFromFile(filepath)
 endFunction
 
-function Run(int scriptInstance) global
+function Dispose(int scriptInstance) global
+    _SkyScript_ScriptInstance.Dispose(scriptInstance)
+endFunction
+
+int function Run(int scriptInstance) global
     _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
+    return scriptInstance
 endFunction
 
 int function RunFile(string filepath) global
-    Run(Initialize(filepath))
+    int scriptInstance = Initialize(filepath)
+    Run(scriptInstance)
+    Dispose(scriptInstance)
 endFunction
 
 function Pause(int scriptInstance) global

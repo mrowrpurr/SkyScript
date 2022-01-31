@@ -34,6 +34,18 @@ function Dispose(int scriptInstance) global
     JMap.removeKey(_RunningScriptInstances(), scriptInstance)
 endFunction
 
+function MarkAsRunning(int scriptInstance) global
+    JMap.setInt(scriptInstance, "running", 1)
+endFunction
+
+function MarkAsNotRunning(int scriptInstance) global
+    JMap.setInt(scriptInstance, "running", 0)
+endFunction
+
+bool function IsRunning(int scriptInstance) global
+    return JMap.getInt(scriptInstance, "running")
+endFunction
+
 function Pause(int scriptInstance) global
     JMap.setInt(scriptInstance, "paused", 1)
 endFunction
@@ -48,7 +60,11 @@ function Resume(int scriptInstance) global
 endFunction
 
 function Kill(int scriptInstance) global
-    JMap.setInt(scriptInstance, "killed", 1)
+    if IsRunning(scriptInstance) && (! IsPaused(scriptInstance))
+        JMap.setInt(scriptInstance, "killed", 1)
+    else
+        Dispose(scriptInstance)
+    endIf
 endFunction
 
 bool function IsMarkedToBeKilled(int scriptInstance) global
