@@ -34,6 +34,19 @@ function Dispose(int scriptInstance) global
     JMap.removeKey(_RunningScriptInstances(), scriptInstance)
 endFunction
 
+function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
+    int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
+    _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
+endFunction
+
+int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
+    int map = GetActionToSubScriptMap(scriptInstance)
+    int subscriptInstance = _SkyScript_ScriptInstance.Initialize()
+    JMap.setObj(map, actionInfo, subscriptInstance)
+    _SkyScript_ScriptInstance.SetActionArray(subscriptInstance, subscriptActions)
+    return subscriptInstance
+endFunction
+
 function MarkAsRunning(int scriptInstance) global
     JMap.setInt(scriptInstance, "running", 1)
 endFunction
@@ -97,11 +110,21 @@ int function GetCurrentActionIndex(int scriptInstance) global
 endFunction
 
 function SetActionArray(int scriptInstance, int actionArray) global
-    JMap.setObj(scriptInstance, "actions", actionArray)
+    if JValue.isArray(actionArray)
+        JMap.setObj(scriptInstance, "actions", actionArray)
+    elseIf actionArray
+        int actionsArray = JArray.object()
+        JArray.addObj(actionsArray, actionArray)
+        JMap.setObj(scriptInstance, "actions", actionsArray)
+    endIf
 endFunction
 
 int function GetVariableMap(int scriptInstance) global
     return JMap.getObj(scriptInstance, "variables")
+endFunction
+
+int function GetActionToSubScriptMap(int scriptInstance) global
+    return JMap.getObj(scriptInstance, "actionSubscripts")
 endFunction
 
 int function _RunningScriptInstances() global

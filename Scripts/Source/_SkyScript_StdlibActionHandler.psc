@@ -11,13 +11,13 @@ event RegisterActions()
     RegisterAction("prompt")
 endEvent
 
-int function Execute(string actionName, int actionInfo)
+int function Execute(int scriptInstance, string actionName, int actionInfo)
     if actionName
         ; Standard actions which use the "action": "something" syntax
         if actionName == "msgbox"
             MessageBox(actionInfo)
         elseIf actionName == "msg"
-            Message(actionInfo)
+            Message(scriptInstance, actionInfo)
         elseIf actionName == "blackscreen"
             BlackScreen(actionInfo)
         elseIf actionName == "fadetoblack"
@@ -27,7 +27,7 @@ int function Execute(string actionName, int actionInfo)
         elseIf actionName == "wait"
             Wait(actionInfo)
         elseIf actionName == "prompt"
-            Prompt(actionInfo)
+            Prompt(scriptInstance, actionInfo)
         elseIf actionName == "closeracemenu"
             CloseRaceMenu(actionInfo)
         endIf
@@ -36,15 +36,15 @@ int function Execute(string actionName, int actionInfo)
     elseIf JMap.hasKey(actionInfo, "msgbox")
         MessageBox(actionInfo)
     elseIf JMap.hasKey(actionInfo, "msg")
-        Message(actionInfo)
+        Message(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "wait")
         Wait(actionInfo)
     elseIf JMap.hasKey(actionInfo, "prompt")
-        Prompt(actionInfo)
+        Prompt(scriptInstance, actionInfo)
     endIf
 endFunction
 
-bool function MatchAction(int actionInfo)
+bool function MatchAction(int scriptInstance, int actionInfo)
     if JMap.hasKey(actionInfo, "msgbox")
         return true
     elseIf JMap.hasKey(actionInfo, "msg")
@@ -99,7 +99,7 @@ function Wait(int actionInfo)
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
-function Message(int actionInfo)
+function Message(int scriptInstance, int actionInfo)
     ; TODO syntax errors, validation, etc
 
     _SkyScript_Quest ss = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_Quest
@@ -180,14 +180,14 @@ function Message(int actionInfo)
     endIf
 
     if resultAction
-        _SkyScript_Runner.RunAction(resultAction)
+        _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
     else
         ; TODO
     endIf
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
-function Prompt(int actionInfo)
+function Prompt(int scriptInstance, int actionInfo)
     ; TODO Raise a SyntaxError if missing prompt or options
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu
     int optionMap = JMap.getObj(actionInfo, "options")
@@ -209,7 +209,7 @@ function Prompt(int actionInfo)
     endIf
     int resultAction = JMap.getObj(optionMap, resultText)
     if resultAction
-        _SkyScript_Runner.RunAction(resultAction)
+        _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
     else
         ; TODO
     endIf

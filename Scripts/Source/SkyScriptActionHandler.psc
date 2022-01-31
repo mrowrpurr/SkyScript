@@ -7,7 +7,7 @@ event OnInit()
     RegisterActions()
 endEvent
 
-bool function MatchAction(int actionInfo)
+bool function MatchAction(int scriptInstance, int actionInfo)
     ; Intended to be optionally overriden
     return false
 endFunction
@@ -16,7 +16,7 @@ event RegisterActions()
     ; Intended to be overriden
 endEvent
 
-int function Execute(string actionName, int actionInfo)
+int function Execute(int scriptInstance, string actionName, int actionInfo)
     ; Intended to be overidden
     return 0
 endFunction

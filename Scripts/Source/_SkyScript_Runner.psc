@@ -10,11 +10,11 @@ function ResumeScriptInstance(int scriptInstance) global
     endIf
 endFunction
 
-function RunAction(int actionInfo) global
+function RunAction(int scriptInstance, int actionInfo) global
     string actionName = JMap.getStr(actionInfo, "action")
     SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
     if handler
-        handler.Execute(actionName, actionInfo)
+        handler.Execute(scriptInstance, actionName, actionInfo)
     else
         ; See if any match
         bool found = false
@@ -22,9 +22,9 @@ function RunAction(int actionInfo) global
         int handlerIndex = 0
         while (! found) && handlerIndex < handlers.HandlerCount
             handler = handlers.GetHandler(handlerIndex)
-            if handler && handler.MatchAction(actionInfo)
+            if handler && handler.MatchAction(scriptInstance, actionInfo)
                 found = true
-                handler.Execute(actionName, actionInfo)
+                handler.Execute(scriptInstance, actionName, actionInfo)
             endIf
             handlerIndex += 1
         endWhile
@@ -42,7 +42,7 @@ function RunActionArray(int scriptInstance, int startIndex = 0) global
         while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
             if i >= startIndex
                 _SkyScript_ScriptInstance.SetCurrentActionIndex(scriptInstance, i)
-                RunAction(JArray.getObj(actionArray, i))
+                RunAction(scriptInstance, JArray.getObj(actionArray, i))
             endIf
             i += 1
         endWhile
