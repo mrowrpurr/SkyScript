@@ -69,9 +69,11 @@ event OnKeyDown(int keyCode)
         Debug.MessageBox("STATUS OF SCRIPT " + currentTestScript + "\n" + _SkyScript_Log.ToJson(currentTestScript))
     elseIf keyCode == 207 ; End
         Debug.MessageBox("STOPPING " + currentTestScript)
-        SkyScript.Stop(currentTestScript)
+        SkyScript.Kill(currentTestScript)
     elseIf keyCode == 211 ; Resume
         Debug.MessageBox("RESUMING " + currentTestScript)
         SkyScript.Resume(currentTestScript)
     endIf
+    
+    _SkyScript_Log.DumpData()
 endEvent

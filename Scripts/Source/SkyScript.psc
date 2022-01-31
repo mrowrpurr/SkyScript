@@ -13,7 +13,7 @@ int function Initialize(string filepath) global
 endFunction
 
 function Run(int scriptInstance) global
-    _SkyScript_Runner.RunActionArray(_SkyScript_ScriptInstance.GetActionArray(scriptInstance))
+    _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
 endFunction
 
 int function RunFile(string filepath) global
@@ -21,13 +21,17 @@ int function RunFile(string filepath) global
 endFunction
 
 function Pause(int scriptInstance) global
+    _SkyScript_ScriptInstance.Pause(scriptInstance)
+endFunction
 
+bool function IsPaused(int scriptInstance) global
+    return _SkyScript_ScriptInstance.IsPaused(scriptInstance)
 endFunction
 
 function Resume(int scriptInstance) global
-
+    _SkyScript_ScriptInstance.Resume(scriptInstance)
 endFunction
 
-function Stop(int scriptInstance) global
-
+function Kill(int scriptInstance) global
+    _SkyScript_ScriptInstance.Kill(scriptInstance)
 endFunction

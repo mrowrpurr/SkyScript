@@ -98,6 +98,7 @@ function Wait(int actionInfo)
     endIf
 endFunction
 
+; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
 function Message(int actionInfo)
     ; TODO syntax errors, validation, etc
 
@@ -185,6 +186,7 @@ function Message(int actionInfo)
     endIf
 endFunction
 
+; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
 function Prompt(int actionInfo)
     ; TODO Raise a SyntaxError if missing prompt or options
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu

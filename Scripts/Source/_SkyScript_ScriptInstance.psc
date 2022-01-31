@@ -34,6 +34,27 @@ function Dispose(int scriptInstance) global
     JMap.removeKey(_RunningScriptInstances(), scriptInstance)
 endFunction
 
+function Pause(int scriptInstance) global
+    JMap.setInt(scriptInstance, "paused", 1)
+endFunction
+
+bool function IsPaused(int scriptInstance) global
+    return JMap.getInt(scriptInstance, "paused")
+endFunction
+
+function Resume(int scriptInstance) global
+    JMap.setInt(scriptInstance, "paused", 0)
+    _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
+endFunction
+
+function Kill(int scriptInstance) global
+    JMap.setInt(scriptInstance, "killed", 1)
+endFunction
+
+bool function IsMarkedToBeKilled(int scriptInstance) global
+    return JMap.getInt(scriptInstance, "killed")
+endFunction
+
 int function Get(int scriptInstance) global
     return JMap.getObj(_RunningScriptInstances(), scriptInstance)
 endFunction
@@ -51,6 +72,14 @@ int function GetActionArray(int scriptInstance) global
     return JMap.getObj(scriptInstance, "actions")
 endFunction
 
+function SetCurrentActionIndex(int scriptInstance, int actionIndex) global
+    JMap.setInt(scriptInstance, "currentActionIndex", actionIndex)
+endFunction
+
+int function GetCurrentActionIndex(int scriptInstance) global
+    return JMap.getInt(scriptInstance, "currentActionIndex")
+endFunction
+
 function SetActionArray(int scriptInstance, int actionArray) global
     JMap.setObj(scriptInstance, "actions", actionArray)
 endFunction
@@ -60,5 +89,5 @@ int function GetVariableMap(int scriptInstance) global
 endFunction
 
 int function _RunningScriptInstances() global
-    return _SkyScript_Data.FindOrCreateMap(".scripts")
+    return _SkyScript_Data.FindOrCreateMap("scripts")
 endFunction

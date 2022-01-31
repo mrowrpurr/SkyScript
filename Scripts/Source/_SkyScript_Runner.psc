@@ -1,5 +1,10 @@
 scriptName _SkyScript_Runner hidden
 
+function ResumeScriptInstance(int scriptInstance) global
+    int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
+    RunActionArray(scriptInstance, currentActionIndex)
+endFunction
+
 function RunAction(int actionInfo) global
     string actionName = JMap.getStr(actionInfo, "action")
     SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
@@ -24,12 +29,16 @@ function RunAction(int actionInfo) global
     endIf
 endFunction
 
-function RunActionArray(int actionList) global
-    if actionList
-        int actionCount = JArray.count(actionList)
+function RunActionArray(int scriptInstance, int startIndex = 0) global
+    int actionArray = _SkyScript_ScriptInstance.GetActionArray(scriptInstance)
+    if actionArray
+        int actionCount = JArray.count(actionArray)
         int i = 0
-        while i < actionCount
-            RunAction(JArray.getObj(actionList, i))
+        while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
+            if i >= startIndex
+                _SkyScript_ScriptInstance.SetCurrentActionIndex(scriptInstance, i)
+                RunAction(JArray.getObj(actionArray, i))
+            endIf
             i += 1
         endWhile
     endIf
