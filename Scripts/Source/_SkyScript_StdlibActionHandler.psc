@@ -247,5 +247,4 @@ function CloseRaceMenu(int actionInfo)
     Input.TapKey(enter)
     Utility.WaitMenuMode(0.1)
     Input.TapKey(enter)
-    Debug.MessageBox("CLOSING RACE MENU ????")
 endFunction

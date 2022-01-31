@@ -17,7 +17,6 @@ function RunAction(int scriptInstance, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
     int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
     if runningScriptInstance
-        Debug.MessageBox("Oh jeez! There's a running instance of a script for this! Continuing...")
         _SkyScript_ScriptInstance.Resume(runningScriptInstance)
         return
     endIf
@@ -47,7 +46,6 @@ endFunction
 
 function RunActionArray(int scriptInstance, int startIndex = 0) global
     int actionArray = _SkyScript_ScriptInstance.GetActionArray(scriptInstance)
-    Debug.MessageBox("RUN ACTION ARRAY: " + _SkyScript_Log.ToJson(actionArray) + " is array? " + JValue.isArray(actionArray))
     if actionArray
         int actionCount = JArray.count(actionArray)
         int i = 0

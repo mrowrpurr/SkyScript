@@ -8,7 +8,6 @@ int function InitializeFromFile(string filepath) global
                 int scriptInstance = Initialize()
                 SetActionArray(scriptInstance, actionsFromFile)
                 SetFilepath(scriptInstance, filepath)
-                Debug.MessageBox("Init from file " + scriptInstance)
                 return scriptInstance
             elseIf JValue.isMap(actionsFromFile) || JValue.isIntegerMap(actionsFromFile) || JValue.isFormMap(actionsFromFile)
                 int scriptInstance = Initialize()
@@ -27,6 +26,7 @@ int function Initialize() global
     int scriptInstance = JMap.object()
     JMap.setObj(_RunningScriptInstances(), scriptInstance, scriptInstance)
     JMap.setObj(scriptInstance, "variables", JMap.object())
+    JMap.setObj(scriptInstance, "actionSubscripts", JMap.object())
     return scriptInstance
 endFunction
 
@@ -37,7 +37,9 @@ endFunction
 function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
     int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
     _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
-    Dispose(subscriptInstance)
+    if ! SkyScript.IsPaused(subscriptInstance)
+        Dispose(subscriptInstance)
+    endIf
 endFunction
 
 int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
