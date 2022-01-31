@@ -62,6 +62,9 @@ event OnKeyDown(int keyCode)
         currentTestScript = SkyScript.Initialize("Data/hello.json")
         Debug.MessageBox("RUNNING " + currentTestScript)
         SkyScript.Run(currentTestScript)
+        if ! SkyScript.IsPaused(currentTestScript)
+            SkyScript.Dispose(currentTestScript)
+        endIf
     elseIf keyCode == 197 ; Pause
         Debug.MessageBox("PAUSING " + currentTestScript)
         SkyScript.Pause(currentTestScript)

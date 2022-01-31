@@ -37,12 +37,14 @@ endFunction
 function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
     int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
     _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
+    Dispose(subscriptInstance)
 endFunction
 
 int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
     int map = GetActionToSubScriptMap(scriptInstance)
     int subscriptInstance = _SkyScript_ScriptInstance.Initialize()
     JMap.setObj(map, actionInfo, subscriptInstance)
+    SetParent(subscriptInstance, scriptInstance)
     _SkyScript_ScriptInstance.SetActionArray(subscriptInstance, subscriptActions)
     return subscriptInstance
 endFunction
@@ -64,7 +66,8 @@ function Pause(int scriptInstance) global
 endFunction
 
 bool function IsPaused(int scriptInstance) global
-    return JMap.getInt(scriptInstance, "paused")
+    int parent = GetParent(scriptInstance)
+    return JMap.getInt(scriptInstance, "paused") || (parent && IsPaused(parent))
 endFunction
 
 function Resume(int scriptInstance) global
@@ -119,8 +122,20 @@ function SetActionArray(int scriptInstance, int actionArray) global
     endIf
 endFunction
 
+function SetParent(int scriptInstance, int parentInstance) global
+    JMap.setObj(scriptInstance, "parent", parentInstance)
+endFunction
+
+int function GetParent(int scriptInstance) global
+    return JMap.getObj(scriptInstance, "parent")
+endFunction
+
 int function GetVariableMap(int scriptInstance) global
     return JMap.getObj(scriptInstance, "variables")
+endFunction
+
+int function GetSubScriptInstanceForAction(int scriptInstance, int actionInfo) global
+    return JMap.getObj(GetActionToSubScriptMap(scriptInstance), actionInfo)
 endFunction
 
 int function GetActionToSubScriptMap(int scriptInstance) global

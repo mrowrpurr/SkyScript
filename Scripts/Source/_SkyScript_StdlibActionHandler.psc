@@ -99,7 +99,7 @@ function Wait(int actionInfo)
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
-function Message(int scriptInstance, int actionInfo)
+function Message(int scriptInstance, int actionInfo)    
     ; TODO syntax errors, validation, etc
 
     _SkyScript_Quest ss = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_Quest
@@ -108,42 +108,51 @@ function Message(int scriptInstance, int actionInfo)
     ss.SkyrimScripting_MessageText_BaseForm.SetName(JMap.getStr(actionInfo, "msg"))
 
     ; Reset all message buttons
+    bool anyButtons = false
     if JMap.hasKey(actionInfo, "back")
         ss.SkyrimScripting_Message_Generic_Back.Value = 1
+        anyButtons = true
     else
         ss.SkyrimScripting_Message_Generic_Back.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "yes")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Yes.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Yes.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "no")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_No.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_No.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "default")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Default.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Default.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "continue")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Continue.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Continue.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "next")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Next.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Next.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "exit")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Exit.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Exit.Value = 0
     endIf
     if JMap.hasKey(actionInfo, "cancel")
+        anyButtons = true
         ss.SkyrimScripting_Message_Generic_Cancel.Value = 1
     else
         ss.SkyrimScripting_Message_Generic_Cancel.Value = 0
@@ -160,35 +169,49 @@ function Message(int scriptInstance, int actionInfo)
 
     int result = ss.SkyrimScripting_Message_Generic.Show()
 
+    if ! anyButtons
+        return
+    endIf
+
+    string resultText
     int resultAction
     if result == back
         resultAction = JMap.getObj(actionInfo, "back")
+        resultText = "back"
     elseIf result == yes
         resultAction = JMap.getObj(actionInfo, "yes")
+        resultText = "yes"
     elseIf result == no
         resultAction = JMap.getObj(actionInfo, "no")
+        resultText = "no"
     elseIf result == default
         resultAction = JMap.getObj(actionInfo, "default")
+        resultText = "default"
     elseIf result == continue
         resultAction = JMap.getObj(actionInfo, "continue")
+        resultText = "continue"
     elseIf result == next
         resultAction = JMap.getObj(actionInfo, "next")
+        resultText = "next"
     elseIf result == exit
         resultAction = JMap.getObj(actionInfo, "exit")
-    elseIf result == cancel
+        resultText = "exit"
+    elseIf result == cancel || result == -1
         resultAction = JMap.getObj(actionInfo, "cancel")
+        resultText = "cancel"
     endIf
 
     if resultAction
         _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
     else
-        ; TODO
+        Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
 function Prompt(int scriptInstance, int actionInfo)
     ; TODO Raise a SyntaxError if missing prompt or options
+
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu
     int optionMap = JMap.getObj(actionInfo, "options")
     int choicesArray = JMap.getObj(actionInfo, "prompt")
@@ -211,7 +234,7 @@ function Prompt(int scriptInstance, int actionInfo)
     if resultAction
         _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
     else
-        ; TODO
+        Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
 endFunction
 

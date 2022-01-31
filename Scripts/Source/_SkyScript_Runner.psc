@@ -1,6 +1,7 @@
 scriptName _SkyScript_Runner hidden
 
 function ResumeScriptInstance(int scriptInstance) global
+    Debug.Notification("RESUME " + scriptInstance)
     _SkyScript_ScriptInstance.MarkAsRunning(scriptInstance)
     int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
     RunActionArray(scriptInstance, currentActionIndex)
@@ -11,6 +12,16 @@ function ResumeScriptInstance(int scriptInstance) global
 endFunction
 
 function RunAction(int scriptInstance, int actionInfo) global
+    Debug.Notification("RUN ACTION " + actionInfo)
+
+    ; Check if there is a script associated with this option that is in progress. If so, resume it.
+    int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
+    if runningScriptInstance
+        Debug.MessageBox("Oh jeez! There's a running instance of a script for this! Continuing...")
+        _SkyScript_ScriptInstance.Resume(runningScriptInstance)
+        return
+    endIf
+
     string actionName = JMap.getStr(actionInfo, "action")
     SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
     if handler
@@ -36,10 +47,14 @@ endFunction
 
 function RunActionArray(int scriptInstance, int startIndex = 0) global
     int actionArray = _SkyScript_ScriptInstance.GetActionArray(scriptInstance)
+    Debug.MessageBox("RUN ACTION ARRAY: " + _SkyScript_Log.ToJson(actionArray) + " is array? " + JValue.isArray(actionArray))
     if actionArray
         int actionCount = JArray.count(actionArray)
         int i = 0
-        while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
+        ; TODO check for PARENT paused/mark for kill here
+        int parent = _SkyScript_ScriptInstance.GetParent(scriptInstance)
+        bool parentPausedOrBeingKilled = parent && (SkyScript.IsPaused(parent) || _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
+        while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)) && (! parentPausedOrBeingKilled)
             if i >= startIndex
                 _SkyScript_ScriptInstance.SetCurrentActionIndex(scriptInstance, i)
                 RunAction(scriptInstance, JArray.getObj(actionArray, i))
