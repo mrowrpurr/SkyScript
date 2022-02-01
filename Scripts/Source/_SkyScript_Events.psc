@@ -12,7 +12,7 @@ function QueueJob(int jobId) global
 endFunction
 
 function CompleteJob(int jobId) global
-    ;
+    JMap.removeKey(EventHandlersQueue(), jobId)
 endFunction
 
 function FireEventHandlers(string eventName, int eventVariable = 0) global
