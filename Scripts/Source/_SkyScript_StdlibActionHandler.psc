@@ -10,6 +10,7 @@ event RegisterActions()
     RegisterAction("closeracemenu")
     RegisterAction("prompt")
     RegisterAction("event")
+    RegisterAction("notify")
 endEvent
 
 int function Execute(int scriptInstance, string actionName, int actionInfo)
@@ -19,6 +20,8 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
             MessageBox(actionInfo)
         elseIf actionName == "msg"
             Message(scriptInstance, actionInfo)
+        elseIf actionName == "notify"
+            Notify(actionInfo)
         elseIf actionName == "blackscreen"
             BlackScreen(actionInfo)
         elseIf actionName == "fadetoblack"
@@ -32,7 +35,7 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
         elseIf actionName == "closeracemenu"
             CloseRaceMenu(actionInfo)
         elseIf actionName == "event"
-            OnEvent(scriptInstance, actionInfo)
+            OnEvent(actionInfo)
         endIf
     ; Customized syntax like "msgbox": "hello" (without using "action": "something")
     ; Note: don't forget to update MatchAction() when adding to this
@@ -40,10 +43,12 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
         Message(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "msgbox")
         MessageBox(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "notify")
+        Notify(actionInfo)
     elseIf JMap.hasKey(actionInfo, "on")
-        OnEvent(scriptInstance, actionInfo)
+        OnEvent(actionInfo)
     elseIf JMap.hasKey(actionInfo, "event")
-        OnEvent(scriptInstance, actionInfo)
+        OnEvent(actionInfo)
     elseIf JMap.hasKey(actionInfo, "wait")
         Wait(actionInfo)
     elseIf JMap.hasKey(actionInfo, "prompt")
@@ -64,6 +69,8 @@ bool function MatchAction(int scriptInstance, int actionInfo)
         return true
     elseIf JMap.hasKey(actionInfo, "on")
         return true
+    elseIf JMap.hasKey(actionInfo, "notify")
+        return true
     endIf
     return false
 endFunction
@@ -74,6 +81,14 @@ function MessageBox(int actionInfo)
         text = GetString(actionInfo, "msgbox")
     endIf
     Debug.MessageBox(text)
+endFunction
+
+function Notify(int actionInfo)
+    string text = GetString(actionInfo, "text")
+    if HasField(actionInfo, "notify")
+        text = GetString(actionInfo, "notify")
+    endIf
+    Debug.Notification(text)
 endFunction
 
 function BlackScreen(int actionInfo)
@@ -249,7 +264,7 @@ function Prompt(int scriptInstance, int actionInfo)
     endIf
 endFunction
 
-function OnEvent(int scriptInstance, int actionInfo) ; TODO do we need scriptInstance?
+function OnEvent(int actionInfo)
     ; TODO validata params and such
     string eventName
     if JMap.hasKey(actionInfo, "event")
