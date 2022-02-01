@@ -22,17 +22,19 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
         int i = 0
         while i < handlerCount
             int eventHandler = JArray.getObj(eventHandlers, i)
-            QueueJob(CreateEventHandlerJob(eventName, eventHandler))
+            QueueJob(CreateEventHandlerJob(eventName, eventHandler, eventVariable))
             i += 1
         endWhile
     endIf
 endFunction
 
-int function CreateEventHandlerJob(string eventName, int eventHandler) global
+; TODO provide the event info!
+int function CreateEventHandlerJob(string eventName, int eventHandler, int eventVariable = 0) global
     int jobId = JMap.object()
     JMap.setStr(jobId, "type", "eventHandler")
     JMap.setStr(jobId, "eventName", eventName)
     JMap.setObj(jobId, "eventHandler", eventHandler)
+    JMap.setObj(jobId, "event", eventVariable)
     return jobId
 endFunction
 

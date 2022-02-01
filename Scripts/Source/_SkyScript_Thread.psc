@@ -45,5 +45,22 @@ function ListenForJobs()
 endFunction
 
 event OnJob(int jobId)
-    Debug.MessageBox("Cool, " + ThreadId + " received a job! " + _SkyScript_Log.ToJson(jobId))
+    string jobType = JMap.getStr(jobId, "type")
+    if jobType == "eventHandler"
+        OnEventHandler(jobId)
+    endIf
 endEvent
+
+event OnEventHandler(int jobId)
+    int eventHandler = JMap.getObj(jobId, "eventHandler")
+    int scriptInstance = _SkyScript_ScriptInstance.Initialize()
+    _SkyScript_ScriptInstance.SetActionArray(scriptInstance, eventHandler)
+    _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
+    _SkyScript_ScriptInstance.Dispose(scriptInstance)
+    _SkyScript_Events.CompleteJob(jobId)
+endEvent
+; JMap.setStr(jobId, "type", "eventHandler")
+; JMap.setStr(jobId, "eventName", eventName)
+; JMap.setObj(jobId, "eventHandler", eventHandler)
+; JMap.setObj(jobId, "event", eventVariable)
+; return jobId

@@ -1,7 +1,6 @@
 scriptName _SkyScript_Runner hidden
 
 function ResumeScriptInstance(int scriptInstance) global
-    Debug.Notification("RESUME " + scriptInstance)
     _SkyScript_ScriptInstance.MarkAsRunning(scriptInstance)
     int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
     RunActionArray(scriptInstance, currentActionIndex)
@@ -12,8 +11,6 @@ function ResumeScriptInstance(int scriptInstance) global
 endFunction
 
 function RunAction(int scriptInstance, int actionInfo) global
-    Debug.Notification("RUN ACTION " + actionInfo)
-
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
     int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
     if runningScriptInstance
