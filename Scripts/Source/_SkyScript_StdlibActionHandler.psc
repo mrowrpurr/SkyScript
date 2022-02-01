@@ -1,14 +1,15 @@
 scriptName _SkyScript_StdlibActionHandler extends SkyScriptActionHandler
 
 event RegisterActions()
+    RegisterAction("msg")
     RegisterAction("msgbox")
     RegisterAction("blackscreen")
     RegisterAction("fadetoblack")
     RegisterAction("fadefromblack")
     RegisterAction("wait")
     RegisterAction("closeracemenu")
-    RegisterAction("msg")
     RegisterAction("prompt")
+    RegisterAction("event")
 endEvent
 
 int function Execute(int scriptInstance, string actionName, int actionInfo)
@@ -30,13 +31,19 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
             Prompt(scriptInstance, actionInfo)
         elseIf actionName == "closeracemenu"
             CloseRaceMenu(actionInfo)
+        elseIf actionName == "event"
+            OnEvent(scriptInstance, actionInfo)
         endIf
     ; Customized syntax like "msgbox": "hello" (without using "action": "something")
     ; Note: don't forget to update MatchAction() when adding to this
-    elseIf JMap.hasKey(actionInfo, "msgbox")
-        MessageBox(actionInfo)
     elseIf JMap.hasKey(actionInfo, "msg")
         Message(scriptInstance, actionInfo)
+    elseIf JMap.hasKey(actionInfo, "msgbox")
+        MessageBox(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "on")
+        OnEvent(scriptInstance, actionInfo)
+    elseIf JMap.hasKey(actionInfo, "event")
+        OnEvent(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "wait")
         Wait(actionInfo)
     elseIf JMap.hasKey(actionInfo, "prompt")
@@ -52,6 +59,10 @@ bool function MatchAction(int scriptInstance, int actionInfo)
     elseIf JMap.hasKey(actionInfo, "wait")
         return true
     elseIf JMap.hasKey(actionInfo, "prompt")
+        return true
+    elseIf JMap.hasKey(actionInfo, "event")
+        return true
+    elseIf JMap.hasKey(actionInfo, "on")
         return true
     endIf
     return false
@@ -236,6 +247,23 @@ function Prompt(int scriptInstance, int actionInfo)
     else
         Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
+endFunction
+
+function OnEvent(int scriptInstance, int actionInfo) ; TODO do we need scriptInstance?
+    ; TODO validata params and such
+    string eventName
+    if JMap.hasKey(actionInfo, "event")
+        eventName = JMap.getStr(actionInfo, "event")
+    elseIf JMap.hasKey(actionInfo, "on")
+        eventName = JMap.getStr(actionInfo, "on")
+    else
+        ; Error, yo
+        Debug.MessageBox("Invalid event " + _SkyScript_Log.ToJson(actionInfo)) ; TODO make this a SyntaxError
+    endIf
+
+    int eventScript = JMap.getObj(actionInfo, "script")
+
+    _SkyScript_Events.AddEventHandler(eventName, eventScript)
 endFunction
 
 function CloseRaceMenu(int actionInfo)

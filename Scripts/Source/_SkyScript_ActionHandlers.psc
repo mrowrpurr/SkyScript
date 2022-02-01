@@ -1,4 +1,4 @@
-scriptName _SkyScript_ActionHandlers extends Quest  
+scriptName _SkyScript_ActionHandlers extends Quest
 
 int property HandlerCount auto
 

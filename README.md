@@ -4,22 +4,30 @@
 
 ```
 Data\SkyScript\Startup\*.json
+Data\SkyScript\RunOnce\*.json
 ```
 
-## _MAYBE_ Event Folders
+## Event Folders
+
+> _Like Dynamic Animation Replacer but for arbitrary simple actions_
 
 ```
 Data\SkyScript\Player\ItemAdded\*.json
+Data\SkyScript\Player\EnterSneak\*.json
+Data\SkyScript\Player\LeaveSneak\*.json
 ```
 
 ## TODO
 
+- [ ] Error Handling of some variety
+- [ ] Variables
+- [ ] Simplest of Conditionals
+
 - [ ] Item chooser (can specify one or multiple)
 - [ ] Spell chooser (can specify one or multiple)
 - [ ] Logging which can be set to INFO/DEBUG/ERROR/WARN separately for Console and Papyrus Logs
-- [ ] Scripts can run scripts by filename
-- [ ] Error Handling of some variety
-- [ ] Scripts can be paused and resumed
+- [x] Scripts can run scripts by filename
+- [x] Scripts can be paused and resumed
 - [ ] Scripts resume after game crash/quit when running
 - [x] MessageBox on game load
 - [ ] Can run MCM recording actions (TODO)

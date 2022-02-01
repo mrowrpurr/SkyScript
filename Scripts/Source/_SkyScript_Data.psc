@@ -47,3 +47,12 @@ int function FindOrCreateMap(string path) global
     endIf
     return object
 endFunction
+
+int function FindOrCreateArray(string path) global
+    int object = Get(path)
+    if ! object
+        object = JArray.object()
+        Store(path, object)
+    endIf
+    return object
+endFunction
