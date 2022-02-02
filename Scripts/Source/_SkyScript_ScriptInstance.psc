@@ -99,7 +99,7 @@ endFunction
 
 function SetFilepath(int scriptInstance, string filepath) global
     JMap.setStr(scriptInstance, "filepath", filepath)
-    JMap.setStr(GetVariableMap(scriptInstance), "SCRIPT_FILE", filepath)
+    ; JMap.setStr(GetVariableMap(scriptInstance), "SCRIPT_FILE", filepath)
 endFunction
 
 int function GetActionArray(int scriptInstance) global
@@ -146,4 +146,153 @@ endFunction
 
 int function _RunningScriptInstances() global
     return _SkyScript_Data.FindOrCreateMap("scripts")
+endFunction
+
+int function DeclareVariable(int scriptInstance, string name) global
+    int varMap = GetVariableMap(scriptInstance)
+    if JMap.hasKey(varMap, name)
+        return JMap.getObj(varMap, name)
+    else
+        int variable = JMap.object()
+        JMap.setObj(varMap, name, variable)
+        return variable
+    endIf
+endFunction
+
+bool function VarExists(int scriptInstance, string name) global
+    int varMap = GetVariableMap(scriptInstance)
+    if JMap.hasKey(varMap, name)
+        return true
+    endIf
+    int parent = GetParent(scriptInstance)
+    if parent
+        return VarExists(parent, name)
+    else
+        return false
+    endIf
+endFunction
+
+int function GetVariable(int scriptInstance, string name) global
+    int varMap = GetVariableMap(scriptInstance)
+    if JMap.hasKey(varMap, name)
+        return JMap.getObj(varMap, name)
+    endIf
+    int parent = GetParent(scriptInstance)
+    if parent
+        return GetVariable(parent, name)
+    else
+        return 0
+    endIf
+endFunction
+
+int function GetVariableInt(int scriptInstance, string name, int default = 0) global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getInt(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableInt(int scriptInstance, string name, int value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "int")
+    JMap.removeKey(variable, "value")
+    JMap.setInt(variable, "value", value)
+endFunction
+
+float function GetVariableFloat(int scriptInstance, string name, float default = 0.0) global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getFlt(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableFloat(int scriptInstance, string name, float value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "float")
+    JMap.removeKey(variable, "value")
+    JMap.setFlt(variable, "value", value)
+endFunction
+
+string function GetVariableString(int scriptInstance, string name, string default = "") global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getStr(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableString(int scriptInstance, string name, string value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "string")
+    JMap.removeKey(variable, "value")
+    JMap.setStr(variable, "value", value)
+endFunction
+
+Form function GetVariableForm(int scriptInstance, string name, Form default = None) global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getForm(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableForm(int scriptInstance, string name, Form value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "Form")
+    JMap.removeKey(variable, "value")
+    JMap.setForm(variable, "value", value)
+endFunction
+
+int function GetVariableObject(int scriptInstance, string name, int default = 0) global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getInt(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableObject(int scriptInstance, string name, int value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "object")
+    JMap.removeKey(variable, "value")
+    JMap.setInt(variable, "value", value)
+endFunction
+
+string function GetVariableText(int scriptInstance, string name) global
+    ; TODO
+    return GetVariableString(scriptInstance, name) ; Just strings to test with
+endFunction
+
+string function InterpolateString(int scriptInstance, string text) global
+    int varStart = StringUtil.Find(text, "<var:")
+    while varStart > -1
+        int varEnd = StringUtil.Find(text, ">", varStart)
+        string varName = StringUtil.Substring(text, varStart + 5, (varEnd - varStart - 5))
+        
+        string beforeVar = ""
+        if varStart > 0
+            beforeVar = StringUtil.Substring(text, 0, varStart)
+        endIf
+
+        string afterVar = ""
+        if varEnd != StringUtil.GetLength(text) - 1
+            afterVar = StringUtil.Substring(text, varEnd + 1)
+        endIf
+
+        string variableText = GetVariableText(scriptInstance, varName)
+
+        text = beforeVar + variableText + afterVar
+
+        ; Debug.MessageBox("New text: '" + text + "'\nBefore: " + beforeVar + "\nVar: " + variableText + "\nAfter: " + afterVar)
+        
+        varStart = StringUtil.Find(text, "<var:")
+    endWhile
+    return text
 endFunction

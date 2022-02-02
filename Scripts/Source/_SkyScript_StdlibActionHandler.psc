@@ -3,6 +3,8 @@ scriptName _SkyScript_StdlibActionHandler extends SkyScriptActionHandler
 event RegisterActions()
     RegisterAction("msg")
     RegisterAction("msgbox")
+    RegisterAction("print")
+    RegisterAction("var")
     RegisterAction("blackscreen")
     RegisterAction("fadetoblack")
     RegisterAction("fadefromblack")
@@ -10,6 +12,7 @@ event RegisterActions()
     RegisterAction("closeracemenu")
     RegisterAction("prompt")
     RegisterAction("event")
+    RegisterAction("script")
     RegisterAction("notify")
 endEvent
 
@@ -17,102 +20,162 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
     if actionName
         ; Standard actions which use the "action": "something" syntax
         if actionName == "msgbox"
-            MessageBox(actionInfo)
+            return MessageBox(actionInfo)
         elseIf actionName == "msg"
-            Message(scriptInstance, actionInfo)
+            return Message(scriptInstance, actionInfo)
+        elseIf actionName == "print"
+            return PrintConsole(actionInfo)
+        elseIf actionName == "var"
+            return SetVariable(scriptInstance, actionInfo)
         elseIf actionName == "notify"
-            Notify(actionInfo)
+            return Notify(actionInfo)
         elseIf actionName == "blackscreen"
-            BlackScreen(actionInfo)
+            return BlackScreen(actionInfo)
         elseIf actionName == "fadetoblack"
-            FadeToBlack(actionInfo)
+            return FadeToBlack(actionInfo)
         elseIf actionName == "fadefromblack"
-            FadeFromBlack(actionInfo)
+            return FadeFromBlack(actionInfo)
         elseIf actionName == "wait"
-            Wait(actionInfo)
+            return Wait(actionInfo)
         elseIf actionName == "prompt"
-            Prompt(scriptInstance, actionInfo)
+            return Prompt(scriptInstance, actionInfo)
         elseIf actionName == "closeracemenu"
-            CloseRaceMenu(actionInfo)
+            return CloseRaceMenu(actionInfo)
         elseIf actionName == "event"
-            OnEvent(actionInfo)
+            return OnEvent(actionInfo)
+        elseIf actionName == "script"
+            return RunScript(scriptInstance, actionInfo)
         endIf
+
     ; Customized syntax like "msgbox": "hello" (without using "action": "something")
     ; Note: don't forget to update MatchAction() when adding to this
     elseIf JMap.hasKey(actionInfo, "msg")
-        Message(scriptInstance, actionInfo)
+        return Message(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "msgbox")
-        MessageBox(actionInfo)
+        return MessageBox(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "print")
+        return PrintConsole(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "var")
+        return SetVariable(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "notify")
-        Notify(actionInfo)
+        return Notify(actionInfo)
     elseIf JMap.hasKey(actionInfo, "on")
-        OnEvent(actionInfo)
+        return OnEvent(actionInfo)
     elseIf JMap.hasKey(actionInfo, "event")
-        OnEvent(actionInfo)
+        return OnEvent(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "script")
+        return RunScript(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "wait")
-        Wait(actionInfo)
+        return Wait(actionInfo)
     elseIf JMap.hasKey(actionInfo, "prompt")
-        Prompt(scriptInstance, actionInfo)
+        return Prompt(scriptInstance, actionInfo)
     endIf
+
+    return 0
 endFunction
 
 bool function MatchAction(int scriptInstance, int actionInfo)
-    if JMap.hasKey(actionInfo, "msgbox")
-        return true
-    elseIf JMap.hasKey(actionInfo, "msg")
-        return true
-    elseIf JMap.hasKey(actionInfo, "wait")
-        return true
-    elseIf JMap.hasKey(actionInfo, "prompt")
-        return true
-    elseIf JMap.hasKey(actionInfo, "event")
-        return true
-    elseIf JMap.hasKey(actionInfo, "on")
-        return true
-    elseIf JMap.hasKey(actionInfo, "notify")
-        return true
-    endIf
-    return false
+    return JMap.hasKey(actionInfo, "msgbox") || \
+           JMap.hasKey(actionInfo, "msg")    || \
+           JMap.hasKey(actionInfo, "var")    || \
+           JMap.hasKey(actionInfo, "wait")   || \
+           JMap.hasKey(actionInfo, "prompt") || \
+           JMap.hasKey(actionInfo, "event")  || \
+           JMap.hasKey(actionInfo, "on")     || \
+           JMap.hasKey(actionInfo, "notify") || \
+           JMap.hasKey(actionInfo, "print")  || \
+           JMap.hasKey(actionInfo, "script")
 endFunction
 
-function MessageBox(int actionInfo)
+int function MessageBox(int actionInfo)
     string text = GetString(actionInfo, "text")
     if HasField(actionInfo, "msgbox")
         text = GetString(actionInfo, "msgbox")
     endIf
     Debug.MessageBox(text)
+    return ReturnString(text)
 endFunction
 
-function Notify(int actionInfo)
+int function Notify(int actionInfo)
     string text = GetString(actionInfo, "text")
     if HasField(actionInfo, "notify")
         text = GetString(actionInfo, "notify")
     endIf
     Debug.Notification(text)
+    return ReturnString(text)
 endFunction
 
-function BlackScreen(int actionInfo)
+int function PrintConsole(int actionInfo)
+    string text = GetString(actionInfo, "text")
+    if HasField(actionInfo, "print")
+        text = GetString(actionInfo, "print")
+    endIf
+    Debug.Notification(text)
+    return ReturnString(text)
+endFunction
+
+; JMap Types
+; 2: int
+; 3: float
+; 4: Form
+; 5: object
+; 6: string
+int function SetVariable(int scriptInstance, int actionInfo)
+    ; validate etc...
+    string varName = JMap.getStr(actioninfo, "var")
+
+    ; Debug.MessageBox("TODO set variable " + varname + " type: " + JMap.valueType(actionInfo, "value") + " as string: " + JMap.getStr(actionInfo, "value"))
+
+    ; Is the variable a literal "value" or does it equal the "result" of running something?
+    if JMap.hasKey(actionInfo, "value")
+        int valueType = JMap.valueType(actionInfo, "value")
+        if valueType == 2
+            _SkyScript_ScriptInstance.SetVariableInt(scriptInstance, varName, JMap.getInt(actionInfo, "value"))
+        elseIf valueType == 3
+            _SkyScript_ScriptInstance.SetVariableFloat(scriptInstance, varName, JMap.getFlt(actionInfo, "value"))
+        elseIf valueType == 4
+            _SkyScript_ScriptInstance.SetVariableForm(scriptInstance, varName, JMap.getForm(actionInfo, "value"))
+        elseIf valueType == 5
+            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, varName, JMap.getObj(actionInfo, "value"))
+        elseIf valueType == 6
+            _SkyScript_ScriptInstance.SetVariableString(scriptInstance, varName, JMap.getStr(actionInfo, "value"))
+        endIf
+    endIf
+
+    return 0
+
+    if JMap.hasKey(actionInfo, "result")
+        Debug.MessageBox("Unsupported var from result")
+        int subscriptDefinitinion = JMap.getObj(actioninfo, "result")
+
+    endIf
+endFunction
+
+int function BlackScreen(int actionInfo)
     ImageSpaceModifier fadeToBlackHold = Game.GetForm(0xf756e) as ImageSpaceModifier
     fadeToBlackHold.Apply()
+    return ReturnNone()
 endFunction
 
-function FadeToBlack(int actionInfo)
+int function FadeToBlack(int actionInfo)
     ImageSpaceModifier fadeToBlack = Game.GetForm(0xf756d) as ImageSpaceModifier
     ImageSpaceModifier fadeToBlackHold = Game.GetForm(0xf756e) as ImageSpaceModifier
     float waitBeforeHold = JMap.getFlt(actionInfo, "wait", 2.0)
     fadeToBlack.Apply()
     Utility.Wait(waitBeforeHold)
     fadeToBlack.PopTo(fadeToBlackHold)
+    return ReturnNone()
 endFunction
 
-function FadeFromBlack(int actionInfo)
+int function FadeFromBlack(int actionInfo)
     ImageSpaceModifier fadeFromBlack = Game.GetForm(0xf756f) as ImageSpaceModifier
     ImageSpaceModifier fadeToBlackHold = Game.GetForm(0xf756e) as ImageSpaceModifier
     fadeToBlackHold.PopTo(FadeFromBlack)
     fadeToBlackHold.Remove()
+    return ReturnNone()
 endFunction
 
-function Wait(int actionInfo)
+int function Wait(int actionInfo)
     float time = GetFloat(actionInfo, "duration")
     if HasField(actionInfo, "wait")
         time = GetFloat(actionInfo, "wait")
@@ -122,16 +185,18 @@ function Wait(int actionInfo)
     else
         Utility.Wait(time)
     endIf
+    return ReturnFloat(time)
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
-function Message(int scriptInstance, int actionInfo)    
+int function Message(int scriptInstance, int actionInfo)    
     ; TODO syntax errors, validation, etc
 
     _SkyScript_Quest ss = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_Quest
     
     ; Set the message Text
-    ss.SkyrimScripting_MessageText_BaseForm.SetName(JMap.getStr(actionInfo, "msg"))
+    string text = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, JMap.getStr(actionInfo, "msg"))
+    ss.SkyrimScripting_MessageText_BaseForm.SetName(text)
 
     ; Reset all message buttons
     bool anyButtons = false
@@ -184,6 +249,7 @@ function Message(int scriptInstance, int actionInfo)
         ss.SkyrimScripting_Message_Generic_Cancel.Value = 0
     endIf
 
+    ; TODO ! Add an explicit "OK" option ?
     int back = 0
     int yes = 1
     int no = 2
@@ -196,7 +262,7 @@ function Message(int scriptInstance, int actionInfo)
     int result = ss.SkyrimScripting_Message_Generic.Show()
 
     if ! anyButtons
-        return
+        return ReturnString("OK")
     endIf
 
     string resultText
@@ -232,10 +298,12 @@ function Message(int scriptInstance, int actionInfo)
     else
         Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
+
+    return ReturnString(resultText)
 endFunction
 
 ; TODO - update to run actions as subscripts instead of just running an action (so they can be paused)
-function Prompt(int scriptInstance, int actionInfo)
+int function Prompt(int scriptInstance, int actionInfo)
     ; TODO Raise a SyntaxError if missing prompt or options
 
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu
@@ -262,9 +330,10 @@ function Prompt(int scriptInstance, int actionInfo)
     else
         Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
+    return ReturnString(resultText)
 endFunction
 
-function OnEvent(int actionInfo)
+int function OnEvent(int actionInfo)
     ; TODO validata params and such
     string eventName
     if JMap.hasKey(actionInfo, "event")
@@ -279,9 +348,18 @@ function OnEvent(int actionInfo)
     int eventScript = JMap.getObj(actionInfo, "script")
 
     _SkyScript_Events.AddEventHandler(eventName, eventScript)
+
+    return ReturnString(eventName)
 endFunction
 
-function CloseRaceMenu(int actionInfo)
+int function RunScript(int scriptInstance, int actionInfo)
+
+    ; TODO run a script by file path
+    
+    return 0
+endFunction
+
+int function CloseRaceMenu(int actionInfo)
     ; This 100% assumes that you're in RaceMenu
     int enter = 28
     int accept = 19 ; R
@@ -290,4 +368,5 @@ function CloseRaceMenu(int actionInfo)
     Input.TapKey(enter)
     Utility.WaitMenuMode(0.1)
     Input.TapKey(enter)
+    return ReturnNone()
 endFunction
