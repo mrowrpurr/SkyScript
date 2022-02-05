@@ -1,6 +1,6 @@
 scriptName _SkyScript_StdlibActionHandler extends SkyScriptActionHandler
 
-event RegisterActions()
+event RegisterActions() ; TODO REDO ACTION REGISTRATION NONSENSE
     RegisterAction("msg")
     RegisterAction("msgbox")
     RegisterAction("print")
@@ -57,6 +57,8 @@ int function Execute(int scriptInstance, string actionName, int actionInfo)
         return PrintConsole(actionInfo)
     elseIf JMap.hasKey(actionInfo, "var")
         return SetVariable(scriptInstance, actionInfo)
+    elseIf JMap.hasKey(actionInfo, "vars")
+        return SetVariables(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "notify")
         return Notify(actionInfo)
     elseIf JMap.hasKey(actionInfo, "on")
@@ -78,6 +80,7 @@ bool function MatchAction(int scriptInstance, int actionInfo)
     return JMap.hasKey(actionInfo, "msgbox") || \
            JMap.hasKey(actionInfo, "msg")    || \
            JMap.hasKey(actionInfo, "var")    || \
+           JMap.hasKey(actionInfo, "vars")   || \
            JMap.hasKey(actionInfo, "wait")   || \
            JMap.hasKey(actionInfo, "prompt") || \
            JMap.hasKey(actionInfo, "event")  || \
@@ -112,6 +115,28 @@ int function PrintConsole(int actionInfo)
     endIf
     Debug.Notification(text)
     return ReturnString(text)
+endFunction
+
+int function SetVariables(int scriptInstance, int actionInfo)
+    int variableMap = JMap.getObj(actionInfo, "vars")
+    string[] variableNames = JMap.allKeysPArray(variableMap)
+    int i = 0
+    while i < variableNames.Length
+        string variableName = variableNames[i]
+        int variableType = JMap.valueType(variableMap, variableName)
+        if variableType == 2
+            _SkyScript_ScriptInstance.SetVariableInt(scriptInstance, variableName, JMap.getInt(variableMap, variableName))
+        elseIf variableType == 3
+            _SkyScript_ScriptInstance.SetVariableFloat(scriptInstance, variableName, JMap.getFlt(variableMap, variableName))
+        elseIf variableType == 4
+            _SkyScript_ScriptInstance.SetVariableForm(scriptInstance, variableName, JMap.getForm(variableMap, variableName))
+        elseIf variableType == 5
+            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, variableName, JMap.getObj(variableMap, variableName))
+        elseIf variableType == 6
+            _SkyScript_ScriptInstance.SetVariableString(scriptInstance, variableName, JMap.getStr(variableMap, variableName))
+        endIf
+        i += 1
+    endWhile
 endFunction
 
 ; JMap Types

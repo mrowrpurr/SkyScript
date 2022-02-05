@@ -324,7 +324,7 @@ endFunction
 int function GetVariableObject(int scriptInstance, string name, int default = 0) global
     int variable = GetVariable(scriptInstance, name)
     if variable
-        return JMap.getInt(variable, "value")
+        return JMap.getObj(variable, "value")
     else
         return default
     endIf
@@ -334,14 +334,14 @@ function SetVariableObject(int scriptInstance, string name, int value) global
     int variable = DeclareVariable(scriptInstance, name)
     JMap.setStr(variable, "type", "object")
     JMap.removeKey(variable, "value")
-    JMap.setInt(variable, "value", value)
+    JMap.setObj(variable, "value", value)
 endFunction
 
 string function GetVariableText(int scriptInstance, string name) global
     string variableType = GetVariableType(scriptInstance, name)
     if variableType
         if variableType == "object"
-            return ToJson(GetVariableObject(scriptInstance, name))
+            return "OBJECT: " + ToJson(GetVariableObject(scriptInstance, name))
         elseIf variableType == "string"
             return GetVariableString(scriptInstance, name)
         elseIf variableType == "int"
@@ -367,7 +367,7 @@ string function ToJson(int object) global
         _SkyScript_Files.DeleteFile(tempFile)
         return json
     else
-        return ""
+        return "[No object]"
     endIf
 endFunction
 
