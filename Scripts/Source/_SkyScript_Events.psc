@@ -24,7 +24,23 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
             i += 1
         endWhile
     endIf
-    ; Now queue them from the relevant files
+
+    FireScriptEventHandlers(eventName, eventVariable)
+endFunction
+
+function FireScriptEventHandlers(string eventName, int eventVariable = 0) global
+    ; TODO ! THESE IDS MIGHT EXPIRE ! PUT THEM SOMEWHERE WHILE ENQUEUED !!!
+    string[] scriptFiles = ScriptFilesForEvent(eventName)
+    if scriptFiles
+        int i = 0
+        while i < scriptFiles.Length
+            int eventHandler = JValue.readFromFile(scriptFiles[i])
+            if eventHandler
+                QueueJob(CreateEventHandlerJob(eventName, eventHandler, eventVariable))
+            endIf
+            i += 1
+        endWhile
+    endIf
 endFunction
 
 ; TODO provide the event info!
@@ -60,4 +76,12 @@ endFunction
 
 int function EventHandlersQueue() global
     return _SkyScript_Data.FindOrCreateMap("eventHandlerQueue")
+endFunction
+
+string function EventScriptsDirectory(string eventName) global
+    return SkyScript.DirectoryPath() + "/Events/" + eventName
+endFunction
+
+string[] function ScriptFilesForEvent(string eventName) global
+    return JContainers.contentsOfDirectoryAtPath(EventScriptsDirectory(eventName), ".json")
 endFunction

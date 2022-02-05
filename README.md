@@ -20,16 +20,29 @@ Data\SkyScript\Player\EnterCombat\*.json
 
 ## TODO
 
-- [x] Change variable interpolation to use `${ }` instead of `<var:>`
-- [ ] ItemAdded via file
-- [ ] If it's a potion... then drink it
-- [ ] If it's a potion... duplicate it
-- [ ] Switch Action Handlers to use Syntax
-- [ ] Switch from "action" to "[unique key]" based matching
-- [ ] Be able to print the name of the item that was added
-- [ ] Variables
 - [ ] Simplest of Conditionals
 - [ ] Error Handling of some variety
+
+- [x] Player/ItemAdded via file
+- [ ] Player/ItemEquip via file
+- [ ] Player/BeginSneak via file
+- [ ] Player/EndSneak via file
+
+- [ ] System/MenuOpen via file
+
+- [ ] Play animation on Player
+- [ ] If it's a potion... then drink it
+- [ ] If it's a potion... duplicate it
+
+- [ ] MCM Actions (recorder)
+
+- [ ] Handle events on certain NPCs!
+
+- [ ] Switch Action Handlers to use Syntax
+- [ ] Switch from "action" to "[unique key]" based matching
+- [x] Change variable interpolation to use `${ }` instead of `<var:>`
+- [x] Be able to print the name of the item that was added
+- [x] Variables
 
 - [ ] Item chooser (can specify one or multiple)
 - [ ] Spell chooser (can specify one or multiple)

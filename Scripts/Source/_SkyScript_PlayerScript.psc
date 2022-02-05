@@ -13,5 +13,5 @@ event OnItemAdded(Form item, int count, ObjectReference ref, ObjectReference sou
     JMap.setInt(eventVar, "count", count)
     JMap.setForm(eventVar, "object", ref)
     JMap.setForm(eventVar, "container", source)
-    _SkyScript_Events.FireEventHandlers("ItemAdded", eventVar)
+    _SkyScript_Events.FireEventHandlers("Player/ItemAdded", eventVar)
 endEvent

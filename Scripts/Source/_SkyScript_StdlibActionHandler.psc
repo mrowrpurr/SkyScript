@@ -370,7 +370,7 @@ int function OnEvent(int actionInfo)
         Debug.MessageBox("Invalid event " + _SkyScript_Log.ToJson(actionInfo)) ; TODO make this a SyntaxError
     endIf
 
-    int eventScript = JMap.getObj(actionInfo, "script")
+    int eventScript = JMap.getObj(actionInfo, "run")
 
     _SkyScript_Events.AddEventHandler(eventName, eventScript)
 

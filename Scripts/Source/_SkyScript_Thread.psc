@@ -13,6 +13,7 @@ function RunJob(int jobId) global
     int eventModEvent = ModEvent.Create(ModEventNameForThreadIndex(threadIndex))
     ModEvent.PushInt(eventModEvent, jobId)
     ModEvent.Send(eventModEvent)
+    MiscUtil.PrintConsole("Send Run Job Event " + jobId)
 endFunction
 
 string function ModEventNameForThreadIndex(int index) global
@@ -45,6 +46,7 @@ function ListenForJobs()
 endFunction
 
 event OnJob(int jobId)
+    MiscUtil.PrintConsole("ON JOB " + jobId + " " + self)
     string jobType = JMap.getStr(jobId, "type")
     if jobType == "eventHandler"
         OnEventHandler(jobId)
@@ -61,8 +63,3 @@ event OnEventHandler(int jobId)
     _SkyScript_ScriptInstance.Dispose(scriptInstance)
     _SkyScript_Events.CompleteJob(jobId)
 endEvent
-; JMap.setStr(jobId, "type", "eventHandler")
-; JMap.setStr(jobId, "eventName", eventName)
-; JMap.setObj(jobId, "eventHandler", eventHandler)
-; JMap.setObj(jobId, "event", eventVariable)
-; return jobId
