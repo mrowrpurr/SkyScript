@@ -15,13 +15,20 @@ Data\SkyScript\RunOnce\*.json
 Data\SkyScript\Player\ItemAdded\*.json
 Data\SkyScript\Player\EnterSneak\*.json
 Data\SkyScript\Player\LeaveSneak\*.json
+Data\SkyScript\Player\EnterCombat\*.json
 ```
 
 ## TODO
 
-- [ ] Error Handling of some variety
+- [ ] Change variable interpolation to use `${ }` instead of `<var:>`
+- [ ] ItemAdded via file
+- [ ] If it's a potion... then drink it
+- [ ] If it's a potion... duplicate it
+- [ ] Switch from "action" to "[unique key]" based matching
+- [ ] Be able to print the name of the item that was added
 - [ ] Variables
 - [ ] Simplest of Conditionals
+- [ ] Error Handling of some variety
 
 - [ ] Item chooser (can specify one or multiple)
 - [ ] Spell chooser (can specify one or multiple)

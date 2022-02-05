@@ -271,10 +271,10 @@ string function GetVariableText(int scriptInstance, string name) global
 endFunction
 
 string function InterpolateString(int scriptInstance, string text) global
-    int varStart = StringUtil.Find(text, "<var:")
+    int varStart = StringUtil.Find(text, "${")
     while varStart > -1
-        int varEnd = StringUtil.Find(text, ">", varStart)
-        string varName = StringUtil.Substring(text, varStart + 5, (varEnd - varStart - 5))
+        int varEnd = StringUtil.Find(text, "}", varStart)
+        string varName = StringUtil.Substring(text, varStart + 2, (varEnd - varStart - 2))
         
         string beforeVar = ""
         if varStart > 0
@@ -289,10 +289,8 @@ string function InterpolateString(int scriptInstance, string text) global
         string variableText = GetVariableText(scriptInstance, varName)
 
         text = beforeVar + variableText + afterVar
-
-        ; Debug.MessageBox("New text: '" + text + "'\nBefore: " + beforeVar + "\nVar: " + variableText + "\nAfter: " + afterVar)
         
-        varStart = StringUtil.Find(text, "<var:")
+        varStart = StringUtil.Find(text, "${")
     endWhile
     return text
 endFunction

@@ -4,11 +4,9 @@ function RunStartupScripts() global
     _SkyScript_Runner.RunDirectoryScripts(_SkyScript_Files.LoadStartupScripts(), _SkyScript_Files.StartupScriptsPath())
 endFunction
 
-; TODO - when save games are loaded, ensure that the queue is resumed!!
-
 function QueueJob(int jobId) global
     JMap.setObj(EventHandlersQueue(), jobId, jobId)
-    _SkyScript_Thread.RunJob(jobId) 
+    _SkyScript_Thread.RunJob(jobId) ; TODO - when save games are loaded, ensure that the queue is resumed playing. I think it auto will be tho...
 endFunction
 
 function CompleteJob(int jobId) global
@@ -16,7 +14,7 @@ function CompleteJob(int jobId) global
 endFunction
 
 function FireEventHandlers(string eventName, int eventVariable = 0) global
-    int eventHandlers = GetEventHandlersArray(eventName)
+    int eventHandlers = GetEventHandlersArray(eventName) ; This is the list of known handlers
     if eventHandlers
         int handlerCount = JArray.count(eventHandlers)
         int i = 0
@@ -26,6 +24,7 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
             i += 1
         endWhile
     endIf
+    ; Now queue them from the relevant files
 endFunction
 
 ; TODO provide the event info!

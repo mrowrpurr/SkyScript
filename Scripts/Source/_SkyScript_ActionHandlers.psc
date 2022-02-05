@@ -1,6 +1,8 @@
 scriptName _SkyScript_ActionHandlers extends Quest
 
-int property HandlerCount auto
+bool property IsReady auto
+
+int property HandlerCount auto ; TODO make this a JArray of AVAILABLE indexes so we can deregister. Which WILL require locking to interact with.
 
 SkyScriptActionHandler[] property Handlers0 auto
 SkyScriptActionHandler[] property Handlers1 auto
@@ -24,6 +26,7 @@ event OnInit()
     Handlers7 = new SkyScriptActionHandler[128]
     Handlers8 = new SkyScriptActionHandler[128]
     Handlers9 = new SkyScriptActionHandler[128]
+    IsReady = true
 endEvent
 
 _SkyScript_ActionHandlers function GetInstance() global
