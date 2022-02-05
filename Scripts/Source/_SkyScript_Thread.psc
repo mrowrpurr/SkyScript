@@ -53,8 +53,10 @@ endEvent
 
 event OnEventHandler(int jobId)
     int eventHandler = JMap.getObj(jobId, "eventHandler")
+    int eventVariable = JMap.getObj(jobId, "event")
     int scriptInstance = _SkyScript_ScriptInstance.Initialize()
     _SkyScript_ScriptInstance.SetActionArray(scriptInstance, eventHandler)
+    _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "event", eventVariable)
     _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
     _SkyScript_ScriptInstance.Dispose(scriptInstance)
     _SkyScript_Events.CompleteJob(jobId)

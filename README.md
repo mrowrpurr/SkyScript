@@ -20,10 +20,11 @@ Data\SkyScript\Player\EnterCombat\*.json
 
 ## TODO
 
-- [ ] Change variable interpolation to use `${ }` instead of `<var:>`
+- [x] Change variable interpolation to use `${ }` instead of `<var:>`
 - [ ] ItemAdded via file
 - [ ] If it's a potion... then drink it
 - [ ] If it's a potion... duplicate it
+- [ ] Switch Action Handlers to use Syntax
 - [ ] Switch from "action" to "[unique key]" based matching
 - [ ] Be able to print the name of the item that was added
 - [ ] Variables

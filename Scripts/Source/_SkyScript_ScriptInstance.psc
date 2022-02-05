@@ -172,16 +172,88 @@ bool function VarExists(int scriptInstance, string name) global
     endIf
 endFunction
 
+; TODO - update this whole damn this to not call GetVariable() again and again
 int function GetVariable(int scriptInstance, string name) global
-    int varMap = GetVariableMap(scriptInstance)
-    if JMap.hasKey(varMap, name)
-        return JMap.getObj(varMap, name)
-    endIf
-    int parent = GetParent(scriptInstance)
-    if parent
-        return GetVariable(parent, name)
+    if StringUtil.Find(name, ".") > -1
+        string[] variableParts = StringUtil.Split(name, ".")
+        string variableName = variableParts[0]
+        string subVariableName = ""
+        int i = 1
+        while i < variableParts.Length
+            if i == 1
+                subVariableName += variableParts[i]
+            else
+                subVariableName += "." + variableParts[i]
+            endIf
+            i += 1
+        endWhile
+        int object = GetVariableObject(scriptInstance, variableName)
+        return GetObjectSubvariable(object, subVariableName)
     else
-        return 0
+        int varMap = GetVariableMap(scriptInstance)
+        if JMap.hasKey(varMap, name)
+            return JMap.getObj(varMap, name)
+        endIf
+        int parent = GetParent(scriptInstance)
+        if parent
+            return GetVariable(parent, name)
+        else
+            return 0
+        endIf
+    endIf
+endFunction
+
+int function GetObjectSubvariable(int object, string subVariableName) global
+    ; What type of object is this?
+
+    if StringUtil.Find(subVariableName, ".") > -1
+        string[] variableParts = StringUtil.Split(subVariableName, ".")
+        string variableName = variableParts[0]
+        string newSubVariableName = ""
+        int i = 1
+        while i < variableParts.Length
+            if i == 1
+                newSubVariableName += variableParts[i]
+            else
+                newSubVariableName += "." + variableParts[i]
+            endIf
+            i += 1
+        endWhile
+        int subobject = JMap.getObj(object, variableName)
+        return GetObjectSubvariable(subobject, newSubVariableName)
+    else
+        if JMap.hasKey(object, subVariableName)
+            int variable = JMap.object()
+            int valueType = JMap.valueType(object, subVariableName)
+            if valueType == 2 ; Int
+                JMap.setStr(variable, "type", "int")
+                JMap.setInt(variable, "value", JMap.getInt(object, subVariableName))
+            elseIf valueType == 3 ; Float
+                JMap.setStr(variable, "type", "float")
+                JMap.setFlt(variable, "value", JMap.getFlt(object, subVariableName))
+            elseIf valueType == 4 ; Form
+                JMap.setStr(variable, "type", "form")
+                JMap.setForm(variable, "value", JMap.getForm(object, subVariableName))
+            elseIf valueType == 5 ; Object
+                JMap.setStr(variable, "type", "object")
+                JMap.setObj(variable, "value", JMap.getObj(object, subVariableName))
+            elseIf valueType == 6 ; String
+                JMap.setStr(variable, "type", "string")
+                JMap.setStr(variable, "value", JMap.getStr(object, subVariableName))
+            endIf
+            return variable
+        else
+            return 0
+        endIf
+    endIf
+endFunction
+
+string function GetVariableType(int scriptInstance, string name) global
+    int variable = GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getStr(variable, "type")
+    else
+        return ""
     endIf
 endFunction
 
@@ -266,8 +338,37 @@ function SetVariableObject(int scriptInstance, string name, int value) global
 endFunction
 
 string function GetVariableText(int scriptInstance, string name) global
-    ; TODO
-    return GetVariableString(scriptInstance, name) ; Just strings to test with
+    string variableType = GetVariableType(scriptInstance, name)
+    if variableType
+        if variableType == "object"
+            return ToJson(GetVariableObject(scriptInstance, name))
+        elseIf variableType == "string"
+            return GetVariableString(scriptInstance, name)
+        elseIf variableType == "int"
+            return GetVariableInt(scriptInstance, name)
+        elseIf variableType == "float"
+            return GetVariableFloat(scriptInstance, name)
+        elseIf variableType == "form"
+            return GetVariableForm(scriptInstance, name)
+        else
+            return "UNSUPPORTED VAR TYPE: " + variableType
+        endIf
+    else
+        return ""
+    endIf
+endFunction
+
+; TODO find a new home for this function
+string function ToJson(int object) global
+    if object
+        string tempFile = _SkyScript_Files.GetTempFile()
+        JValue.writeToFile(object, tempFile)
+        string json = MiscUtil.ReadFromFile(tempFile)
+        _SkyScript_Files.DeleteFile(tempFile)
+        return json
+    else
+        return ""
+    endIf
 endFunction
 
 string function InterpolateString(int scriptInstance, string text) global
