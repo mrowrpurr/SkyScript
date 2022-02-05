@@ -187,8 +187,12 @@ int function GetVariable(int scriptInstance, string name) global
             endIf
             i += 1
         endWhile
-        int object = GetVariableObject(scriptInstance, variableName)
-        return GetObjectSubvariable(object, subVariableName)
+        if GetVariableType(scriptInstance, variableName) == "form"
+            return GetFormPropertyVariable(GetVariableForm(scriptInstance, variableName), subVariableName)
+        else
+            int object = GetVariableObject(scriptInstance, variableName)
+            return GetObjectSubvariable(object, subVariableName)
+        endIf
     else
         int varMap = GetVariableMap(scriptInstance)
         if JMap.hasKey(varMap, name)
@@ -219,8 +223,12 @@ int function GetObjectSubvariable(int object, string subVariableName) global
             endIf
             i += 1
         endWhile
-        int subobject = JMap.getObj(object, variableName)
-        return GetObjectSubvariable(subobject, newSubVariableName)
+        if JMap.valueType(object, variableName) == 4 ; Form
+            return GetFormPropertyVariable(JMap.getForm(object, variableName), newSubVariableName)
+        else
+            int subobject = JMap.getObj(object, variableName)
+            return GetObjectSubvariable(subobject, newSubVariableName)
+        endIf
     else
         if JMap.hasKey(object, subVariableName)
             int variable = JMap.object()
@@ -246,6 +254,19 @@ int function GetObjectSubvariable(int object, string subVariableName) global
             return 0
         endIf
     endIf
+endFunction
+
+int function GetFormPropertyVariable(Form theForm, string propertyName) global
+    ; TODO - make this extensible! and based on various types! woohoo!
+    int variable = JMap.object()
+    if propertyName == "name"
+        JMap.setStr(variable, "type", "string")
+        JMap.setStr(variable, "value", theForm.GetName())
+    else
+        JMap.setStr(variable, "type", "string")
+        JMap.setStr(variable, "value", "Unsupported Form property: " + propertyName)
+    endIf
+    return variable
 endFunction
 
 string function GetVariableType(int scriptInstance, string name) global
