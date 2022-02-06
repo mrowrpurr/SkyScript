@@ -103,7 +103,7 @@ endFunction
 
 function SetFilepath(int scriptInstance, string filepath) global
     JMap.setStr(scriptInstance, "filepath", filepath)
-    ; JMap.setStr(GetVariableMap(scriptInstance), "SCRIPT_FILE", filepath)
+    SetVariableString(scriptInstance, "SCRIPT_FILENAME", filepath)
 endFunction
 
 int function GetActionArray(int scriptInstance) global
@@ -680,6 +680,10 @@ string function ToJson(int object) global
 endFunction
 
 string function InterpolateString(int scriptInstance, string text) global
+    if ! text
+        return ""
+    endIf
+
     int varStart = StringUtil.Find(text, "${")
     while varStart > -1
         int varEnd = StringUtil.Find(text, "}", varStart)

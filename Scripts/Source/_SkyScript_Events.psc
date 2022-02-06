@@ -20,7 +20,9 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
         int i = 0
         while i < handlerCount
             int eventHandler = JArray.getObj(eventHandlers, i)
-            QueueJob(CreateEventHandlerJob(eventName, eventHandler, eventVariable))
+            int scriptInstance = _SkyScript_ScriptInstance.Initialize()
+            _SkyScript_ScriptInstance.SetActionArray(scriptInstance, eventHandler)
+            QueueJob(CreateEventHandlerJob(eventName, scriptInstance, eventVariable))
             i += 1
         endWhile
     endIf
@@ -29,27 +31,23 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
 endFunction
 
 function FireScriptEventHandlers(string eventName, int eventVariable = 0) global
-    ; TODO ! THESE IDS MIGHT EXPIRE ! PUT THEM SOMEWHERE WHILE ENQUEUED !!!
     string[] scriptFiles = ScriptFilesForEvent(eventName)
     if scriptFiles
         int i = 0
         while i < scriptFiles.Length
-            int eventHandler = JValue.readFromFile(scriptFiles[i])
-            if eventHandler
-                QueueJob(CreateEventHandlerJob(eventName, eventHandler, eventVariable))
-            endIf
+            string filepath = scriptFiles[i]
+            int scriptInstance = SkyScript.Initialize(filepath)
+            QueueJob(CreateEventHandlerJob(eventName, scriptInstance, eventVariable))
             i += 1
         endWhile
     endIf
 endFunction
 
-; TODO provide the event info!
-int function CreateEventHandlerJob(string eventName, int eventHandler, int eventVariable = 0) global
+int function CreateEventHandlerJob(string eventName, int scriptInstance, int eventVariable = 0) global
+    _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "event", eventVariable)
     int jobId = JMap.object()
-    JMap.setStr(jobId, "type", "eventHandler")
-    JMap.setStr(jobId, "eventName", eventName)
-    JMap.setObj(jobId, "eventHandler", eventHandler)
-    JMap.setObj(jobId, "event", eventVariable)
+    JMap.setStr(jobId, "type", "script")
+    JMap.setObj(jobId, "script", scriptInstance)
     return jobId
 endFunction
 

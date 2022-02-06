@@ -42,3 +42,7 @@ endFunction
 function Kill(int scriptInstance) global
     _SkyScript_ScriptInstance.Kill(scriptInstance)
 endFunction
+
+string function InterpolateString(int scriptInstance, string text) global
+    return _SkyScript_ScriptInstance.InterpolateString(scriptInstance, text)
+endFunction

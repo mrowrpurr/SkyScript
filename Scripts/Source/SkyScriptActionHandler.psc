@@ -4,7 +4,7 @@ int property HandlerId auto
  
 event OnInit()
     HandlerId = _SkyScript_ActionHandlers.GetInstance().AddHandler(self)
-    RegisterActions()
+    RegisterSyntax()
 endEvent
 
 bool function MatchAction(int scriptInstance, int actionInfo)
@@ -12,17 +12,17 @@ bool function MatchAction(int scriptInstance, int actionInfo)
     return false
 endFunction
 
-event RegisterActions()
+event RegisterSyntax()
     ; Intended to be overriden
 endEvent
 
-int function Execute(int scriptInstance, string actionName, int actionInfo)
+int function Execute(int scriptInstance, int actionInfo)
     ; Intended to be overidden
     return 0
 endFunction
 
-function RegisterAction(string actionName)
-    _SkyScript_ActionNames.Register(actionName, HandlerId)
+function AddSyntax(string keyName)
+    JMap.setInt(_KeyNameMap(), keyName, HandlerId)
 endFunction
 
 bool function HasField(int actionInfo, string field)
@@ -39,6 +39,14 @@ endFunction
 
 int function GetInt(int actionInfo, string field)
     return JMap.getInt(actionInfo, field)
+endFunction
+
+int function GetObject(int actionInfo, string field)
+    return JMap.getObj(actionInfo, field)
+endFunction
+
+Form function GetForm(int actionInfo, string field)
+    return JMap.getForm(actionInfo, field)
 endFunction
 
 bool function GetBool(int actionInfo, string field)
@@ -171,4 +179,17 @@ endFunction
 
 int function GetResponseObject(int response) global
     return JMap.getObj(response, "value")
+endFunction
+
+SkyScriptActionHandler function GetHandlerForSyntaxKey(string actionName) global
+    int theHandlerId = JMap.getInt(_KeyNameMap(), actionName, -1)
+    if theHandlerId != -1
+        return _SkyScript_ActionHandlers.GetInstance().GetHandler(theHandlerId)
+    else
+        return None
+    endIf
+endFunction
+
+int function _KeyNameMap() global
+    return _SkyScript_Data.FindOrCreateMap("actionHandlerKeys")
 endFunction

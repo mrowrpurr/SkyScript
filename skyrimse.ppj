@@ -18,6 +18,7 @@
         <Import>@ImportsFolder\SKSE64\Scripts\Source</Import>
         <Import>@ModsFolder\SkyUnit\Scripts\Source</Import>
         <Import>@ImportsFolder\UIExtensions\scripts\source</Import>
+        <Import>@ImportsFolder\ConsoleUtil\scripts\source</Import>
         <Import>@ImportsFolder\PapyrusUtil\scripts\source</Import>
         <Import>@ImportsFolder\JContainers\scripts\source</Import>
         <Import>@ImportsFolder\SkyUI_SDK\Scripts\Source</Import>

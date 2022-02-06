@@ -11,6 +11,9 @@ int function ResumeScriptInstance(int scriptInstance) global
     return _SkyScript_ScriptInstance.GetVariableObject(scriptInstance, "LAST_RESPONSE")
 endFunction
 
+; TODO (1) Make a GetHandlerForAction()
+; TODO (2) Add timeout / waiting to GetHandlerForAction()
+
 int function RunAction(int scriptInstance, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
     int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
@@ -18,31 +21,35 @@ int function RunAction(int scriptInstance, int actionInfo) global
         return _SkyScript_ScriptInstance.Resume(runningScriptInstance)
     endIf
 
-    ; TODO CHANGE THIS MATCHING ON ACTION TO SYNTAX BASED MATCHING
-    string actionName = JMap.getStr(actionInfo, "action")
-    SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
-    if handler
-        int response = handler.Execute(scriptInstance, actionName, actionInfo)
-        _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
-        return response
-    else
-        ; See if any match
-        bool found = false
-        _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
-        int handlerIndex = 0
-        while (! found) && handlerIndex < handlers.HandlerCount
-            handler = handlers.GetHandler(handlerIndex)
-            if handler && handler.MatchAction(scriptInstance, actionInfo)
-                found = true
-                int response = handler.Execute(scriptInstance, actionName, actionInfo)
-                _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
-                return response
-            endIf
-            handlerIndex += 1
-        endWhile
-        if ! found
-            Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo))
+    ; Find the handler based on the keys in this action, the first one which matches wins
+    string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
+    int i = 0
+    while i < actionSyntaxKeys.Length
+        SkyScriptActionHandler handler = SkyScriptActionHandler.GetHandlerForSyntaxKey(actionSyntaxKeys[i])
+        if handler
+            int response = handler.Execute(scriptInstance, actionInfo)
+            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+            return response
         endIf
+        i += 1
+    endWhile
+
+    ; None found based on registered keys. Fall back to 'MatchAction' support.
+    bool found = false
+    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
+    int handlerIndex = 0
+    while (! found) && handlerIndex < handlers.HandlerCount
+        SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
+        if handler && handler.MatchAction(scriptInstance, actionInfo)
+            found = true
+            int response = handler.Execute(scriptInstance, actionInfo)
+            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+            return response
+        endIf
+        handlerIndex += 1
+    endWhile
+    if ! found
+        Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo))
     endIf
 endFunction
 

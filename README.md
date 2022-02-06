@@ -20,7 +20,9 @@ Data\SkyScript\Player\EnterCombat\*.json
 
 ## TODO
 
-- [ ] Simplest of Conditionals
+- [ ] Switch Action Handlers to use Syntax
+
+- [x] Simplest of Conditionals
 - [ ] Error Handling of some variety
 
 - [x] Player/ItemAdded via file
@@ -30,6 +32,7 @@ Data\SkyScript\Player\EnterCombat\*.json
 - [ ] ModEvent
 - [ ] MenuOpen via file
 
+- [ ] Can run script by file name
 - [ ] Play animation on Player
 - [ ] If it's a potion... then drink it
 - [ ] If it's a potion... duplicate it
@@ -38,7 +41,6 @@ Data\SkyScript\Player\EnterCombat\*.json
 
 - [ ] Handle events on certain NPCs!
 
-- [ ] Switch Action Handlers to use Syntax
 - [ ] Switch from "action" to "[unique key]" based matching
 - [x] Change variable interpolation to use `${ }` instead of `<var:>`
 - [x] Be able to print the name of the item that was added

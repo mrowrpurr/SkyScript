@@ -1,5 +1,7 @@
 scriptName _SkyScript_Thread extends Quest hidden
 
+; Add QueueJob here but make it QueueScript! And STORE the queue of them. And put the code here.
+
 _SkyScript_Thread function GetThreadByIndex(int threadIndex) global
     return Quest.GetQuest("SkyrimScripting_Thread" + threadIndex) as _SkyScript_Thread
 endFunction
@@ -24,7 +26,7 @@ string _threadId
 
 string property ThreadId
     string function get()
-        if ! _threadId ; [ScriptName < (0000aabb)>]
+        if ! _threadId ; [scriptName < (0000aabb)>]
             _threadId = StringUtil.SubString(self, 1, StringUtil.Find(self, " ") - 1)
         endIf
         return _threadId
@@ -46,20 +48,11 @@ function ListenForJobs()
 endFunction
 
 event OnJob(int jobId)
-    MiscUtil.PrintConsole("ON JOB " + jobId + " " + self)
     string jobType = JMap.getStr(jobId, "type")
-    if jobType == "eventHandler"
-        OnEventHandler(jobId)
+    if jobType == "script"
+        int scriptInstance = JMap.getObj(jobId, "script")
+        _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
+        _SkyScript_ScriptInstance.Dispose(scriptInstance)
+        _SkyScript_Events.CompleteJob(jobId)
     endIf
-endEvent
-
-event OnEventHandler(int jobId)
-    int eventHandler = JMap.getObj(jobId, "eventHandler")
-    int eventVariable = JMap.getObj(jobId, "event")
-    int scriptInstance = _SkyScript_ScriptInstance.Initialize()
-    _SkyScript_ScriptInstance.SetActionArray(scriptInstance, eventHandler)
-    _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "event", eventVariable)
-    _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
-    _SkyScript_ScriptInstance.Dispose(scriptInstance)
-    _SkyScript_Events.CompleteJob(jobId)
 endEvent
