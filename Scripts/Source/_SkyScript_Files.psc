@@ -20,3 +20,7 @@ endFunction
 function DeleteFile(string filepath) global
     JContainers.removeFileAtPath(filepath)
 endFunction
+
+bool function Exists(string filepath) global
+    return JContainers.fileExistsAtPath(filepath) ; Trying this, I usually use MiscUtil
+endFunction

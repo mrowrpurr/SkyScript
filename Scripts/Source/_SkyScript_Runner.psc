@@ -11,9 +11,34 @@ int function ResumeScriptInstance(int scriptInstance) global
     return _SkyScript_ScriptInstance.GetVariableObject(scriptInstance, "LAST_RESPONSE")
 endFunction
 
-; TODO (1) Make a GetHandlerForAction()
-; TODO (2) Add timeout / waiting to GetHandlerForAction()
+SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int actionInfo) global
+    ; Try using registered syntax keys
+    string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
+    int i = 0
+    while i < actionSyntaxKeys.Length
+        SkyScriptActionHandler handler = SkyScriptActionHandler.GetHandlerForSyntaxKey(actionSyntaxKeys[i])
+        if handler
+            return handler
+        endIf
+        i += 1
+    endWhile
 
+    ; Fallback to MatchSyntax
+    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
+    int handlerIndex = 0
+    while handlerIndex < handlers.HandlerCount
+        SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
+        if handler && handler.MatchSyntax(scriptInstance, actionInfo)
+            return handler
+        endIf
+        handlerIndex += 1
+    endWhile
+
+    ; Nope, didn't find it!
+    return None
+endFunction
+
+; TODO - Should only wait ONCE per missing syntax PER game load (so we don't wait again and again and again...)
 int function RunAction(int scriptInstance, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
     int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
@@ -21,35 +46,23 @@ int function RunAction(int scriptInstance, int actionInfo) global
         return _SkyScript_ScriptInstance.Resume(runningScriptInstance)
     endIf
 
-    ; Find the handler based on the keys in this action, the first one which matches wins
-    string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
-    int i = 0
-    while i < actionSyntaxKeys.Length
-        SkyScriptActionHandler handler = SkyScriptActionHandler.GetHandlerForSyntaxKey(actionSyntaxKeys[i])
-        if handler
-            int response = handler.Execute(scriptInstance, actionInfo)
-            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
-            return response
-        endIf
-        i += 1
+    float waitInterval = SkyScriptConfig.ActionLookup_WaitInterval()
+    int waitAttempts = SkyScriptConfig.ActionLookup_WaitAttempts()
+    int attempt = 0
+    SkyScriptActionHandler handler
+
+    while (! handler) && (attempt < waitAttempts)
+        handler = GetHandlerForAction(scriptInstance, actionInfo)
+        Utility.WaitMenuMode(waitInterval)
+        attempt += 1
     endWhile
 
-    ; None found based on registered keys. Fall back to 'MatchAction' support.
-    bool found = false
-    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
-    int handlerIndex = 0
-    while (! found) && handlerIndex < handlers.HandlerCount
-        SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
-        if handler && handler.MatchAction(scriptInstance, actionInfo)
-            found = true
-            int response = handler.Execute(scriptInstance, actionInfo)
-            _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
-            return response
-        endIf
-        handlerIndex += 1
-    endWhile
-    if ! found
-        Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo))
+    if handler
+        int response = handler.Execute(scriptInstance, actionInfo)
+        _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+        return response
+    else
+        Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo)) ; TODO Move this to logs! unless some like error config or something
     endIf
 endFunction
 

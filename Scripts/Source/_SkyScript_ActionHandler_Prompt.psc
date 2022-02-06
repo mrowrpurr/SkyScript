@@ -5,6 +5,8 @@ event RegisterSyntax()
 endEvent
 
 int function Execute(int scriptInstance, int actionInfo)
+    SkyScriptLock.AcquireLock("UIPrompt")
+
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu
     int optionMap = GetObject(actionInfo, "options")
     int choicesArray = GetObject(actionInfo, "prompt")
@@ -17,6 +19,9 @@ int function Execute(int scriptInstance, int actionInfo)
     endWhile
     listMenu.OpenMenu()
     int resultIndex = listMenu.GetResultInt()
+    
+    SkyScriptLock.ReleaseLock("UIPrompt")
+
     string resultText
     if resultIndex == -1
         resultText = "Cancel"
@@ -27,5 +32,6 @@ int function Execute(int scriptInstance, int actionInfo)
     if resultAction
         _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
     endIf
+
     return ReturnString(resultText)
 endFunction

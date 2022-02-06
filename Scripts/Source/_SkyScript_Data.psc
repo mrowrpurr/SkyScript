@@ -21,9 +21,16 @@ int function Get(string path) global
     return JDB.solveObj(GetPath(path))
 endFunction
 
-int function Store(string path, int object) global
+float function GetFloat(string path) global
+    return JDB.solveFlt(GetPath(path))
+endFunction
+
+function Store(string path, int object) global
     JDB.solveObjSetter(GetPath(path), object, createMissingKeys = true) 
-    return object
+endFunction
+
+function StoreFloat(string path, float value) global
+    JDB.solveFltSetter(GetPath(path), value, createMissingKeys = true) 
 endFunction
 
 int function Clear(string path) global 
@@ -33,7 +40,9 @@ endFunction
 
 int function StoreDirectory(string path, string directory) global
     if MiscUtil.FileExists(directory)
-        return Store(path, JValue.readFromDirectory(directory))
+        int object = JValue.readFromDirectory(directory)
+        Store(path, object)
+        return object
     else
         return Clear(path)
     endIf

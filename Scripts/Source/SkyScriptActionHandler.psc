@@ -7,7 +7,7 @@ event OnInit()
     RegisterSyntax()
 endEvent
 
-bool function MatchAction(int scriptInstance, int actionInfo)
+bool function MatchSyntax(int scriptInstance, int actionInfo)
     ; Intended to be optionally overriden
     return false
 endFunction
@@ -22,7 +22,9 @@ int function Execute(int scriptInstance, int actionInfo)
 endFunction
 
 function AddSyntax(string keyName)
+    SkyScriptLock.AcquireLock("AddSkyScriptActionHandlerSyntax")
     JMap.setInt(_KeyNameMap(), keyName, HandlerId)
+    SkyScriptLock.ReleaseLock("AddSkyScriptActionHandlerSyntax")
 endFunction
 
 bool function HasField(int actionInfo, string field)

@@ -25,16 +25,15 @@ endFunction
 
 event OnInit()
     CurrentlyInstalledVersion = SkyScript.GetVersion()
+    _SkyScript_ConfigFile.ReloadFromFile()
     InitializeThreads()
     ListenForEventHandlers()
     Utility.WaitMenuMode(1) ; TODO CONFIGURE THIS! ADD SOME WAITING SOMEPLACE!
     _SkyScript_Events.RunStartupScripts()
-
-    ; Testing...
-    ; ListenForTestingKeyboardShortcuts()
 endEvent
 
 event OnPlayerLoadGame()
+    _SkyScript_ConfigFile.ReloadFromFile()
     ListenForEventHandlers()
     _SkyScript_Events.RunStartupScripts() ; How to make these so they only run once (IF SO DESIRED?)
 endEvent
@@ -88,41 +87,3 @@ function ListenForEventHandlers()
     Threads[8].ListenForJobs()
     Threads[9].ListenForJobs()
 endFunction
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; KEYBOARD SHORTCUTS FOR TESTING (TEMPORARY)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; function ListenForTestingKeyboardShortcuts()
-;     RegisterForKey(199)    ; Start Script - Home
-;     RegisterForKey(197)    ; Pause It - Pause
-;     RegisterForKey(210)    ; Print Status - Ins
-;     RegisterForKey(207)    ; End it - End
-;     RegisterForKey(211)    ; Resume it - Del
-; endFunction
-
-; int currentTestScript
-
-; event OnKeyDown(int keyCode)
-;     if keyCode == 199 ; Start
-;         currentTestScript = SkyScript.Initialize("Data/hello.json")
-;         Debug.MessageBox("RUNNING " + currentTestScript)
-;         SkyScript.Run(currentTestScript)
-;         if ! SkyScript.IsPaused(currentTestScript)
-;             SkyScript.Dispose(currentTestScript)
-;         endIf
-;     elseIf keyCode == 197 ; Pause
-;         Debug.MessageBox("PAUSING " + currentTestScript)
-;         SkyScript.Pause(currentTestScript)
-;     elseIf keyCode == 210 ; Status
-;         Debug.MessageBox("STATUS OF SCRIPT " + currentTestScript + "\n" + _SkyScript_Log.ToJson(currentTestScript))
-;     elseIf keyCode == 207 ; End
-;         Debug.MessageBox("STOPPING " + currentTestScript)
-;         SkyScript.Kill(currentTestScript)
-;     elseIf keyCode == 211 ; Resume
-;         Debug.MessageBox("RESUMING " + currentTestScript)
-;         SkyScript.Resume(currentTestScript)
-;     endIf
-    
-;     _SkyScript_Log.DumpData()
-; endEvent

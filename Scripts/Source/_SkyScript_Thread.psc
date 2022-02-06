@@ -15,7 +15,6 @@ function RunJob(int jobId) global
     int eventModEvent = ModEvent.Create(ModEventNameForThreadIndex(threadIndex))
     ModEvent.PushInt(eventModEvent, jobId)
     ModEvent.Send(eventModEvent)
-    MiscUtil.PrintConsole("Send Run Job Event " + jobId)
 endFunction
 
 string function ModEventNameForThreadIndex(int index) global

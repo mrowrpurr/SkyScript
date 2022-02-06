@@ -108,8 +108,6 @@ int function Execute(int scriptInstance, int actionInfo)
 
     if resultAction
         _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
-    else
-        Debug.MessageBox("NO ACTION REGISTERED FOR RESULT: " + resultText)
     endIf
 
     return ReturnString(resultText)
