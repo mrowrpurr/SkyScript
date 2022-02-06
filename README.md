@@ -27,8 +27,8 @@ Data\SkyScript\Player\EnterCombat\*.json
 - [ ] Player/ItemEquip via file
 - [ ] Player/BeginSneak via file
 - [ ] Player/EndSneak via file
-
-- [ ] System/MenuOpen via file
+- [ ] ModEvent
+- [ ] MenuOpen via file
 
 - [ ] Play animation on Player
 - [ ] If it's a potion... then drink it

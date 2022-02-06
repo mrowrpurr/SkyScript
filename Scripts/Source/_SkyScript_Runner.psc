@@ -1,6 +1,6 @@
 scriptName _SkyScript_Runner hidden
 
-function ResumeScriptInstance(int scriptInstance) global
+int function ResumeScriptInstance(int scriptInstance) global
     _SkyScript_ScriptInstance.MarkAsRunning(scriptInstance)
     int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
     RunActionArray(scriptInstance, currentActionIndex)
@@ -8,20 +8,23 @@ function ResumeScriptInstance(int scriptInstance) global
     if _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)
         _SkyScript_ScriptInstance.Dispose(scriptInstance)
     endIf
+    return _SkyScript_ScriptInstance.GetVariableObject(scriptInstance, "LAST_RESPONSE")
 endFunction
 
-function RunAction(int scriptInstance, int actionInfo) global
+int function RunAction(int scriptInstance, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
     int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
     if runningScriptInstance
-        _SkyScript_ScriptInstance.Resume(runningScriptInstance)
-        return
+        return _SkyScript_ScriptInstance.Resume(runningScriptInstance)
     endIf
 
+    ; TODO CHANGE THIS MATCHING ON ACTION TO SYNTAX BASED MATCHING
     string actionName = JMap.getStr(actionInfo, "action")
     SkyScriptActionHandler handler = _SkyScript_ActionNames.HandlerForAction(actionName)
     if handler
-        handler.Execute(scriptInstance, actionName, actionInfo)
+        int response = handler.Execute(scriptInstance, actionName, actionInfo)
+        _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+        return response
     else
         ; See if any match
         bool found = false
@@ -31,7 +34,9 @@ function RunAction(int scriptInstance, int actionInfo) global
             handler = handlers.GetHandler(handlerIndex)
             if handler && handler.MatchAction(scriptInstance, actionInfo)
                 found = true
-                handler.Execute(scriptInstance, actionName, actionInfo)
+                int response = handler.Execute(scriptInstance, actionName, actionInfo)
+                _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+                return response
             endIf
             handlerIndex += 1
         endWhile

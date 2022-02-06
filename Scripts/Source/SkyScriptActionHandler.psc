@@ -73,6 +73,30 @@ int function ReturnNone()
     return GetReturnNone()
 endFunction
 
+bool function ResponseBool(int response)
+    return GetResponseBool(response)
+endFunction
+
+string function ResponseString(int response)
+    return GetResponseString(response)
+endFunction
+
+int function ResponseInt(int response)
+    return GetResponseInt(response)
+endFunction
+
+float function ResponseFloat(int response)
+    return GetResponseFloat(response)
+endFunction
+
+Form function ResponseForm(int theForm)
+    return GetResponseForm(theForm)
+endFunction
+
+int function ResponseObject(int object)
+    return GetResponseObject(object)
+endFunction
+
 int function GetReturnBool(bool value) global
     int response = JMap.object()
     JMap.setInt(response, "value", value as int)
@@ -119,4 +143,32 @@ int function GetReturnNone() global
     int response = JMap.object()
     JMap.setStr(response, "type", "none")
     return response
+endFunction
+
+string function GetResponseType(int response) global
+    return JMap.getStr(response, "type")
+endFunction
+
+bool function GetResponseBool(int response) global
+    return JMap.getInt(response, "value") || JMap.getStr(response, "value")
+endFunction
+
+int function GetResponseInt(int response) global
+    return JMap.getInt(response, "value")
+endFunction
+
+float function GetResponseFloat(int response) global
+    return JMap.getFlt(response, "value")
+endFunction
+
+string function GetResponseString(int response) global
+    return JMap.getStr(response, "value")
+endFunction
+
+Form function GetResponseForm(int response) global
+    return JMap.getForm(response, "value")
+endFunction
+
+int function GetResponseObject(int response) global
+    return JMap.getObj(response, "value")
 endFunction

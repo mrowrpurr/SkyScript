@@ -1,58 +1,30 @@
 scriptName _SkyScript_StdlibActionHandler extends SkyScriptActionHandler
 
-event RegisterActions() ; TODO REDO ACTION REGISTRATION NONSENSE
-    RegisterAction("msg")
-    RegisterAction("msgbox")
-    RegisterAction("print")
-    RegisterAction("var")
-    RegisterAction("blackscreen")
-    RegisterAction("fadetoblack")
-    RegisterAction("fadefromblack")
-    RegisterAction("wait")
-    RegisterAction("closeracemenu")
-    RegisterAction("prompt")
-    RegisterAction("event")
-    RegisterAction("script")
-    RegisterAction("notify")
-endEvent
+; event RegisterActions() ; TODO REDO ACTION REGISTRATION NONSENSE
+;     RegisterAction("msg")
+;     RegisterAction("msgbox")
+;     RegisterAction("print")
+;     RegisterAction("var")
+;     RegisterAction("blackscreen")
+;     RegisterAction("fadetoblack")
+;     RegisterAction("fadefromblack")
+;     RegisterAction("wait")
+;     RegisterAction("closeracemenu")
+;     RegisterAction("prompt")
+;     RegisterAction("event")
+;     RegisterAction("script")
+;     RegisterAction("notify")
+; endEvent
 
 int function Execute(int scriptInstance, string actionName, int actionInfo)
-    if actionName
-        ; Standard actions which use the "action": "something" syntax
-        if actionName == "msgbox"
-            return MessageBox(actionInfo)
-        elseIf actionName == "msg"
-            return Message(scriptInstance, actionInfo)
-        elseIf actionName == "print"
-            return PrintConsole(actionInfo)
-        elseIf actionName == "var"
-            return SetVariable(scriptInstance, actionInfo)
-        elseIf actionName == "notify"
-            return Notify(actionInfo)
-        elseIf actionName == "blackscreen"
-            return BlackScreen(actionInfo)
-        elseIf actionName == "fadetoblack"
-            return FadeToBlack(actionInfo)
-        elseIf actionName == "fadefromblack"
-            return FadeFromBlack(actionInfo)
-        elseIf actionName == "wait"
-            return Wait(actionInfo)
-        elseIf actionName == "prompt"
-            return Prompt(scriptInstance, actionInfo)
-        elseIf actionName == "closeracemenu"
-            return CloseRaceMenu(actionInfo)
-        elseIf actionName == "event"
-            return OnEvent(actionInfo)
-        elseIf actionName == "script"
-            return RunScript(scriptInstance, actionInfo)
-        endIf
-
-    ; Customized syntax like "msgbox": "hello" (without using "action": "something")
-    ; Note: don't forget to update MatchAction() when adding to this
-    elseIf JMap.hasKey(actionInfo, "msg")
+    if JMap.hasKey(actionInfo, "msg")
         return Message(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "msgbox")
         return MessageBox(actionInfo)
+    elseIf JMap.hasKey(actionInfo, "if")
+        return IfConditional(scriptInstance, actionInfo)
+    elseIf JMap.hasKey(actionInfo, "equal")
+        return EqualCondition(scriptInstance, actionInfo)
     elseIf JMap.hasKey(actionInfo, "print")
         return PrintConsole(actionInfo)
     elseIf JMap.hasKey(actionInfo, "var")
@@ -79,6 +51,8 @@ endFunction
 bool function MatchAction(int scriptInstance, int actionInfo)
     return JMap.hasKey(actionInfo, "msgbox") || \
            JMap.hasKey(actionInfo, "msg")    || \
+           JMap.hasKey(actionInfo, "if")     || \
+           JMap.hasKey(actionInfo, "equal")  || \
            JMap.hasKey(actionInfo, "var")    || \
            JMap.hasKey(actionInfo, "vars")   || \
            JMap.hasKey(actionInfo, "wait")   || \
@@ -394,4 +368,70 @@ int function CloseRaceMenu(int actionInfo)
     Utility.WaitMenuMode(0.1)
     Input.TapKey(enter)
     return ReturnNone()
+endFunction
+
+int function IfConditional(int scriptInstance, int actionInfo)
+    int condition = JMap.getObj(actionInfo, "if")
+    bool result = ResponseBool(RunCondition(scriptInstance, condition))
+    if result
+        if JMap.hasKey(actionInfo, "then")
+            int subscript = _SkyScript_ScriptInstance.Initialize()
+            _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
+            _SkyScript_ScriptInstance.SetActionArray(subscript, JMap.getObj(actionInfo, "then"))
+            _SkyScript_ScriptInstance.Run(subscript)
+        endIf
+        return ReturnBool(true)
+    else
+        if JMap.hasKey(actionInfo, "else")
+            int subscript = _SkyScript_ScriptInstance.Initialize()
+            _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
+            _SkyScript_ScriptInstance.SetActionArray(subscript, JMap.getObj(actionInfo, "else"))
+            _SkyScript_ScriptInstance.Run(subscript)
+        endIf
+        return ReturnBool(false)
+    endIf
+endFunction
+
+int function RunCondition(int scriptInstance, int condition)
+    int subscript = _SkyScript_ScriptInstance.Initialize()
+    _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
+    _SkyScript_ScriptInstance.SetActionArray(subscript, condition)
+    return _SkyScript_ScriptInstance.Run(subscript)
+endFunction
+
+int function EqualCondition(int scriptInstance, int actionInfo)
+    int equalityCheck = JMap.getObj(actionInfo, "equal")
+
+    string leftHandSideAsString
+    int leftHandSideValueType = JArray.valueType(equalityCheck, 0)
+    if leftHandSideValueType == 2 ; Int
+        leftHandSideAsString = JArray.getInt(equalityCheck, 0)
+    elseIf leftHandSideValueType == 3 ; Float
+        leftHandSideAsString = JArray.getFlt(equalityCheck, 0)
+    elseIf leftHandSideValueType == 4 ; Form
+        leftHandSideAsString = JArray.getForm(equalityCheck, 0)
+    elseIf leftHandSideValueType == 5 ; Object
+        leftHandSideAsString = JArray.getObj(equalityCheck, 0)
+    elseIf leftHandSideValueType == 6 ; String
+        leftHandSideAsString = JArray.getStr(equalityCheck, 0)
+    endIf
+
+    string rightHandSideAsString
+    int rightHandSideValueType = JArray.valueType(equalityCheck, 1)
+    if rightHandSideValueType == 2 ; Int
+        rightHandSideAsString = JArray.getInt(equalityCheck, 1)
+    elseIf rightHandSideValueType == 3 ; Float
+        rightHandSideAsString = JArray.getFlt(equalityCheck, 1)
+    elseIf rightHandSideValueType == 4 ; Form
+        rightHandSideAsString = JArray.getForm(equalityCheck, 1)
+    elseIf rightHandSideValueType == 5 ; Object
+        rightHandSideAsString = JArray.getObj(equalityCheck, 1)
+    elseIf rightHandSideValueType == 6 ; String
+        rightHandSideAsString = JArray.getStr(equalityCheck, 1)
+    endIf
+
+    string leftText = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, leftHandSideAsString)
+    string rightText = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, rightHandSideAsString)
+
+    return ReturnBool(leftText == rightText)
 endFunction
