@@ -44,7 +44,7 @@ function FireScriptEventHandlers(string eventName, int eventVariable = 0) global
 endFunction
 
 int function CreateEventHandlerJob(string eventName, int scriptInstance, int eventVariable = 0) global
-    _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "event", eventVariable)
+    SkyScript.SetVariableObject(scriptInstance, "event", eventVariable)
     int jobId = JMap.object()
     JMap.setStr(jobId, "type", "script")
     JMap.setObj(jobId, "script", scriptInstance)

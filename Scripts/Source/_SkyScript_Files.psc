@@ -1,7 +1,7 @@
 scriptName _SkyScript_Files hidden
 
 string function StartupScriptsPath() global
-    return SkyScript.DirectoryPath() + "/Startup"
+    return SkyScript.DirectoryPath() + "/Events/Startup"
 endFunction
 
 int function LoadStartupScripts() global

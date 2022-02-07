@@ -35,8 +35,8 @@ int function Execute(int scriptInstance, int actionInfo)
         rightHandSideAsString = JArray.getStr(equalityCheck, 1)
     endIf
 
-    string leftText = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, leftHandSideAsString)
-    string rightText = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, rightHandSideAsString)
+    string leftText = SkyScript.InterpolateString(scriptInstance, leftHandSideAsString)
+    string rightText = SkyScript.InterpolateString(scriptInstance, rightHandSideAsString)
 
     return ReturnBool(leftText == rightText)
 endFunction

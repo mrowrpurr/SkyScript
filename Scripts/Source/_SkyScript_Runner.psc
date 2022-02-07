@@ -8,7 +8,7 @@ int function ResumeScriptInstance(int scriptInstance) global
     if _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)
         _SkyScript_ScriptInstance.Dispose(scriptInstance)
     endIf
-    return _SkyScript_ScriptInstance.GetVariableObject(scriptInstance, "LAST_RESPONSE")
+    return SkyScript.GetVariableObject(scriptInstance, "LAST_RESPONSE")
 endFunction
 
 SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int actionInfo) global
@@ -59,7 +59,7 @@ int function RunAction(int scriptInstance, int actionInfo) global
 
     if handler
         int response = handler.Execute(scriptInstance, actionInfo)
-        _SkyScript_ScriptInstance.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+        SkyScript.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
         return response
     else
         Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo)) ; TODO Move this to logs! unless some like error config or something
@@ -72,7 +72,7 @@ function RunActionArray(int scriptInstance, int startIndex = 0) global
         int actionCount = JArray.count(actionArray)
         int i = 0
         ; TODO check for PARENT paused/mark for kill here
-        int parent = _SkyScript_ScriptInstance.GetParent(scriptInstance)
+        int parent = SkyScript.GetScriptParent(scriptInstance)
         bool parentPausedOrBeingKilled = parent && (SkyScript.IsPaused(parent) || _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
         while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)) && (! parentPausedOrBeingKilled)
             if i >= startIndex

@@ -8,7 +8,7 @@ int function Execute(int scriptInstance, int actionInfo)
     _SkyScript_Quest ss = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_Quest
     
     ; Set the message Text
-    string text = _SkyScript_ScriptInstance.InterpolateString(scriptInstance, JMap.getStr(actionInfo, "msg"))
+    string text = SkyScript.InterpolateString(scriptInstance, JMap.getStr(actionInfo, "msg"))
     ss.SkyrimScripting_MessageText_BaseForm.SetName(text)
 
     ; Reset all message buttons
