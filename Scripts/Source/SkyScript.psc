@@ -8,13 +8,25 @@ string function DirectoryPath() global
     return "Data/SkyScript"
 endFunction
 
-int function Initialize(string filepath) global
-    return _SkyScript_ScriptInstance.InitializeFromFile(filepath)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Initialization + Dispose
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+int function Initialize(string filepath = "") global
+    if filepath
+        return _SkyScript_ScriptInstance.InitializeFromFile(filepath)
+    else
+        return _SkyScript_ScriptInstance.Initialize()
+    endIf
 endFunction
 
 function Dispose(int scriptInstance) global
     _SkyScript_ScriptInstance.Dispose(scriptInstance)
 endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Running, Pausing, Resuming, Killing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 int function Run(int scriptInstance) global
     _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
@@ -43,9 +55,35 @@ function Kill(int scriptInstance) global
     _SkyScript_ScriptInstance.Kill(scriptInstance)
 endFunction
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Parent Script
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 int function GetScriptParent(int scriptInstance) global
     return JMap.getObj(scriptInstance, "parent")
 endFunction
+
+function SetScriptParent(int scriptInstance, int parentInstance) global
+    JMap.setObj(scriptInstance, "parent", parentInstance)
+endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Actions of script
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+function SetScriptActions(int scriptInstance, int actionArray) global
+    if JValue.isArray(actionArray)
+        JMap.setObj(scriptInstance, "actions", actionArray)
+    elseIf actionArray
+        int actionsArray = JArray.object()
+        JArray.addObj(actionsArray, actionArray)
+        JMap.setObj(scriptInstance, "actions", actionsArray)
+    endIf
+endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 int function DeclareVariable(int scriptInstance, string name) global
     int varMap = _SkyScript_ScriptInstance.GetVariableMap(scriptInstance)
@@ -78,6 +116,22 @@ string function GetVariableType(int scriptInstance, string name) global
     else
         return ""
     endIf
+endFunction
+
+bool function GetVariableBool(int scriptInstance, string name, bool default = false) global
+    int variable = _SkyScript_ScriptInstance.GetVariable(scriptInstance, name)
+    if variable
+        return JMap.getInt(variable, "value")
+    else
+        return default
+    endIf
+endFunction
+
+function SetVariableBool(int scriptInstance, string name, bool value) global
+    int variable = DeclareVariable(scriptInstance, name)
+    JMap.setStr(variable, "type", "bool")
+    JMap.removeKey(variable, "value")
+    JMap.setInt(variable, "value", value as int)
 endFunction
 
 int function GetVariableInt(int scriptInstance, string name, int default = 0) global
@@ -181,6 +235,10 @@ string function GetVariableText(int scriptInstance, string name) global
     endIf
 endFunction
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ToJson helper function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; TODO find a new home for this function
 string function ToJson(int object) global
     if object
@@ -193,6 +251,10 @@ string function ToJson(int object) global
         return "[No object]"
     endIf
 endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; String interpolation of variables in script context
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 string function InterpolateString(int scriptInstance, string text) global
     if ! text

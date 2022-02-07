@@ -6,14 +6,14 @@ int function InitializeFromFile(string filepath) global
         if actionsFromFile
             if JValue.isArray(actionsFromFile)
                 int scriptInstance = Initialize()
-                SetActionArray(scriptInstance, actionsFromFile)
+                SkyScript.SetScriptActions(scriptInstance, actionsFromFile)
                 SetFilepath(scriptInstance, filepath)
                 return scriptInstance
             elseIf JValue.isMap(actionsFromFile) || JValue.isIntegerMap(actionsFromFile) || JValue.isFormMap(actionsFromFile)
                 int scriptInstance = Initialize()
                 int actionArray = JArray.object()
                 JArray.addObj(actionArray, actionsFromFile)
-                SetActionArray(scriptInstance, actionArray)
+                SkyScript.SetScriptActions(scriptInstance, actionArray)
                 SetFilepath(scriptInstance, filepath)
                 return scriptInstance
             endIf
@@ -32,23 +32,6 @@ endFunction
 
 function Dispose(int scriptInstance) global
     JMap.removeKey(_RunningScriptInstances(), scriptInstance)
-endFunction
-
-function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
-    int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
-    _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
-    if ! SkyScript.IsPaused(subscriptInstance)
-        Dispose(subscriptInstance)
-    endIf
-endFunction
-
-int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
-    int map = GetActionToSubScriptMap(scriptInstance)
-    int subscriptInstance = _SkyScript_ScriptInstance.Initialize()
-    JMap.setObj(map, actionInfo, subscriptInstance)
-    SetParent(subscriptInstance, scriptInstance)
-    _SkyScript_ScriptInstance.SetActionArray(subscriptInstance, subscriptActions)
-    return subscriptInstance
 endFunction
 
 function MarkAsRunning(int scriptInstance) global
@@ -118,20 +101,6 @@ int function GetCurrentActionIndex(int scriptInstance) global
     return JMap.getInt(scriptInstance, "currentActionIndex")
 endFunction
 
-function SetActionArray(int scriptInstance, int actionArray) global
-    if JValue.isArray(actionArray)
-        JMap.setObj(scriptInstance, "actions", actionArray)
-    elseIf actionArray
-        int actionsArray = JArray.object()
-        JArray.addObj(actionsArray, actionArray)
-        JMap.setObj(scriptInstance, "actions", actionsArray)
-    endIf
-endFunction
-
-function SetParent(int scriptInstance, int parentInstance) global
-    JMap.setObj(scriptInstance, "parent", parentInstance)
-endFunction
-
 int function GetVariableMap(int scriptInstance) global
     return JMap.getObj(scriptInstance, "variables")
 endFunction
@@ -148,6 +117,22 @@ int function _RunningScriptInstances() global
     return _SkyScript_Data.FindOrCreateMap("scripts")
 endFunction
 
+function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
+    int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
+    _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
+    if ! SkyScript.IsPaused(subscriptInstance)
+        Dispose(subscriptInstance)
+    endIf
+endFunction
+
+int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
+    int map = _SkyScript_ScriptInstance.GetActionToSubScriptMap(scriptInstance)
+    int subscriptInstance = _SkyScript_ScriptInstance.Initialize()
+    JMap.setObj(map, actionInfo, subscriptInstance)
+    SkyScript.SetScriptParent(subscriptInstance, scriptInstance)
+    SkyScript.SetScriptActions(subscriptInstance, subscriptActions)
+    return subscriptInstance
+endFunction
 
 ; TODO - update this whole damn this to not call GetVariable() again and again
 int function GetVariable(int scriptInstance, string name) global

@@ -20,7 +20,7 @@ Data\SkyScript\Player\EnterCombat\*.json
 
 ## TODO
 
-- [ ] Switch Action Handlers to use Syntax
+- [x] Switch Action Handlers to use Syntax
 
 - [x] Simplest of Conditionals
 - [ ] Error Handling of some variety

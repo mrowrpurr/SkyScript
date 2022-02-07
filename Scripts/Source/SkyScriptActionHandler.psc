@@ -3,7 +3,17 @@ scriptName SkyScriptActionHandler extends Quest
 int property HandlerId auto
  
 event OnInit()
-    HandlerId = _SkyScript_ActionHandlers.GetInstance().AddHandler(self)
+    _SkyScript_ActionHandlers handlers = _SkyScript_ActionHandlers.GetInstance()
+    int maxAttempts = 200 ; 10 seconds
+    int attempt = 0
+
+    while (! handlers) && (attempt < maxAttempts)
+        _SkyScript_ActionHandlers.GetInstance()
+        Utility.WaitMenuMode(0.05) ; Wait for SkyScript to load
+        attempt += 1
+    endWhile
+
+    HandlerId = handlers.AddHandler(self)
     RegisterSyntax()
 endEvent
 
@@ -183,8 +193,10 @@ int function GetResponseObject(int response) global
     return JMap.getObj(response, "value")
 endFunction
 
-SkyScriptActionHandler function GetHandlerForSyntaxKey(string actionName) global
-    int theHandlerId = JMap.getInt(_KeyNameMap(), actionName, -1)
+SkyScriptActionHandler function GetHandlerForSyntaxKey(string syntaxKey) global
+    JValue.writeToFile(_KeyNameMap(), "These Are The Keys.txt")
+
+    int theHandlerId = JMap.getInt(_KeyNameMap(), syntaxKey, -1)
     if theHandlerId != -1
         return _SkyScript_ActionHandlers.GetInstance().GetHandler(theHandlerId)
     else
@@ -194,4 +206,8 @@ endFunction
 
 int function _KeyNameMap() global
     return _SkyScript_Data.FindOrCreateMap("actionHandlerKeys")
+endFunction
+
+string[] function AllSyntaxKeys() global
+    return JMap.allKeysPArray(_KeyNameMap())
 endFunction

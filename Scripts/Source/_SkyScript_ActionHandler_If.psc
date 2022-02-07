@@ -10,16 +10,16 @@ int function Execute(int scriptInstance, int actionInfo)
     if result
         if JMap.hasKey(actionInfo, "then")
             int subscript = _SkyScript_ScriptInstance.Initialize()
-            _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
-            _SkyScript_ScriptInstance.SetActionArray(subscript, JMap.getObj(actionInfo, "then"))
+            SkyScript.SetScriptParent(subscript, scriptInstance)
+            SkyScript.SetScriptActions(subscript, JMap.getObj(actionInfo, "then"))
             _SkyScript_ScriptInstance.Run(subscript)
         endIf
         return ReturnBool(true)
     else
         if JMap.hasKey(actionInfo, "else")
             int subscript = _SkyScript_ScriptInstance.Initialize()
-            _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
-            _SkyScript_ScriptInstance.SetActionArray(subscript, JMap.getObj(actionInfo, "else"))
+            SkyScript.SetScriptParent(subscript, scriptInstance)
+            SkyScript.SetScriptActions(subscript, JMap.getObj(actionInfo, "else"))
             _SkyScript_ScriptInstance.Run(subscript)
         endIf
         return ReturnBool(false)
@@ -28,7 +28,7 @@ endFunction
 
 int function RunCondition(int scriptInstance, int condition)
     int subscript = _SkyScript_ScriptInstance.Initialize()
-    _SkyScript_ScriptInstance.SetParent(subscript, scriptInstance)
-    _SkyScript_ScriptInstance.SetActionArray(subscript, condition)
+    SkyScript.SetScriptParent(subscript, scriptInstance)
+    SkyScript.SetScriptActions(subscript, condition)
     return _SkyScript_ScriptInstance.Run(subscript)
 endFunction

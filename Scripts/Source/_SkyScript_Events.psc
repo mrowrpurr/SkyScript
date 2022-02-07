@@ -21,7 +21,7 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
         while i < handlerCount
             int eventHandler = JArray.getObj(eventHandlers, i)
             int scriptInstance = _SkyScript_ScriptInstance.Initialize()
-            _SkyScript_ScriptInstance.SetActionArray(scriptInstance, eventHandler)
+            SkyScript.SetScriptActions(scriptInstance, eventHandler)
             QueueJob(CreateEventHandlerJob(eventName, scriptInstance, eventVariable))
             i += 1
         endWhile

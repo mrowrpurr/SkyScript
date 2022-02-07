@@ -30,9 +30,14 @@ event OnInit()
 endEvent
 
 _SkyScript_ActionHandlers function GetInstance() global
-    return _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_ActionHandlers
+    _SkyScript_ActionHandlers handlers = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_ActionHandlers
+    while ! handlers.IsReady
+        Utility.WaitMenuMode(0.05)
+    endWhile
+    return handlers
 endFunction
 
+; TODO switch to use a JContainers array of 'availableIndices' so we can Register and Unregister
 int function AddHandler(SkyScriptActionHandler handler)
     int nextIndex = HandlerCount
     HandlerCount += 1
@@ -40,6 +45,7 @@ int function AddHandler(SkyScriptActionHandler handler)
         Handlers0[nextIndex] = handler
     else
         ; TODO
+        Debug.MessageBox("Whoops, we haven't supported > 128 handlers yet!")
     endIf
     return nextIndex
 endFunction
@@ -49,5 +55,6 @@ SkyScriptActionHandler function GetHandler(int index)
         return Handlers0[index]
     else
         ; TODO
+        Debug.MessageBox("Whoops, we haven't supported > 128 handlers yet!")
     endIf
 endFunction
