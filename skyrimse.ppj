@@ -17,6 +17,7 @@
     <Imports>
         <Import>@ImportsFolder\SKSE64\Scripts\Source</Import>
         <Import>@ModsFolder\SkyUnit\Scripts\Source</Import>
+        <Import>@ModsFolder\ConsoleCommands\Scripts\Source</Import>
         <Import>@ImportsFolder\UIExtensions\scripts\source</Import>
         <Import>@ImportsFolder\ConsoleUtil\scripts\source</Import>
         <Import>@ImportsFolder\PapyrusUtil\scripts\source</Import>

@@ -10,6 +10,8 @@ int function Execute(int scriptInstance, int actionInfo)
         MiscUtil.PrintConsole(text)
     elseIf ConsoleUtil.GetVersion()
         ConsoleUtil.PrintMessage(text)
+    else
+        UI.InvokeString("Console", "_global.Console.AddHistory", text)
     endIf
     return ReturnString(text)
 endFunction

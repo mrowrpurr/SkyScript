@@ -9,6 +9,7 @@ GlobalVariable property SkyrimScripting_Message_Generic_Back auto
 GlobalVariable property SkyrimScripting_Message_Generic_Yes auto
 GlobalVariable property SkyrimScripting_Message_Generic_No auto
 GlobalVariable property SkyrimScripting_Message_Generic_Default auto
+GlobalVariable property SkyrimScripting_Message_Generic_Ok auto
 GlobalVariable property SkyrimScripting_Message_Generic_Continue auto
 GlobalVariable property SkyrimScripting_Message_Generic_Next auto
 GlobalVariable property SkyrimScripting_Message_Generic_Exit auto
@@ -29,7 +30,7 @@ event OnInit()
     InitializeThreads()
     ListenForEventHandlers()
     Utility.WaitMenuMode(1) ; TODO CONFIGURE THIS! ADD SOME WAITING SOMEPLACE!
-    _SkyScript_Events.RunStartupScripts()
+    _SkyScript_Events.RunStartupScripts() ; DISABLED FOR TESTING
 endEvent
 
 event OnPlayerLoadGame()

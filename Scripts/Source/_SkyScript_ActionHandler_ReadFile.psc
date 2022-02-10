@@ -1,0 +1,1 @@
+Scriptname _SkyScript_ActionHandler_ReadFile extends Quest  

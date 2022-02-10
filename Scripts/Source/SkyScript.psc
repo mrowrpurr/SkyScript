@@ -257,7 +257,7 @@ endFunction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 string function InterpolateString(int scriptInstance, string text) global
-    if ! text
+    if (! text) || (! scriptInstance)
         return ""
     endIf
 

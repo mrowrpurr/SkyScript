@@ -1,0 +1,1 @@
+Scriptname _SkyScript_ActionHandler_Inventory extends Quest  

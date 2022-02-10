@@ -37,6 +37,12 @@ int function Execute(int scriptInstance, int actionInfo)
     else
         ss.SkyrimScripting_Message_Generic_Default.Value = 0
     endIf
+    if JMap.hasKey(actionInfo, "ok")
+        anyButtons = true
+        ss.SkyrimScripting_Message_Generic_Ok.Value = 1
+    else
+        ss.SkyrimScripting_Message_Generic_Ok.Value = 0
+    endIf
     if JMap.hasKey(actionInfo, "continue")
         anyButtons = true
         ss.SkyrimScripting_Message_Generic_Continue.Value = 1
@@ -62,11 +68,11 @@ int function Execute(int scriptInstance, int actionInfo)
         ss.SkyrimScripting_Message_Generic_Cancel.Value = 0
     endIf
 
-    ; TODO ! Add an explicit "OK" option ?
     int back = 0
     int yes = 1
     int no = 2
     int default = 3
+    int ok = 4
     int continue = 6
     int next = 7
     int exit = 8
@@ -92,6 +98,9 @@ int function Execute(int scriptInstance, int actionInfo)
     elseIf result == default
         resultAction = JMap.getObj(actionInfo, "default")
         resultText = "default"
+    elseIf result == ok
+        resultAction = JMap.getObj(actionInfo, "ok")
+        resultText = "ok"
     elseIf result == continue
         resultAction = JMap.getObj(actionInfo, "continue")
         resultText = "continue"

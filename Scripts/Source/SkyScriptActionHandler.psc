@@ -65,6 +65,22 @@ bool function GetBool(int actionInfo, string field)
     return JMap.getInt(actionInfo, field) || JMap.getStr(actionInfo, field)
 endFunction
 
+; TODO
+; int function GetSubAction(int actionInfo, string field)
+;     if JMap.hasKey(actionInfo, field)
+;         string valueType = JMap.valueType(actionInfo, field)
+;         if valueType == 6 ; String --> default to a run action
+;             string runActionVariable = JMap.getStr(actionInfo, field)
+;             int runAction = JMap.object()
+;             ; Gotta store this someplace! Or it'll expire. 
+;         else
+;             return JMap.getObj(actionInfo, field)
+;         endIf
+;     else
+;         return 0
+;     endIf
+; endFunction
+
 int function ReturnBool(bool value)
     return GetReturnBool(value)
 endFunction
@@ -210,4 +226,8 @@ endFunction
 
 string[] function AllSyntaxKeys() global
     return JMap.allKeysPArray(_KeyNameMap())
+endFunction
+
+string function InterpolateString(int scriptInstance, string text)
+    return SkyScript.InterpolateString(scriptInstance, text)
 endFunction
