@@ -81,6 +81,11 @@ endFunction
 ;     endIf
 ; endFunction
 
+int function ReturnError(string errorMessage)
+    ; TODO - do something especial
+    return GetReturnString("[ERROR] " + errorMessage)
+endFunction
+
 int function ReturnBool(bool value)
     return GetReturnBool(value)
 endFunction
