@@ -10,6 +10,20 @@ int function String_RFind(string source, string searchText) global
     return lastIndex
 endFunction
 
+bool function String_EndsWith(string source, string searchText) global
+    if (! source) || (! searchText)
+        return false
+    endIf
+    int sourceLength = StringUtil.GetLength(source)
+    int searchLength = StringUtil.GetLength(searchText)
+    if searchLength > sourceLength
+        return false
+    endIf
+    string endOfSourceText = StringUtil.Substring(source, sourceLength - searchLength)
+    return endOfSourceText == searchText
+endFunction
+
+; TODO move this out of here? it's not generic? I dunno. undecided.
 string function FindFile(string filePath, string extension = ".json") global
     if JContainers.fileExistsAtPath(filePath)
         return filePath

@@ -5,14 +5,53 @@ event RegisterSyntax()
 endEvent
 
 int function Execute(int scriptInstance, int actionInfo)
-    string varName = GetString(actioninfo, "var")
+    string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
 
-    MiscUtil.PrintConsole("Var name " + varName)
+    ; Is it variable shorthand?
+    if actionSyntaxKeys.Length == 1
+        string keyName = actionSyntaxKeys[0]
+        string varName
+        if SkyScriptUtil.String_EndsWith(keyName, " =")
+            varName = StringUtil.Substring(keyName, 0, StringUtil.GetLength(keyName) - 2)
+        elseIf SkyScriptUtil.String_EndsWith(keyName, " = ")
+            varName = StringUtil.Substring(keyName, 0, StringUtil.GetLength(keyName) - 3)
+        endIf
+        if varName
+            ; The value of this key is a literal variable value
+            int valueType = JMap.valueType(actionInfo, keyName)
+            if valueType == 2 ; Int
+                int value = JMap.getInt(actionInfo, keyName)
+                SkyScript.SetVariableInt(scriptInstance, varName, value)
+                return ReturnInt(value)
+            elseIf valueType == 3 ; Float
+                float value = JMap.getFlt(actionInfo, keyName)
+                SkyScript.SetVariableFloat(scriptInstance, varName, value)
+                return ReturnFloat(value)
+            elseIf valueType == 4 ; Form
+                Form value = JMap.getForm(actionInfo, keyName)
+                SkyScript.SetVariableForm(scriptInstance, varName, value)
+                return ReturnForm(value)
+            elseIf valueType == 5 ; Object
+                int value = JMap.getObj(actionInfo, keyName)
+                SkyScript.SetVariableObject(scriptInstance, varName, value)
+                return ReturnObject(value)
+            elseIf valueType == 6 ; String
+                string value = JMap.getStr(actionInfo, keyName)
+                SkyScript.SetVariableString(scriptInstance, varName, value)
+                return ReturnString(value)
+            endIf
+        endIf
+        if SkyScriptUtil.String_EndsWith(keyName, " =>") || SkyScriptUtil.String_EndsWith(keyName, " => ")
+            ; The value of this key is an expression to be evaluated
+
+        endIf
+    endIf
+
+    string varName = GetString(actioninfo, "var")
 
     ; if "get" get it from sub-object or Form!
 
     if JMap.hasKey(actionInfo, "value")
-        MiscUtil.PrintConsole("Have value")
         int valueType = JMap.valueType(actionInfo, "value")
         if valueType == 2 ; Int
             int value = JMap.getInt(actionInfo, "value")

@@ -215,8 +215,6 @@ int function GetResponseObject(int response) global
 endFunction
 
 SkyScriptActionHandler function GetHandlerForSyntaxKey(string syntaxKey) global
-    JValue.writeToFile(_KeyNameMap(), "These Are The Keys.txt")
-
     int theHandlerId = JMap.getInt(_KeyNameMap(), syntaxKey, -1)
     if theHandlerId != -1
         return _SkyScript_ActionHandlers.GetInstance().GetHandler(theHandlerId)

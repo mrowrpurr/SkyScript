@@ -12,8 +12,23 @@ int function ResumeScriptInstance(int scriptInstance) global
 endFunction
 
 SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int actionInfo) global
-    ; Try using registered syntax keys
     string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
+
+    ; Is it variable shorthand?
+    if actionSyntaxKeys.Length == 1
+        string keyName = actionSyntaxKeys[0]
+        if SkyScriptUtil.String_EndsWith(keyName, " =") || SkyScriptUtil.String_EndsWith(keyName, " = ")
+            ; The value of this key is a literal variable value
+            ; return GetHandlerByName("_SkyScript_ActionHandler_Var")
+            return SkyScriptActionHandler.GetHandlerForSyntaxKey("var")
+        elseIf SkyScriptUtil.String_EndsWith(keyName, " =>") || SkyScriptUtil.String_EndsWith(keyName, " => ")
+            ; The value of this key is an expression to be evaluated
+            ; return GetHandlerByName("_SkyScript_ActionHandler_Var")
+            return SkyScriptActionHandler.GetHandlerForSyntaxKey("var")
+        endIf
+    endIf
+
+    ; Try using registered syntax keys
     int i = 0
     while i < actionSyntaxKeys.Length
         SkyScriptActionHandler handler = SkyScriptActionHandler.GetHandlerForSyntaxKey(actionSyntaxKeys[i])
@@ -37,6 +52,9 @@ SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int acti
     ; Nope, didn't find it!
     return None
 endFunction
+
+; SkyScriptActionHandler function GetHandlerByName(string name) global
+; endFunction
 
 ; TODO - Should only wait ONCE per missing syntax PER game load (so we don't wait again and again and again...)
 int function RunAction(int scriptInstance, int actionInfo) global
