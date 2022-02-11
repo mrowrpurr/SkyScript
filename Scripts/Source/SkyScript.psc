@@ -245,6 +245,7 @@ string function ToJson(int object) global
         string tempFile = _SkyScript_Files.GetTempFile()
         JValue.writeToFile(object, tempFile)
         string json = MiscUtil.ReadFromFile(tempFile)
+        Utility.WaitMenuMode(0.01)
         _SkyScript_Files.DeleteFile(tempFile)
         return json
     else

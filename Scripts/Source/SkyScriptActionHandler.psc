@@ -114,6 +114,10 @@ int function ReturnNone()
     return GetReturnNone()
 endFunction
 
+string function ResponseType(int response)
+    return GetResponseType(response)
+endFunction
+
 bool function ResponseBool(int response)
     return GetResponseBool(response)
 endFunction
@@ -175,7 +179,7 @@ endFunction
 
 int function GetReturnObject(int object) global
     int response = JMap.object()
-    JMap.setInt(response, "value", object)
+    JMap.setObj(response, "value", object)
     JMap.setStr(response, "type", "object")
     return response
 endFunction

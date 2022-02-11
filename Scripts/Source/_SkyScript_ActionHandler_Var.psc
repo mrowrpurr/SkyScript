@@ -42,8 +42,51 @@ int function Execute(int scriptInstance, int actionInfo)
             endIf
         endIf
         if SkyScriptUtil.String_EndsWith(keyName, " =>") || SkyScriptUtil.String_EndsWith(keyName, " => ")
+            if SkyScriptUtil.String_EndsWith(keyName, " =>")
+                varName = StringUtil.Substring(keyName, 0, StringUtil.GetLength(keyName) - 3)
+            elseIf SkyScriptUtil.String_EndsWith(keyName, " => ")
+                varName = StringUtil.Substring(keyName, 0, StringUtil.GetLength(keyName) - 4)
+            endIf
             ; The value of this key is an expression to be evaluated
-
+            int expressionResponse
+            int valueType = JMap.valueType(actionInfo, keyName)
+            if valueType == 2 ; Int
+                int value = JMap.getInt(actionInfo, keyName)
+                SkyScript.SetVariableInt(scriptInstance, varName, value)
+                return ReturnInt(value)
+            elseIf valueType == 3 ; Float
+                float value = JMap.getFlt(actionInfo, keyName)
+                SkyScript.SetVariableFloat(scriptInstance, varName, value)
+                return ReturnFloat(value)
+            elseIf valueType == 4 ; Form
+                Form value = JMap.getForm(actionInfo, keyName)
+                SkyScript.SetVariableForm(scriptInstance, varName, value)
+                return ReturnForm(value)
+            elseIf valueType == 5 ; Object
+                int expressionAction = JMap.getObj(actionInfo, keyName)
+                expressionResponse = _SkyScript_Runner.RunAction(scriptInstance, expressionAction)
+                MiscUtil.PrintConsole("EXPRESSION RESPONSE: " + SkyScript.ToJson(expressionResponse))
+            elseIf valueType == 6 ; String
+                string expressionText = JMap.getStr(actionInfo, keyName)
+                expressionResponse = _SkyScript_Expressions.Evaluate(scriptInstance, expressionText)
+            endIf
+            if expressionResponse
+                string responseType = ResponseType(expressionResponse)
+                if responseType == "bool"
+                    SkyScript.SetVariableBool(scriptInstance, varName, ResponseBool(expressionResponse))
+                elseIf responseType == "int"
+                    SkyScript.SetVariableInt(scriptInstance, varName, ResponseInt(expressionResponse))
+                elseIf responseType == "float"
+                    SkyScript.SetVariableFloat(scriptInstance, varName, ResponseFloat(expressionResponse))
+                elseIf responseType == "form"
+                    SkyScript.SetVariableForm(scriptInstance, varName, ResponseForm(expressionResponse))
+                elseIf responseType == "object"
+                    SkyScript.SetVariableObject(scriptInstance, varName, ResponseObject(expressionResponse))
+                elseIf responseType == "string"
+                    SkyScript.SetVariableString(scriptInstance, varName, ResponseString(expressionResponse))
+                endIf
+                return expressionResponse
+            endIf
         endIf
     endIf
 
@@ -76,34 +119,5 @@ int function Execute(int scriptInstance, int actionInfo)
         endIf
     endIf
 
-    string filePath
-    string objectPath 
-
-    if JMap.hasKey(actionInfo, "from")
-        filePath = JMap.getStr(actionInfo, "from")
-        objectPath = JMap.getStr(actionInfo, "get")
-    elseIf JMap.hasKey(actionInfo, "get") ; "get" is the file if no "from" is provided and the full file is provided 
-        filePath = JMap.getStr(actionInfo, "get")
-    endIf
-
-    if filePath
-        filePath = SkyScriptUtil.FindFile(filePath)
-    endIf
-
-    MiscUtil.PrintConsole("File path: " + filePath)
-
-    if JContainers.fileExistsAtPath(filePath)
-        int fileContent = JValue.readFromFile(filePath)
-        if objectPath
-            MiscUtil.PrintConsole("Object path?")
-            return ReturnString("Dunno how to do this...")
-        else
-            MiscUtil.PrintConsole("Setting variable to the file content")
-            SkyScript.SetVariableObject(scriptInstance, varName, fileContent)
-            return ReturnObject(fileContent)
-        endIf
-    else
-        MiscUtil.PrintConsole("File not found " + filePath)
-        return 0
-    endIf
+    return 0
 endFunction

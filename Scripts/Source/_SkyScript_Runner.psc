@@ -56,6 +56,8 @@ endFunction
 ; SkyScriptActionHandler function GetHandlerByName(string name) global
 ; endFunction
 
+; BIG TODO !!!!!!!!!!!!!! Add the response values to a JDB structure so they aren't lost !!!!!!!!!!!!!!
+
 ; TODO - Should only wait ONCE per missing syntax PER game load (so we don't wait again and again and again...)
 int function RunAction(int scriptInstance, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
