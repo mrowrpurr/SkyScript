@@ -1,1 +1,1 @@
-Scriptname _SkyScript_ActionHandler_Spells extends Quest  
+scriptName _SkyScript_ActionHandler_Spells extends Quest

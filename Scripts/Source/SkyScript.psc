@@ -214,6 +214,10 @@ function SetVariableObject(int scriptInstance, string name, int value) global
     JMap.setObj(variable, "value", value)
 endFunction
 
+int function GetVariable(int scriptInstance, string varName) global
+    return _SkyScript_ScriptInstance.GetVariable(scriptInstance, varName)
+endFunction
+
 string function GetVariableText(int scriptInstance, string name) global
     string variableType = GetVariableType(scriptInstance, name)
     if variableType

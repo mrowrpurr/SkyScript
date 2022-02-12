@@ -384,3 +384,11 @@ Spell function GetSpell(int scriptInstance, int actionInfo, string field, Spell 
         endIf
     endIf
 endFunction
+
+int function RunAction(int scriptInstance, int actionInfo)
+    return _SkyScript_Runner.RunAction(scriptInstance, actionInfo)
+endFunction
+
+int function Evaluate(int scriptInstance, string expression)
+    return _SkyScript_Expressions.Evaluate(scriptInstance, expression)
+endFunction

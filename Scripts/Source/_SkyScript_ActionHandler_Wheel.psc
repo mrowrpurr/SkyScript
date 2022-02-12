@@ -1,1 +1,1 @@
-Scriptname _SkyScript_ActionHandler_Wheel extends Quest  
+scriptName _SkyScript_ActionHandler_Wheel extends Quest

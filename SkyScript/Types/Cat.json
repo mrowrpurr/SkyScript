@@ -1,0 +1,6 @@
+{
+  "type": "Cat",
+  "meow()": {
+    "msg": "Mrowr!"
+  }
+}
