@@ -1,7 +1,8 @@
 [
   { "print": "Giving you green apples!" },
   {
-    "additem": { "getform": "64B2F" },
-    "count": 420
+    "additem": {
+      "getformfromfile": ["410fd", "Apachii_DivineEleganceStore.esm"]
+    }
   }
 ]
