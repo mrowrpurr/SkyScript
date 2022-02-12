@@ -17,6 +17,17 @@ event OnInit()
     RegisterSyntax()
 endEvent
 
+Actor _player
+
+Actor property Player
+    Actor function get()
+        if ! _player
+            _player = Game.GetPlayer()
+        endIf
+        return _player
+    endFunction
+endProperty
+
 bool function MatchSyntax(int scriptInstance, int actionInfo)
     ; Intended to be optionally overriden
     return false
@@ -391,4 +402,8 @@ endFunction
 
 int function Evaluate(int scriptInstance, string expression)
     return _SkyScript_Expressions.Evaluate(scriptInstance, expression)
+endFunction
+
+int function GetVariable(int scriptInstance, string varName)
+    return SkyScript.GetVariable(scriptInstance, varName)
 endFunction

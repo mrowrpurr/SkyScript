@@ -2,6 +2,10 @@ scriptName FormHelper hidden
 
 ; Returns the provided hexadecimal string as a decimal integer value.
 int function HexToInt(string hex) global
+    if StringUtil.Find(hex, "0x") == 0
+        hex = StringUtil.Substring(hex, 2)
+    endIf
+
     int decimal = 0
 
     int base = 1

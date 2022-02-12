@@ -1,1 +1,6 @@
-[{ "saveequipped": "CowbowOutfit.json" }]
+[
+  { "outfit =>": { "get": "CowboyOutfit" } },
+  { "print": "${outfit}" },
+  { "unequip": "all" },
+  { "equip": "outfit" }
+]

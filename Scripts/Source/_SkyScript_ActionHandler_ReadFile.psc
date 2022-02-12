@@ -1,5 +1,7 @@
 scriptName _SkyScript_ActionHandler_ReadFile extends Quest ; SkyScriptActionHandler
 
+
+
 ; event RegisterSyntax()
 ;     AddSyntax("readFile")
 ; endEvent
