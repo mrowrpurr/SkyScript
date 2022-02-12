@@ -223,7 +223,11 @@ int function GetFormPropertyVariable(Form theForm, string propertyName) global
     int variable = JMap.object()
     if propertyName == "name"
         JMap.setStr(variable, "type", "string")
-        JMap.setStr(variable, "value", theForm.GetName())
+        if theForm as Actor
+            JMap.setStr(variable, "value", (theForm as Actor).GetActorBase().GetName())
+        else
+            JMap.setStr(variable, "value", theForm.GetName())
+        endIf
     elseIf propertyName == "type"
         JMap.setStr(variable, "type", "string")
         JMap.setStr(variable, "value", GetFormTypeName(theForm))

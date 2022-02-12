@@ -1,0 +1,3 @@
+{
+  "msg": "Hit with ${event.source.name} by ${event.aggressor.name}"
+}
