@@ -1,8 +1,8 @@
 # Stream TODO
 
-- [ ] getform and getformfromfile
-- [ ] add items
-- [ ] equip items
+- [x] getform and getformfromfile
+- [x] add items
+- [ ] equip items and unequip items
 - [ ] fix running MCM toggles from scripts
 - [ ] register syntax via script
 - [ ] create custom console command with script

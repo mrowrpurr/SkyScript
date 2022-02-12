@@ -1,8 +1,1 @@
-[
-  { "print": "Giving you green apples!" },
-  {
-    "additem": {
-      "getformfromfile": ["410fd", "Apachii_DivineEleganceStore.esm"]
-    }
-  }
-]
+[{ "saveequipped": "CowbowOutfit.json" }]
