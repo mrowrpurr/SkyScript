@@ -2,10 +2,19 @@ scriptName _SkyScript_PlayerScript extends ReferenceAlias hidden
 
 ; Add: EnterSneak and LeaveSneak via ability, as well as EnterCombat and LeaveCombat
 
+event OnInit()
+    ListenForEvents()
+endEvent
+
 event OnPlayerLoadGame()
     (GetOwningQuest() as _SkyScript_Quest).OnPlayerLoadGame()
     ; Delegate load game events to listening scripts!
+    ListenForEvents()
 endEvent
+
+function ListenForEvents()
+    ; RegisterForMenu("")
+endFunction
 
 event OnItemAdded(Form item, int count, ObjectReference ref, ObjectReference source)
     int eventVar = JMap.object()
