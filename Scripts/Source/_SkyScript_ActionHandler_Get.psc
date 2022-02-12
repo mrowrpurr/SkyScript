@@ -8,7 +8,6 @@ endEvent
 
 ; Foo/Bar/Baz.foo.bar.baz
 int function Execute(int scriptInstance, int actionInfo)
-    MiscUtil.PrintConsole("EXECUTE GET")
     string filePath
     string objectPath 
 
@@ -27,7 +26,6 @@ int function Execute(int scriptInstance, int actionInfo)
             MiscUtil.PrintConsole("GET unsupported")
             return ReturnString("UNSUPPORTED OBJECT PATH - TODO")
         else
-            MiscUtil.PrintConsole("GET return file content : " + fileContent + " " + SkyScript.ToJson(fileContent))
             return ReturnObject(fileContent)
         endIf
     else

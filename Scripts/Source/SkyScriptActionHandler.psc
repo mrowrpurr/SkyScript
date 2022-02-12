@@ -41,28 +41,76 @@ bool function HasField(int actionInfo, string field)
     return JMap.hasKey(actionInfo, field)
 endFunction
 
-string function GetString(int actionInfo, string field)
-    return JMap.getStr(actionInfo, field)
+string function GetString(int actionInfo, string field, string default = "")
+    return JMap.getStr(actionInfo, field, default)
 endFunction
 
-float function GetFloat(int actionInfo, string field)
-    return JMap.getFlt(actionInfo, field)
+float function GetFloat(int actionInfo, string field, float default = 0.0)
+    return JMap.getFlt(actionInfo, field, default)
 endFunction
 
-int function GetInt(int actionInfo, string field)
-    return JMap.getInt(actionInfo, field)
+int function GetInt(int actionInfo, string field, int default = 0)
+    return JMap.getInt(actionInfo, field, default)
 endFunction
 
-int function GetObject(int actionInfo, string field)
-    return JMap.getObj(actionInfo, field)
+int function GetObject(int actionInfo, string field, int default = 0)
+    return JMap.getObj(actionInfo, field, default)
 endFunction
 
-Form function GetForm(int actionInfo, string field)
-    return JMap.getForm(actionInfo, field)
+Form function GetForm(int actionInfo, string field, Form default = None)
+    return JMap.getForm(actionInfo, field, default)
 endFunction
 
-bool function GetBool(int actionInfo, string field)
-    return JMap.getInt(actionInfo, field) || JMap.getStr(actionInfo, field)
+bool function GetBool(int actionInfo, string field, bool default = false)
+    if JMap.hasKey(actionInfo, field)
+        return JMap.getInt(actionInfo, field) || JMap.getStr(actionInfo, field)
+    else
+        return default
+    endIf
+endFunction
+
+bool function IsInt(int actionInfo, string field)
+    return JMap.valueType(actionInfo, field) == 2
+endFunction
+
+bool function IsFloat(int actionInfo, string field)
+    return JMap.valueType(actionInfo, field) == 3
+endFunction
+
+bool function IsForm(int actionInfo, string field)
+    return JMap.valueType(actionInfo, field) == 4
+endFunction
+
+bool function IsObject(int actionInfo, string field)
+    return JMap.valueType(actionInfo, field) == 5
+endFunction
+
+bool function IsObjectOfType(int actionInfo, string field, string type)
+    return JMap.getStr(JMap.getObj(actionInfo, field), "__type") == type
+endFunction
+
+bool function IsString(int actionInfo, string field)
+    return JMap.valueType(actionInfo, field) == 6
+endFunction
+
+string function FieldType(int actionInfo, string field)
+    return GetFieldType(actionInfo, field)
+endFunction
+
+string function GetFieldType(int actionInfo, string field) global
+    int valueType = JMap.valueType(actionInfo, field)
+    if valueType == 2 ; Int
+        return "int"
+    elseIf valueType == 3 ; Float
+        return "float"
+    elseIf valueType == 4 ; Form
+        return "form"
+    elseIf valueType == 5 ; Object
+        return "object"
+    elseIf valueType == 6 ; String
+        return "string"
+    endIf
+    return ""
 endFunction
 
 ; TODO
@@ -237,4 +285,102 @@ endFunction
 
 string function InterpolateString(int scriptInstance, string text)
     return SkyScript.InterpolateString(scriptInstance, text)
+endFunction
+
+Actor function GetActor(int scriptInstance, int actionInfo, string field, Actor default = None)
+    if ! HasField(actionInfo, field)
+        return default
+    endIf
+    string objectType = "Actor"
+    if IsString(actionInfo, field)
+        string varName = GetString(actionInfo, field)
+        if SkyScript.HasVariable(scriptInstance, varName)
+            string varType = SkyScript.GetVariableType(scriptInstance, varName)
+            ; Form
+            if varType == "form"
+                Actor theActor = SkyScript.GetVariableForm(scriptInstance, varName) as Actor
+                if theActor
+                    return theActor
+                else
+                    return default
+                endIf
+            ; Object
+            elseIf varType == "object"
+                int object = SkyScript.GetVariableObject(scriptInstance, varName)
+                ; if IsObjectOfType(object) ; Extract typing into something... SkyScriptType... <---------
+                ; endIf
+                if JMap.getStr(object, "__type") == objectType
+                    Actor theActor = JMap.getForm(object, "value") as Actor
+                    if theActor
+                        return theActor
+                    else
+                        return default
+                    endIf
+                endIf
+            endIf
+        endIf
+    elseIf IsForm(actionInfo, field)
+        Actor theActor = GetForm(actionInfo, field) as Actor
+        if theActor
+            return theActor
+        else
+            return default
+        endIf
+    elseIf IsObjectOfType(actionInfo, field, type = objectType)
+        Actor theActor = GetForm(GetObject(actionInfo, field), "value") as Actor
+        if theActor
+            return theActor
+        else
+            return default
+        endIf
+    endIf
+endFunction
+
+Spell function GetSpell(int scriptInstance, int actionInfo, string field, Spell default = None)
+    if ! HasField(actionInfo, field)
+        return default
+    endIf
+    string objectType = "Spell"
+    if IsString(actionInfo, field)
+        string varName = GetString(actionInfo, field)
+        if SkyScript.HasVariable(scriptInstance, varName)
+            string varType = SkyScript.GetVariableType(scriptInstance, varName)
+            ; Form
+            if varType == "form"
+                Spell theSpell = SkyScript.GetVariableForm(scriptInstance, varName) as Spell
+                if theSpell
+                    return theSpell
+                else
+                    return default
+                endIf
+            ; Object
+            elseIf varType == "object"
+                int object = SkyScript.GetVariableObject(scriptInstance, varName)
+                ; if IsObjectOfType(object) ; Extract typing into something... SkyScriptType... <---------
+                ; endIf
+                if JMap.getStr(object, "__type") == objectType
+                    Spell theSpell = JMap.getForm(object, "value") as Spell
+                    if theSpell
+                        return theSpell
+                    else
+                        return default
+                    endIf
+                endIf
+            endIf
+        endIf
+    elseIf IsForm(actionInfo, field)
+        Spell theSpell = GetForm(actionInfo, field) as Spell
+        if theSpell
+            return theSpell
+        else
+            return default
+        endIf
+    elseIf IsObjectOfType(actionInfo, field, type = objectType)
+        Spell theSpell = GetForm(GetObject(actionInfo, field), "value") as Spell
+        if theSpell
+            return theSpell
+        else
+            return default
+        endIf
+    endIf
 endFunction

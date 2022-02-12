@@ -65,7 +65,6 @@ int function Execute(int scriptInstance, int actionInfo)
             elseIf valueType == 5 ; Object
                 int expressionAction = JMap.getObj(actionInfo, keyName)
                 expressionResponse = _SkyScript_Runner.RunAction(scriptInstance, expressionAction)
-                MiscUtil.PrintConsole("EXPRESSION RESPONSE: " + SkyScript.ToJson(expressionResponse))
             elseIf valueType == 6 ; String
                 string expressionText = JMap.getStr(actionInfo, keyName)
                 expressionResponse = _SkyScript_Expressions.Evaluate(scriptInstance, expressionText)

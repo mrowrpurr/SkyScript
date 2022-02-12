@@ -96,14 +96,14 @@ int function DeclareVariable(int scriptInstance, string name) global
     endIf
 endFunction
 
-bool function VarExists(int scriptInstance, string name) global
+bool function HasVariable(int scriptInstance, string name) global
     int varMap = _SkyScript_ScriptInstance.GetVariableMap(scriptInstance)
     if JMap.hasKey(varMap, name)
         return true
     endIf
     int parent = GetScriptParent(scriptInstance)
     if parent
-        return VarExists(parent, name)
+        return HasVariable(parent, name)
     else
         return false
     endIf
