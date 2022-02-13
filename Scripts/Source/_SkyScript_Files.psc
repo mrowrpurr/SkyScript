@@ -17,7 +17,13 @@ string function EventScriptsDirectory(string eventName) global
 endFunction
 
 string[] function ScriptFilesForEvent(string eventName) global
-    return JContainers.contentsOfDirectoryAtPath(EventScriptsDirectory(eventName), ".json")
+    string directoryPath = EventScriptsDirectory(eventName)
+    if JContainers.fileExistsAtPath(directoryPath)
+        return JContainers.contentsOfDirectoryAtPath(directoryPath, ".json")
+    else
+        string[] emptyArray
+        return emptyArray
+    endIf
 endFunction
 
 string function TempPath() global

@@ -5,8 +5,9 @@ event RegisterSyntax()
 endEvent
 
 int function Execute(int scriptInstance, int actionInfo)
-    string eventName = GetString(actionInfo, "on")
-    int eventScript = GetObject(actionInfo, "run")
-    _SkyScript_Events.AddEventHandler(eventName, eventScript)
-    return ReturnString(eventName)
+    Debug.MessageBox("Disabled ON support for events until we do active handler counting")
+    ; string eventName = GetString(actionInfo, "on")
+    ; int eventScript = GetObject(actionInfo, "run")
+    ; _SkyScript_Events.AddEventHandler(eventName, eventScript)
+    ; return ReturnString(eventName)
 endFunction

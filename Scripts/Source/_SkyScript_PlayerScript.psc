@@ -2,6 +2,18 @@ scriptName _SkyScript_PlayerScript extends ReferenceAlias hidden
 
 ; Add: EnterSneak and LeaveSneak via ability, as well as EnterCombat and LeaveCombat
 
+bool property ListenFor_OnItemAdded auto
+bool property ListenFor_OnItemRemoved auto
+bool property ListenFor_OnObjectEquipped auto
+bool property ListenFor_OnObjectUnequipped auto
+bool property ListenFor_OnHit auto
+
+string property FolderFor_OnItemAdded = "Player/ItemAdded" autoReadonly
+string property FolderFor_OnItemRemoved = "Player/ItemRemoved" autoReadonly
+string property FolderFor_OnObjectEquipped = "Player/ObjectEquipped" autoReadonly
+string property FolderFor_ObjectUnequipped = "Player/ObjectUnequipped" autoReadonly
+string property FolderFor_OnHit = "Player/Hit" autoReadonly
+
 event OnInit()
     ListenForEvents()
 endEvent
@@ -13,7 +25,20 @@ event OnPlayerLoadGame()
 endEvent
 
 function ListenForEvents()
-    ListenForMenus()    
+    ListenFor_OnItemAdded = JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnItemAdded))
+    ListenFor_OnItemRemoved = JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnItemRemoved))
+    ListenFor_OnObjectEquipped = JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnObjectEquipped))
+    ListenFor_OnObjectUnequipped = JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnObjectEquipped))
+    ListenFor_OnHit = JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnHit))
+
+    ; TODO - we need this to COUNT active handlers (fun times) because these handlers can be registered via code. oof.
+    ; ListenFor_OnItemAdded = true ;JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnItemAdded))
+    ; ListenFor_OnItemRemoved = true ;JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnItemRemoved))
+    ; ListenFor_OnObjectEquipped = true ;JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnObjectEquipped))
+    ; ListenFor_OnObjectUnequipped = true ;JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnObjectEquipped))
+    ; ListenFor_OnHit = true ;JContainers.fileExistsAtPath(_SkyScript_Files.EventScriptsDirectory(FolderFor_OnHit))
+
+    ListenForMenus()
 endFunction
 
 function ListenForMenus()
@@ -44,38 +69,53 @@ event OnMenuClose(string menuName)
 endEvent
 
 event OnItemAdded(Form item, int count, ObjectReference ref, ObjectReference source)
+    if ! ListenFor_OnItemAdded
+        return
+    endIf
     int eventVar = JMap.object()
     JMap.setForm(eventVar, "item", item)
     JMap.setInt(eventVar, "count", count)
     JMap.setForm(eventVar, "object", ref)
     JMap.setForm(eventVar, "container", source)
-    _SkyScript_Events.FireEventHandlers("Player/ItemAdded", eventVar)
+    _SkyScript_Events.FireEventHandlers(FolderFor_OnItemAdded, eventVar)
 endEvent
 
 event OnItemRemoved(Form item, int count, ObjectReference ref, ObjectReference source)
+    if ! ListenFor_OnItemAdded
+        return
+    endIf
     int eventVar = JMap.object()
     JMap.setForm(eventVar, "item", item)
     JMap.setInt(eventVar, "count", count)
     JMap.setForm(eventVar, "object", ref)
     JMap.setForm(eventVar, "container", source)
-    _SkyScript_Events.FireEventHandlers("Player/ItemRemoved", eventVar)
+    _SkyScript_Events.FireEventHandlers(FolderFor_OnItemRemoved, eventVar)
 endEvent
 
 event OnObjectEquipped(Form item, ObjectReference ref)
+    if ! ListenFor_OnObjectEquipped
+        return
+    endIf
     int eventVar = JMap.object()
     JMap.setForm(eventVar, "item", item)
     JMap.setForm(eventVar, "object", ref)
-    _SkyScript_Events.FireEventHandlers("Player/ObjectEquipped", eventVar)
+    _SkyScript_Events.FireEventHandlers(FolderFor_OnObjectEquipped, eventVar)
 endEvent
 
 event OnObjectUnequipped(Form item, ObjectReference ref)
+    if ! ListenFor_OnObjectUnequipped
+        return
+    endIf
     int eventVar = JMap.object()
     JMap.setForm(eventVar, "item", item)
     JMap.setForm(eventVar, "object", ref)
-    _SkyScript_Events.FireEventHandlers("Player/ObjectUnequipped", eventVar)
+    _SkyScript_Events.FireEventHandlers(FolderFor_ObjectUnequipped, eventVar)
 endEvent
 
 event OnHit(ObjectReference aggressor, Form source, Projectile theProjectile, bool powerAttack, bool sneakAttack, bool bashAttack, bool hitBlocked)
+    if ! ListenFor_OnHit
+        return
+    endIf
     int eventVar = JMap.object()
     JMap.setForm(eventVar, "aggressor", aggressor)
     JMap.setForm(eventVar, "source", source)
@@ -84,7 +124,7 @@ event OnHit(ObjectReference aggressor, Form source, Projectile theProjectile, bo
     JMap.setInt(eventVar, "sneakAttack", sneakAttack as int)
     JMap.setInt(eventVar, "bashAttack", bashAttack as int)
     JMap.setInt(eventVar, "hitBlocked", hitBlocked as int)
-    _SkyScript_Events.FireEventHandlers("Player/Hit", eventVar)
+    _SkyScript_Events.FireEventHandlers(FolderFor_OnHit, eventVar)
 endEvent
 
 string[] function GetAllValidMenuNames() global
