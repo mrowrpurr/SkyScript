@@ -1,0 +1,9 @@
+[
+  {
+    "msg": "Hi from the DUDE json"
+  },
+  {
+    "additem": { "getform": "a" },
+    "count": 69
+  }
+]

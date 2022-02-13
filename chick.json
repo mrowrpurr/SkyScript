@@ -1,0 +1,9 @@
+[
+  {
+    "msg": "Hi from the chick json"
+  },
+  {
+    "additem": { "getform": "f" },
+    "count": 420
+  }
+]

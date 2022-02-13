@@ -12,5 +12,7 @@ int function Execute(int scriptInstance, int actionInfo)
         else
             return ReturnString("Female")
         endIf
+    elseIf playerRequest == "getrace"
+        return ReturnString(Player.GetRace().GetName())
     endIf
 endFunction

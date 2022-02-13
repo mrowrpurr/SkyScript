@@ -31,7 +31,7 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
 endFunction
 
 function FireScriptEventHandlers(string eventName, int eventVariable = 0) global
-    string[] scriptFiles = ScriptFilesForEvent(eventName)
+    string[] scriptFiles = _SkyScript_Files.ScriptFilesForEvent(eventName)
     if scriptFiles
         int i = 0
         while i < scriptFiles.Length
@@ -74,12 +74,4 @@ endFunction
 
 int function EventHandlersQueue() global
     return _SkyScript_Data.FindOrCreateMap("eventHandlerQueue")
-endFunction
-
-string function EventScriptsDirectory(string eventName) global
-    return SkyScript.DirectoryPath() + "/Events/" + eventName
-endFunction
-
-string[] function ScriptFilesForEvent(string eventName) global
-    return JContainers.contentsOfDirectoryAtPath(EventScriptsDirectory(eventName), ".json")
 endFunction

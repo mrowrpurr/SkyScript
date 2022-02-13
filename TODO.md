@@ -3,7 +3,9 @@
 - [x] getform and getformfromfile
 - [x] add items
 - [x] equip items and unequip items
-- [ ] get player gender
+- [x] get player gender
+- [ ] get player race
+- [ ] run script file + load (into current context)
 - [ ] notequal or "!equal"
 - [ ] unless
 - [ ] do something on sneak

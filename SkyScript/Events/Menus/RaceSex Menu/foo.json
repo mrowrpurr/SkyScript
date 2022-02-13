@@ -1,8 +1,13 @@
-{
-  "unless": "${event.menuOpen}",
-  "then": {
-    "if": { "equal": [{ "player": "getsex" }, "Male"] },
-    "then": { "msg": "Sup, dude?" },
-    "else": { "msg": "Sup, lady?" }
+[
+  {
+    "if": { "equal": ["${event.open}", ""] },
+    "then": [
+      { "gender =>": { "player": "getsex" } },
+      {
+        "if": { "equal": ["${gender}", "Male"] },
+        "then": { "run": "dude" },
+        "else": { "run": "chick" }
+      }
+    ]
   }
-}
+]
