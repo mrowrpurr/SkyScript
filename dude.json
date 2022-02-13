@@ -1,9 +1,12 @@
 [
   {
-    "msg": "Hi from the DUDE json"
+    "msg": "Hi from the DUDE json - CHANGED THIS"
   },
   {
-    "additem": { "getform": "a" },
-    "count": 69
+    "unequip": "all"
+  },
+  { "outfit => ": { "get": "CowboyOutfit" } },
+  {
+    "equip": "outfit"
   }
 ]

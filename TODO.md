@@ -5,7 +5,8 @@
 - [x] equip items and unequip items
 - [x] get player gender
 - [ ] get player race
-- [ ] run script file + load (into current context)
+- [x] run script file
+- [ ] load script file (into current context)
 - [ ] notequal or "!equal"
 - [ ] unless
 - [ ] do something on sneak

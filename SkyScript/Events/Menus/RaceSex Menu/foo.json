@@ -5,8 +5,8 @@
       { "gender =>": { "player": "getsex" } },
       {
         "if": { "equal": ["${gender}", "Male"] },
-        "then": { "run": "dude" },
-        "else": { "run": "chick" }
+        "then": [{ "msg": "Using LOAD..." }, { "load": "dude" }],
+        "else": { "load": "chick" }
       }
     ]
   }
