@@ -6,7 +6,7 @@ scriptName _SkyScript_ActionHandler_ReadFile extends Quest ; SkyScriptActionHand
 ;     AddSyntax("readFile")
 ; endEvent
 
-; int function Execute(int scriptInstance, int actionInfo)
+; int function Execute(int script, int actionInfo)
 ;     string filePath = JMap.getStr(actionInfo, "readFile")
 ;     bool found = JContainers.fileExistsAtPath(filePath)
 

@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("wait")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     float time = GetFloat(actionInfo, "wait")
     if GetBool(actionInfo, "menu")
         Utility.WaitMenuMode(time)

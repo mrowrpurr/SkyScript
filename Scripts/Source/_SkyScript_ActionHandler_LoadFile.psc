@@ -8,7 +8,7 @@ scriptName _SkyScript_ActionHandler_LoadFile extends Quest
 ;     AddSyntax(ACTION_KEY)
 ; endEvent
 
-; int function Execute(int scriptInstance, int actionInfo)
+; int function Execute(int script, int actionInfo)
 ;     string filePath = SkyScriptUtil.FindFile(GetString(actionInfo, ACTION_KEY))
 ;     if JContainers.fileExistsAtPath(filePath)
 ;         return JValue.readFromFile(filePath)

@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("racemenu")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string actionName = GetString(actionInfo, "racemenu")
     if actionName == "close"
         ; This 100% assumes that you're in RaceMenu

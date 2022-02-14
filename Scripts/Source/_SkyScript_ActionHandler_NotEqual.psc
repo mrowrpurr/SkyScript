@@ -6,7 +6,7 @@ event RegisterSyntax()
     AddSyntax("notequal")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     int equalityCheck
     if HasField(actionInfo, "!equal")
         equalityCheck = GetObject(actionInfo, "!equal")
@@ -44,8 +44,8 @@ int function Execute(int scriptInstance, int actionInfo)
         rightHandSideAsString = JArray.getStr(equalityCheck, 1)
     endIf
 
-    string leftText = SkyScript.InterpolateString(scriptInstance, leftHandSideAsString)
-    string rightText = SkyScript.InterpolateString(scriptInstance, rightHandSideAsString)
+    string leftText = SkyScript.InterpolateString(script, leftHandSideAsString)
+    string rightText = SkyScript.InterpolateString(script, rightHandSideAsString)
 
     return ReturnBool(leftText != rightText)
 endFunction

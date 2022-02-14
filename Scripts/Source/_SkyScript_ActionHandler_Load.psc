@@ -6,7 +6,7 @@ event RegisterSyntax()
     AddSyntax(ACTION_KEY)
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string scriptPath = GetString(actionInfo, ACTION_KEY)
     scriptPath = SkyScriptUtil.FindFile(scriptPath)
     if scriptPath
@@ -19,12 +19,12 @@ int function Execute(int scriptInstance, int actionInfo)
                 while i < actionCount
                     int actionToRun = JArray.getObj(scriptFileActions, i)
                     if actionToRun
-                        _SkyScript_Runner.RunAction(scriptInstance, actionToRun)
+                        _SkyScript_Runner.RunAction(script, actionToRun)
                     endIf
                     i += 1
                 endWhile
             elseIf JValue.isMap(scriptFileActions)
-                _SkyScript_Runner.RunAction(scriptInstance, scriptFileActions)
+                _SkyScript_Runner.RunAction(script, scriptFileActions)
             endIf
         endIf
     endIf

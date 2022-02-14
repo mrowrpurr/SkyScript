@@ -7,7 +7,7 @@ endEvent
 ; BIG TODO !!!!!!!!!!!!!! Add the response values to a JDB structure so they aren't lost !!!!!!!!!!!!!!
 
 ; Foo/Bar/Baz.foo.bar.baz
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string filePath
     string objectPath 
 

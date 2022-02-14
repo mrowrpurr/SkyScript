@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("player")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string playerRequest = GetString(actionInfo, "player")
     if playerRequest == "getsex"
         if Player.GetActorBase().GetSex() == 0

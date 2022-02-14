@@ -4,8 +4,8 @@ event RegisterSyntax()
     AddSyntax("print")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
-    string text = SkyScript.InterpolateString(scriptInstance, GetString(actionInfo, "print"))
+int function Execute(int script, int actionInfo)
+    string text = SkyScript.InterpolateString(script, GetString(actionInfo, "print"))
     if PapyrusUtil.GetVersion()
         MiscUtil.PrintConsole(text)
     elseIf ConsoleUtil.GetVersion()

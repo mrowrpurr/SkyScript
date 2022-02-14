@@ -28,7 +28,7 @@ Actor property Player
     endFunction
 endProperty
 
-bool function MatchSyntax(int scriptInstance, int actionInfo)
+bool function MatchSyntax(int script, int actionInfo)
     ; Intended to be optionally overriden
     return false
 endFunction
@@ -37,7 +37,7 @@ event RegisterSyntax()
     ; Intended to be overriden
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     ; Intended to be overidden
     return 0
 endFunction
@@ -294,22 +294,22 @@ string[] function AllSyntaxKeys() global
     return JMap.allKeysPArray(_KeyNameMap())
 endFunction
 
-string function InterpolateString(int scriptInstance, string text)
-    return SkyScript.InterpolateString(scriptInstance, text)
+string function InterpolateString(int script, string text)
+    return SkyScript.InterpolateString(script, text)
 endFunction
 
-Actor function GetActor(int scriptInstance, int actionInfo, string field, Actor default = None)
+Actor function GetActor(int script, int actionInfo, string field, Actor default = None)
     if ! HasField(actionInfo, field)
         return default
     endIf
     string objectType = "Actor"
     if IsString(actionInfo, field)
         string varName = GetString(actionInfo, field)
-        if SkyScript.HasVariable(scriptInstance, varName)
-            string varType = SkyScript.GetVariableType(scriptInstance, varName)
+        if SkyScript.HasVariable(script, varName)
+            string varType = SkyScript.GetVariableType(script, varName)
             ; Form
             if varType == "form"
-                Actor theActor = SkyScript.GetVariableForm(scriptInstance, varName) as Actor
+                Actor theActor = SkyScript.GetVariableForm(script, varName) as Actor
                 if theActor
                     return theActor
                 else
@@ -317,7 +317,7 @@ Actor function GetActor(int scriptInstance, int actionInfo, string field, Actor 
                 endIf
             ; Object
             elseIf varType == "object"
-                int object = SkyScript.GetVariableObject(scriptInstance, varName)
+                int object = SkyScript.GetVariableObject(script, varName)
                 ; if IsObjectOfType(object) ; Extract typing into something... SkyScriptType... <---------
                 ; endIf
                 if JMap.getStr(object, "__type") == objectType
@@ -347,18 +347,18 @@ Actor function GetActor(int scriptInstance, int actionInfo, string field, Actor 
     endIf
 endFunction
 
-Spell function GetSpell(int scriptInstance, int actionInfo, string field, Spell default = None)
+Spell function GetSpell(int script, int actionInfo, string field, Spell default = None)
     if ! HasField(actionInfo, field)
         return default
     endIf
     string objectType = "Spell"
     if IsString(actionInfo, field)
         string varName = GetString(actionInfo, field)
-        if SkyScript.HasVariable(scriptInstance, varName)
-            string varType = SkyScript.GetVariableType(scriptInstance, varName)
+        if SkyScript.HasVariable(script, varName)
+            string varType = SkyScript.GetVariableType(script, varName)
             ; Form
             if varType == "form"
-                Spell theSpell = SkyScript.GetVariableForm(scriptInstance, varName) as Spell
+                Spell theSpell = SkyScript.GetVariableForm(script, varName) as Spell
                 if theSpell
                     return theSpell
                 else
@@ -366,7 +366,7 @@ Spell function GetSpell(int scriptInstance, int actionInfo, string field, Spell 
                 endIf
             ; Object
             elseIf varType == "object"
-                int object = SkyScript.GetVariableObject(scriptInstance, varName)
+                int object = SkyScript.GetVariableObject(script, varName)
                 ; if IsObjectOfType(object) ; Extract typing into something... SkyScriptType... <---------
                 ; endIf
                 if JMap.getStr(object, "__type") == objectType
@@ -396,14 +396,14 @@ Spell function GetSpell(int scriptInstance, int actionInfo, string field, Spell 
     endIf
 endFunction
 
-int function RunAction(int scriptInstance, int actionInfo)
-    return _SkyScript_Runner.RunAction(scriptInstance, actionInfo)
+int function RunAction(int script, int actionInfo)
+    return _SkyScript_Runner.RunAction(script, actionInfo)
 endFunction
 
-int function Evaluate(int scriptInstance, string expression)
-    return _SkyScript_Expressions.Evaluate(scriptInstance, expression)
+int function Evaluate(int script, string expression)
+    return _SkyScript_Expressions.Evaluate(script, expression)
 endFunction
 
-int function GetVariable(int scriptInstance, string varName)
-    return SkyScript.GetVariable(scriptInstance, varName)
+int function GetVariable(int script, string varName)
+    return SkyScript.GetVariable(script, varName)
 endFunction

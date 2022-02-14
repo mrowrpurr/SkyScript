@@ -1,17 +1,17 @@
 scriptName _SkyScript_Runner hidden
 
-int function ResumeScriptInstance(int scriptInstance) global
-    _SkyScript_ScriptInstance.MarkAsRunning(scriptInstance)
-    int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(scriptInstance)
-    RunActionArray(scriptInstance, currentActionIndex)
-    _SkyScript_ScriptInstance.MarkAsNotRunning(scriptInstance)
-    if _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)
-        _SkyScript_ScriptInstance.Dispose(scriptInstance)
+int function Resumescript(int script) global
+    _SkyScript_ScriptInstance.MarkAsRunning(script)
+    int currentActionIndex = _SkyScript_ScriptInstance.GetCurrentActionIndex(script)
+    RunActionArray(script, currentActionIndex)
+    _SkyScript_ScriptInstance.MarkAsNotRunning(script)
+    if _SkyScript_ScriptInstance.IsMarkedToBeKilled(script)
+        _SkyScript_ScriptInstance.Dispose(script)
     endIf
-    return SkyScript.GetVariableObject(scriptInstance, "LAST_RESPONSE")
+    return SkyScript.GetVariableObject(script, "LAST_RESPONSE")
 endFunction
 
-SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int actionInfo) global
+SkyScriptActionHandler function GetHandlerForAction(int script, int actionInfo) global
     string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
 
     ; Is it variable shorthand?
@@ -43,7 +43,7 @@ SkyScriptActionHandler function GetHandlerForAction(int scriptInstance, int acti
     int handlerIndex = 0
     while handlerIndex < handlers.HandlerCount
         SkyScriptActionHandler handler = handlers.GetHandler(handlerIndex)
-        if handler && handler.MatchSyntax(scriptInstance, actionInfo)
+        if handler && handler.MatchSyntax(script, actionInfo)
             return handler
         endIf
         handlerIndex += 1
@@ -59,11 +59,11 @@ endFunction
 ; BIG TODO !!!!!!!!!!!!!! Add the response values to a JDB structure so they aren't lost !!!!!!!!!!!!!!
 
 ; TODO - Should only wait ONCE per missing syntax PER game load (so we don't wait again and again and again...)
-int function RunAction(int scriptInstance, int actionInfo) global
+int function RunAction(int script, int actionInfo) global
     ; Check if there is a script associated with this option that is in progress. If so, resume it.
-    int runningScriptInstance = _SkyScript_ScriptInstance.GetSubScriptInstanceForAction(scriptInstance, actionInfo)
-    if runningScriptInstance
-        return _SkyScript_ScriptInstance.Resume(runningScriptInstance)
+    int runningscript = _SkyScript_ScriptInstance.GetSubscriptForAction(script, actionInfo)
+    if runningscript
+        return _SkyScript_ScriptInstance.Resume(runningscript)
     endIf
 
     float waitInterval = SkyScriptConfig.ActionLookup_WaitInterval()
@@ -72,32 +72,32 @@ int function RunAction(int scriptInstance, int actionInfo) global
     SkyScriptActionHandler handler
 
     while (! handler) && (attempt < waitAttempts)
-        handler = GetHandlerForAction(scriptInstance, actionInfo)
+        handler = GetHandlerForAction(script, actionInfo)
         Utility.WaitMenuMode(waitInterval)
         attempt += 1
     endWhile
 
     if handler
-        int response = handler.Execute(scriptInstance, actionInfo)
-        SkyScript.SetVariableObject(scriptInstance, "LAST_RESPONSE", response)
+        int response = handler.Execute(script, actionInfo)
+        SkyScript.SetVariableObject(script, "LAST_RESPONSE", response)
         return response
     else
         Debug.MessageBox("Unsupported SkyScript action: " + _SkyScript_Log.ToJson(actionInfo)) ; TODO Move this to logs! unless some like error config or something
     endIf
 endFunction
 
-function RunActionArray(int scriptInstance, int startIndex = 0) global
-    int actionArray = _SkyScript_ScriptInstance.GetActionArray(scriptInstance)
+function RunActionArray(int script, int startIndex = 0) global
+    int actionArray = _SkyScript_ScriptInstance.GetActionArray(script)
     if actionArray
         int actionCount = JArray.count(actionArray)
         int i = 0
         ; TODO check for PARENT paused/mark for kill here
-        int parent = SkyScript.GetScriptParent(scriptInstance)
-        bool parentPausedOrBeingKilled = parent && (SkyScript.IsPaused(parent) || _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance))
-        while i < actionCount && (! SkyScript.IsPaused(scriptInstance)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(scriptInstance)) && (! parentPausedOrBeingKilled)
+        int parent = SkyScript.GetScriptParent(script)
+        bool parentPausedOrBeingKilled = parent && (SkyScript.IsPaused(parent) || _SkyScript_ScriptInstance.IsMarkedToBeKilled(script))
+        while i < actionCount && (! SkyScript.IsPaused(script)) && (! _SkyScript_ScriptInstance.IsMarkedToBeKilled(script)) && (! parentPausedOrBeingKilled)
             if i >= startIndex
-                _SkyScript_ScriptInstance.SetCurrentActionIndex(scriptInstance, i)
-                RunAction(scriptInstance, JArray.getObj(actionArray, i))
+                _SkyScript_ScriptInstance.SetCurrentActionIndex(script, i)
+                RunAction(script, JArray.getObj(actionArray, i))
             endIf
             i += 1
         endWhile

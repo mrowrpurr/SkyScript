@@ -49,9 +49,9 @@ endFunction
 event OnJob(int jobId)
     string jobType = JMap.getStr(jobId, "type")
     if jobType == "script"
-        int scriptInstance = JMap.getObj(jobId, "script")
-        _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
-        _SkyScript_ScriptInstance.Dispose(scriptInstance)
+        int script = JMap.getObj(jobId, "script")
+        _SkyScript_Runner.Resumescript(script)
+        _SkyScript_ScriptInstance.Dispose(script)
         _SkyScript_Events.CompleteJob(jobId)
     endIf
 endEvent

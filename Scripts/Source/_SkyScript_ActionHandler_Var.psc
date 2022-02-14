@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("var")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string[] actionSyntaxKeys = JMap.allKeysPArray(actionInfo)
 
     ; Is it variable shorthand?
@@ -21,23 +21,23 @@ int function Execute(int scriptInstance, int actionInfo)
             int valueType = JMap.valueType(actionInfo, keyName)
             if valueType == 2 ; Int
                 int value = JMap.getInt(actionInfo, keyName)
-                SkyScript.SetVariableInt(scriptInstance, varName, value)
+                SkyScript.SetVariableInt(script, varName, value)
                 return ReturnInt(value)
             elseIf valueType == 3 ; Float
                 float value = JMap.getFlt(actionInfo, keyName)
-                SkyScript.SetVariableFloat(scriptInstance, varName, value)
+                SkyScript.SetVariableFloat(script, varName, value)
                 return ReturnFloat(value)
             elseIf valueType == 4 ; Form
                 Form value = JMap.getForm(actionInfo, keyName)
-                SkyScript.SetVariableForm(scriptInstance, varName, value)
+                SkyScript.SetVariableForm(script, varName, value)
                 return ReturnForm(value)
             elseIf valueType == 5 ; Object
                 int value = JMap.getObj(actionInfo, keyName)
-                SkyScript.SetVariableObject(scriptInstance, varName, value)
+                SkyScript.SetVariableObject(script, varName, value)
                 return ReturnObject(value)
             elseIf valueType == 6 ; String
                 string value = JMap.getStr(actionInfo, keyName)
-                SkyScript.SetVariableString(scriptInstance, varName, value)
+                SkyScript.SetVariableString(script, varName, value)
                 return ReturnString(value)
             endIf
         endIf
@@ -52,37 +52,37 @@ int function Execute(int scriptInstance, int actionInfo)
             int valueType = JMap.valueType(actionInfo, keyName)
             if valueType == 2 ; Int
                 int value = JMap.getInt(actionInfo, keyName)
-                SkyScript.SetVariableInt(scriptInstance, varName, value)
+                SkyScript.SetVariableInt(script, varName, value)
                 return ReturnInt(value)
             elseIf valueType == 3 ; Float
                 float value = JMap.getFlt(actionInfo, keyName)
-                SkyScript.SetVariableFloat(scriptInstance, varName, value)
+                SkyScript.SetVariableFloat(script, varName, value)
                 return ReturnFloat(value)
             elseIf valueType == 4 ; Form
                 Form value = JMap.getForm(actionInfo, keyName)
-                SkyScript.SetVariableForm(scriptInstance, varName, value)
+                SkyScript.SetVariableForm(script, varName, value)
                 return ReturnForm(value)
             elseIf valueType == 5 ; Object
                 int expressionAction = JMap.getObj(actionInfo, keyName)
-                expressionResponse = _SkyScript_Runner.RunAction(scriptInstance, expressionAction)
+                expressionResponse = _SkyScript_Runner.RunAction(script, expressionAction)
             elseIf valueType == 6 ; String
                 string expressionText = JMap.getStr(actionInfo, keyName)
-                expressionResponse = _SkyScript_Expressions.Evaluate(scriptInstance, expressionText)
+                expressionResponse = _SkyScript_Expressions.Evaluate(script, expressionText)
             endIf
             if expressionResponse
                 string responseType = ResponseType(expressionResponse)
                 if responseType == "bool"
-                    SkyScript.SetVariableBool(scriptInstance, varName, ResponseBool(expressionResponse))
+                    SkyScript.SetVariableBool(script, varName, ResponseBool(expressionResponse))
                 elseIf responseType == "int"
-                    SkyScript.SetVariableInt(scriptInstance, varName, ResponseInt(expressionResponse))
+                    SkyScript.SetVariableInt(script, varName, ResponseInt(expressionResponse))
                 elseIf responseType == "float"
-                    SkyScript.SetVariableFloat(scriptInstance, varName, ResponseFloat(expressionResponse))
+                    SkyScript.SetVariableFloat(script, varName, ResponseFloat(expressionResponse))
                 elseIf responseType == "form"
-                    SkyScript.SetVariableForm(scriptInstance, varName, ResponseForm(expressionResponse))
+                    SkyScript.SetVariableForm(script, varName, ResponseForm(expressionResponse))
                 elseIf responseType == "object"
-                    SkyScript.SetVariableObject(scriptInstance, varName, ResponseObject(expressionResponse))
+                    SkyScript.SetVariableObject(script, varName, ResponseObject(expressionResponse))
                 elseIf responseType == "string"
-                    SkyScript.SetVariableString(scriptInstance, varName, ResponseString(expressionResponse))
+                    SkyScript.SetVariableString(script, varName, ResponseString(expressionResponse))
                 endIf
                 return expressionResponse
             endIf
@@ -97,23 +97,23 @@ int function Execute(int scriptInstance, int actionInfo)
         int valueType = JMap.valueType(actionInfo, "value")
         if valueType == 2 ; Int
             int value = JMap.getInt(actionInfo, "value")
-            SkyScript.SetVariableInt(scriptInstance, varName, value)
+            SkyScript.SetVariableInt(script, varName, value)
             return ReturnInt(value)
         elseIf valueType == 3 ; Float
             float value = JMap.getFlt(actionInfo, "value")
-            SkyScript.SetVariableFloat(scriptInstance, varName, value)
+            SkyScript.SetVariableFloat(script, varName, value)
             return ReturnFloat(value)
         elseIf valueType == 4 ; Form
             Form value = JMap.getForm(actionInfo, "value")
-            SkyScript.SetVariableForm(scriptInstance, varName, value)
+            SkyScript.SetVariableForm(script, varName, value)
             return ReturnForm(value)
         elseIf valueType == 5 ; Object
             int value = JMap.getObj(actionInfo, "value")
-            SkyScript.SetVariableObject(scriptInstance, varName, value)
+            SkyScript.SetVariableObject(script, varName, value)
             return ReturnObject(value)
         elseIf valueType == 6 ; String
             string value = JMap.getStr(actionInfo, "value")
-            SkyScript.SetVariableString(scriptInstance, varName, value)
+            SkyScript.SetVariableString(script, varName, value)
             return ReturnString(value)
         endIf
     endIf

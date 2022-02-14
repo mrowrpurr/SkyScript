@@ -4,138 +4,151 @@ int function InitializeFromFile(string filepath) global
     if MiscUtil.FileExists(filepath)
         int actionsFromFile = JValue.readFromFile(filepath)
         if actionsFromFile
-            if JValue.isArray(actionsFromFile)
-                int scriptInstance = Initialize()
-                SkyScript.SetScriptActions(scriptInstance, actionsFromFile)
-                SetFilepath(scriptInstance, filepath)
-                return scriptInstance
-            elseIf JValue.isMap(actionsFromFile) || JValue.isIntegerMap(actionsFromFile) || JValue.isFormMap(actionsFromFile)
-                int scriptInstance = Initialize()
-                int actionArray = JArray.object()
-                JArray.addObj(actionArray, actionsFromFile)
-                SkyScript.SetScriptActions(scriptInstance, actionArray)
-                SetFilepath(scriptInstance, filepath)
-                return scriptInstance
-            endIf
+            int script = InitializeFromObject(actionsFromFile)
+            SetFilepath(script, filepath)
+            return script
         endIf
     endIf
     return 0
 endFunction
 
-int function Initialize() global
-    int scriptInstance = JMap.object()
-    JMap.setObj(_RunningScriptInstances(), scriptInstance, scriptInstance)
-    JMap.setObj(scriptInstance, "variables", JMap.object())
-    JMap.setObj(scriptInstance, "actionSubscripts", JMap.object())
-    return scriptInstance
-endFunction
-
-function Dispose(int scriptInstance) global
-    JMap.removeKey(_RunningScriptInstances(), scriptInstance)
-endFunction
-
-function MarkAsRunning(int scriptInstance) global
-    JMap.setInt(scriptInstance, "running", 1)
-endFunction
-
-function MarkAsNotRunning(int scriptInstance) global
-    JMap.setInt(scriptInstance, "running", 0)
-endFunction
-
-bool function IsRunning(int scriptInstance) global
-    return JMap.getInt(scriptInstance, "running")
-endFunction
-
-function Pause(int scriptInstance) global
-    JMap.setInt(scriptInstance, "paused", 1)
-endFunction
-
-bool function IsPaused(int scriptInstance) global
-    int parent = SkyScript.GetScriptParent(scriptInstance)
-    return JMap.getInt(scriptInstance, "paused") || (parent && IsPaused(parent))
-endFunction
-
-int function Run(int scriptInstance) global
-    return Resume(scriptInstance)
-endFunction
-
-int function Resume(int scriptInstance) global
-    JMap.setInt(scriptInstance, "paused", 0)
-    return _SkyScript_Runner.ResumeScriptInstance(scriptInstance)
-endFunction
-
-function Kill(int scriptInstance) global
-    if IsRunning(scriptInstance) && (! IsPaused(scriptInstance))
-        JMap.setInt(scriptInstance, "killed", 1)
+int function InitializeFromString(string json) global
+    int object = JValue.objectFromPrototype(json)
+    if object
+        return InitializeFromObject(object)
     else
-        Dispose(scriptInstance)
+        return 0
     endIf
 endFunction
 
-bool function IsMarkedToBeKilled(int scriptInstance) global
-    return JMap.getInt(scriptInstance, "killed")
+int function InitializeFromObject(int object) global
+    if JValue.isArray(object)
+        int script = Initialize()
+        SkyScript.SetScriptActions(script, object)
+        return script
+    elseIf JValue.isMap(object) || JValue.isIntegerMap(object) || JValue.isFormMap(object)
+        int script = Initialize()
+        int actionArray = JArray.object()
+        JArray.addObj(actionArray, object)
+        SkyScript.SetScriptActions(script, actionArray)
+        return script
+    endIf
 endFunction
 
-int function Get(int scriptInstance) global
-    return JMap.getObj(_RunningScriptInstances(), scriptInstance)
+int function Initialize() global
+    int script = JMap.object()
+    JMap.setObj(_Runningscripts(), script, script)
+    JMap.setObj(script, "variables", JMap.object())
+    JMap.setObj(script, "actionSubscripts", JMap.object())
+    return script
 endFunction
 
-string function GetFilepath(int scriptInstance) global
-    return JMap.getStr(scriptInstance, "filepath")
+function Dispose(int script) global
+    JMap.removeKey(_Runningscripts(), script)
 endFunction
 
-function SetFilepath(int scriptInstance, string filepath) global
-    JMap.setStr(scriptInstance, "filepath", filepath)
-    SkyScript.SetVariableString(scriptInstance, "SCRIPT_FILENAME", filepath)
+function MarkAsRunning(int script) global
+    JMap.setInt(script, "running", 1)
 endFunction
 
-int function GetActionArray(int scriptInstance) global
-    return JMap.getObj(scriptInstance, "actions")
+function MarkAsNotRunning(int script) global
+    JMap.setInt(script, "running", 0)
 endFunction
 
-function SetCurrentActionIndex(int scriptInstance, int actionIndex) global
-    JMap.setInt(scriptInstance, "currentActionIndex", actionIndex)
+bool function IsRunning(int script) global
+    return JMap.getInt(script, "running")
 endFunction
 
-int function GetCurrentActionIndex(int scriptInstance) global
-    return JMap.getInt(scriptInstance, "currentActionIndex")
+function Pause(int script) global
+    JMap.setInt(script, "paused", 1)
 endFunction
 
-int function GetVariableMap(int scriptInstance) global
-    return JMap.getObj(scriptInstance, "variables")
+bool function IsPaused(int script) global
+    int parent = SkyScript.GetScriptParent(script)
+    return JMap.getInt(script, "paused") || (parent && IsPaused(parent))
 endFunction
 
-int function GetSubScriptInstanceForAction(int scriptInstance, int actionInfo) global
-    return JMap.getObj(GetActionToSubScriptMap(scriptInstance), actionInfo)
+int function Run(int script) global
+    return Resume(script)
 endFunction
 
-int function GetActionToSubScriptMap(int scriptInstance) global
-    return JMap.getObj(scriptInstance, "actionSubscripts")
+int function Resume(int script) global
+    JMap.setInt(script, "paused", 0)
+    return _SkyScript_Runner.Resumescript(script)
 endFunction
 
-int function _RunningScriptInstances() global
+function Kill(int script) global
+    if IsRunning(script) && (! IsPaused(script))
+        JMap.setInt(script, "killed", 1)
+    else
+        Dispose(script)
+    endIf
+endFunction
+
+bool function IsMarkedToBeKilled(int script) global
+    return JMap.getInt(script, "killed")
+endFunction
+
+int function Get(int script) global
+    return JMap.getObj(_Runningscripts(), script)
+endFunction
+
+string function GetFilepath(int script) global
+    return JMap.getStr(script, "filepath")
+endFunction
+
+function SetFilepath(int script, string filepath) global
+    JMap.setStr(script, "filepath", filepath)
+    SkyScript.SetVariableString(script, "SCRIPT_FILENAME", filepath)
+endFunction
+
+int function GetActionArray(int script) global
+    return JMap.getObj(script, "actions")
+endFunction
+
+function SetCurrentActionIndex(int script, int actionIndex) global
+    JMap.setInt(script, "currentActionIndex", actionIndex)
+endFunction
+
+int function GetCurrentActionIndex(int script) global
+    return JMap.getInt(script, "currentActionIndex")
+endFunction
+
+int function GetVariableMap(int script) global
+    return JMap.getObj(script, "variables")
+endFunction
+
+int function GetSubscriptForAction(int script, int actionInfo) global
+    return JMap.getObj(GetActionToSubScriptMap(script), actionInfo)
+endFunction
+
+int function GetActionToSubScriptMap(int script) global
+    return JMap.getObj(script, "actionSubscripts")
+endFunction
+
+int function _Runningscripts() global
     return _SkyScript_Data.FindOrCreateMap("scripts")
 endFunction
 
-function AddAndRunActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
-    int subscriptInstance = AddActionSubScript(scriptInstance, actionInfo, subscriptActions)
-    _SkyScript_Runner.ResumeScriptInstance(subscriptInstance)
-    if ! SkyScript.IsPaused(subscriptInstance)
-        Dispose(subscriptInstance)
+function AddAndRunActionSubScript(int script, int actionInfo, int subscriptActions) global
+    int subscript = AddActionSubScript(script, actionInfo, subscriptActions)
+    _SkyScript_Runner.Resumescript(subscript)
+    if ! SkyScript.IsPaused(subscript)
+        Dispose(subscript)
     endIf
 endFunction
 
-int function AddActionSubScript(int scriptInstance, int actionInfo, int subscriptActions) global
-    int map = _SkyScript_ScriptInstance.GetActionToSubScriptMap(scriptInstance)
-    int subscriptInstance = _SkyScript_ScriptInstance.Initialize()
-    JMap.setObj(map, actionInfo, subscriptInstance)
-    SkyScript.SetScriptParent(subscriptInstance, scriptInstance)
-    SkyScript.SetScriptActions(subscriptInstance, subscriptActions)
-    return subscriptInstance
+int function AddActionSubScript(int script, int actionInfo, int subscriptActions) global
+    int map = _SkyScript_ScriptInstance.GetActionToSubScriptMap(script)
+    int subscript = _SkyScript_ScriptInstance.Initialize()
+    JMap.setObj(map, actionInfo, subscript)
+    SkyScript.SetScriptParent(subscript, script)
+    SkyScript.SetScriptActions(subscript, subscriptActions)
+    return subscript
 endFunction
 
 ; TODO - update this whole damn this to not call GetVariable() again and again
-int function GetVariable(int scriptInstance, string name) global
+int function GetVariable(int script, string name) global
     if StringUtil.Find(name, ".") > -1
         string[] variableParts = StringUtil.Split(name, ".")
         string variableName = variableParts[0]
@@ -149,18 +162,18 @@ int function GetVariable(int scriptInstance, string name) global
             endIf
             i += 1
         endWhile
-        if SkyScript.GetVariableType(scriptInstance, variableName) == "form"
-            return GetFormPropertyVariable(SkyScript.GetVariableForm(scriptInstance, variableName), subVariableName)
+        if SkyScript.GetVariableType(script, variableName) == "form"
+            return GetFormPropertyVariable(SkyScript.GetVariableForm(script, variableName), subVariableName)
         else
-            int object = SkyScript.GetVariableObject(scriptInstance, variableName)
+            int object = SkyScript.GetVariableObject(script, variableName)
             return GetObjectSubvariable(object, subVariableName)
         endIf
     else
-        int varMap = GetVariableMap(scriptInstance)
+        int varMap = GetVariableMap(script)
         if JMap.hasKey(varMap, name)
             return JMap.getObj(varMap, name)
         endIf
-        int parent = SkyScript.GetScriptParent(scriptInstance)
+        int parent = SkyScript.GetScriptParent(script)
         if parent
             return GetVariable(parent, name)
         else

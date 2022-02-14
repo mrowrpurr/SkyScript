@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("vars")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     int variableMap = GetObject(actionInfo, "vars")
     string[] variableNames = JMap.allKeysPArray(variableMap)
     int i = 0
@@ -12,15 +12,15 @@ int function Execute(int scriptInstance, int actionInfo)
         string variableName = variableNames[i]
         int variableType = JMap.valueType(variableMap, variableName)
         if variableType == 2 ; Int
-            SkyScript.SetVariableInt(scriptInstance, variableName, JMap.getInt(variableMap, variableName))
+            SkyScript.SetVariableInt(script, variableName, JMap.getInt(variableMap, variableName))
         elseIf variableType == 3 ; Float
-            SkyScript.SetVariableFloat(scriptInstance, variableName, JMap.getFlt(variableMap, variableName))
+            SkyScript.SetVariableFloat(script, variableName, JMap.getFlt(variableMap, variableName))
         elseIf variableType == 4 ; Form
-            SkyScript.SetVariableForm(scriptInstance, variableName, JMap.getForm(variableMap, variableName))
+            SkyScript.SetVariableForm(script, variableName, JMap.getForm(variableMap, variableName))
         elseIf variableType == 5 ; Object
-            SkyScript.SetVariableObject(scriptInstance, variableName, JMap.getObj(variableMap, variableName))
+            SkyScript.SetVariableObject(script, variableName, JMap.getObj(variableMap, variableName))
         elseIf variableType == 6 ; String
-            SkyScript.SetVariableString(scriptInstance, variableName, JMap.getStr(variableMap, variableName))
+            SkyScript.SetVariableString(script, variableName, JMap.getStr(variableMap, variableName))
         endIf
         i += 1
     endWhile

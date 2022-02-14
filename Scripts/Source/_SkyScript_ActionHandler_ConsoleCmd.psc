@@ -5,7 +5,7 @@ scriptName _SkyScript_ActionHandler_ConsoleCmd extends SkyScriptActionHandler
 ; "aliases": ["optional", "aliases"],
 ; "run": {ACTION} which will have variables set: args, argCount, argsText
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string commandName = JMap.getStr(actionInfo, "console-command")
     int aliases = JMap.getObj(actionInfo, "aliases")
     ; int action = GetAction(actionInfo, "run") ; <--- TODO

@@ -4,11 +4,11 @@ event RegisterSyntax()
     AddSyntax("msg")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     _SkyScript_Quest ss = _SkyScript_Quest.GetSkyrimScriptingQuest() as _SkyScript_Quest
     
     ; Set the message Text
-    string text = SkyScript.InterpolateString(scriptInstance, JMap.getStr(actionInfo, "msg"))
+    string text = SkyScript.InterpolateString(script, JMap.getStr(actionInfo, "msg"))
     ss.SkyrimScripting_MessageText_BaseForm.SetName(text)
 
     ; Reset all message buttons
@@ -116,7 +116,7 @@ int function Execute(int scriptInstance, int actionInfo)
     endIf
 
     if resultAction
-        _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
+        _SkyScript_ScriptInstance.AddAndRunActionSubScript(script, actionInfo, resultAction)
     endIf
 
     return ReturnString(resultText)

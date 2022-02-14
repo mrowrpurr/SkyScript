@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("blackscreen")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     ImageSpaceModifier fadeToBlack = Game.GetForm(0xf756d) as ImageSpaceModifier
     ImageSpaceModifier fadeToBlackHold = Game.GetForm(0xf756e) as ImageSpaceModifier
     ImageSpaceModifier fadeFromBlack = Game.GetForm(0xf756f) as ImageSpaceModifier

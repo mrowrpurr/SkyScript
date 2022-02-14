@@ -4,7 +4,7 @@ event RegisterSyntax()
     AddSyntax("prompt")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     SkyScriptLock.AcquireLock("UIPrompt")
 
     UIListMenu listMenu = UIExtensions.GetMenu("UIListMenu") as UIListMenu
@@ -13,7 +13,7 @@ int function Execute(int scriptInstance, int actionInfo)
     int choiceCount = JArray.count(choicesArray)
     int i = 0
     while i < choiceCount
-        string choiceText = SkyScript.InterpolateString(scriptInstance, JArray.getStr(choicesArray, i))
+        string choiceText = SkyScript.InterpolateString(script, JArray.getStr(choicesArray, i))
         listMenu.AddEntryItem(choiceText)
         i += 1
     endWhile
@@ -30,7 +30,7 @@ int function Execute(int scriptInstance, int actionInfo)
     endIf
     int resultAction = JMap.getObj(optionMap, resultText)
     if resultAction
-        _SkyScript_ScriptInstance.AddAndRunActionSubScript(scriptInstance, actionInfo, resultAction)
+        _SkyScript_ScriptInstance.AddAndRunActionSubScript(script, actionInfo, resultAction)
     endIf
 
     return ReturnString(resultText)

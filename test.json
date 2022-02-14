@@ -1,12 +1,4 @@
 [
-  {
-    "msg": "Welcome to my badass modlist!\n\nHere are some options for you..."
-  },
-  {
-    "msg": "Do you want to play in Hard mode?",
-    "yes": { "msg": "Cool, this would run the HARD MODE settings" },
-    "no": { "msg": "Cool, this would run the EASY MODE settings" }
-  },
-  { "msg": "Choose a play style" },
-  { "prompt": ["Rogue", "Mage", "Fighter"] }
+    { "kitty =": { "Cat.new()": { "name": "The Kitteh" }}},
+    { "print": "${kitty}" }
 ]

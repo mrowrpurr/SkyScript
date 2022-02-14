@@ -20,9 +20,9 @@ function FireEventHandlers(string eventName, int eventVariable = 0) global
         int i = 0
         while i < handlerCount
             int eventHandler = JArray.getObj(eventHandlers, i)
-            int scriptInstance = _SkyScript_ScriptInstance.Initialize()
-            SkyScript.SetScriptActions(scriptInstance, eventHandler)
-            QueueJob(CreateEventHandlerJob(eventName, scriptInstance, eventVariable))
+            int script = _SkyScript_ScriptInstance.Initialize()
+            SkyScript.SetScriptActions(script, eventHandler)
+            QueueJob(CreateEventHandlerJob(eventName, script, eventVariable))
             i += 1
         endWhile
     endIf
@@ -36,18 +36,18 @@ function FireScriptEventHandlers(string eventName, int eventVariable = 0) global
         int i = 0
         while i < scriptFiles.Length
             string filepath = scriptFiles[i]
-            int scriptInstance = SkyScript.Initialize(filepath)
-            QueueJob(CreateEventHandlerJob(eventName, scriptInstance, eventVariable))
+            int script = SkyScript.Initialize(filepath)
+            QueueJob(CreateEventHandlerJob(eventName, script, eventVariable))
             i += 1
         endWhile
     endIf
 endFunction
 
-int function CreateEventHandlerJob(string eventName, int scriptInstance, int eventVariable = 0) global
-    SkyScript.SetVariableObject(scriptInstance, "event", eventVariable)
+int function CreateEventHandlerJob(string eventName, int script, int eventVariable = 0) global
+    SkyScript.SetVariableObject(script, "event", eventVariable)
     int jobId = JMap.object()
     JMap.setStr(jobId, "type", "script")
-    JMap.setObj(jobId, "script", scriptInstance)
+    JMap.setObj(jobId, "script", script)
     return jobId
 endFunction
 

@@ -8,7 +8,7 @@ event RegisterSyntax()
     AddSyntax(GETFORMFROMFILE_KEY)
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     if HasField(actionInfo, GETFORM_KEY)
         string formHex = GetString(actionInfo, GETFORM_KEY)
         Form theForm = FormHelper.HexToForm(formHex)

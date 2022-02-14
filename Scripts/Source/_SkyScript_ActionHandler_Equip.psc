@@ -8,21 +8,21 @@ event RegisterSyntax()
     AddSyntax(UNEQUIP_KEY)
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
-    Actor target = GetActor(scriptInstance, actionInfo, "target", Player)
+int function Execute(int script, int actionInfo)
+    Actor target = GetActor(script, actionInfo, "target", Player)
 
     if HasField(actionInfo, EQUIP_KEY)
         int object
         if IsString(actionInfo, EQUIP_KEY)
             string varName = GetString(actionInfo, EQUIP_KEY)
-            if SkyScript.GetVariableType(scriptInstance, varName) == "object"
-                object = SkyScript.GetVariableObject(scriptInstance, varName)
+            if SkyScript.GetVariableType(script, varName) == "object"
+                object = SkyScript.GetVariableObject(script, varName)
             endIf
         endIf
         if IsObject(actionInfo, EQUIP_KEY)
             object = GetObject(actionInfo, EQUIP_KEY)
             if ! JValue.isArray(object)
-                object = RunAction(scriptInstance, object)
+                object = RunAction(script, object)
             endIf
         endIf
         if JValue.isArray(object)

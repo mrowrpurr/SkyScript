@@ -9,12 +9,12 @@ event RegisterSyntax()
     AddSyntax(SAVEEQUIPPED_KEY)
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     if HasField(actionInfo, SAVEEQUIPPED_KEY)
         MiscUtil.PrintConsole("YES, SAVE EQUIPPED")
         string filePath = GetString(actionInfo, SAVEEQUIPPED_KEY)
         MiscUtil.PrintConsole("Save to: " + filePath)
-        Actor target = GetActor(scriptInstance, actionInfo, "target", Game.GetPlayer())
+        Actor target = GetActor(script, actionInfo, "target", Game.GetPlayer())
         SaveEquippedItems(target, filePath)
     endIf    
 endFunction

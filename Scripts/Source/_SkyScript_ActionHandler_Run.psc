@@ -6,7 +6,7 @@ event RegisterSyntax()
     AddSyntax(ACTION_KEY)
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
+int function Execute(int script, int actionInfo)
     string scriptPath = GetString(actionInfo, ACTION_KEY)
     scriptPath = SkyScriptUtil.FindFile(scriptPath)
     if scriptPath

@@ -4,8 +4,8 @@ event RegisterSyntax()
     AddSyntax("console")
 endEvent
 
-int function Execute(int scriptInstance, int actionInfo)
-    string command = InterpolateString(scriptInstance, JMap.getStr(actionInfo, "console"))
+int function Execute(int script, int actionInfo)
+    string command = InterpolateString(script, JMap.getStr(actionInfo, "console"))
     if command
         if ConsoleUtil.GetVersion()
             ConsoleUtil.ExecuteCommand(command)
