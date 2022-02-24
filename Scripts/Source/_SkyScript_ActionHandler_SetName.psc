@@ -1,1 +1,0 @@
-scriptName _SkyScript_ActionHandler_SetName extends Quest

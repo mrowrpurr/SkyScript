@@ -1,6 +1,0 @@
-{
-  "actionLookup": {
-    "waitInterval": 0.05,
-    "waitAttempts": 200
-  }
-}

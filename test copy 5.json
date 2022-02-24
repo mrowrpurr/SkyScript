@@ -1,6 +1,0 @@
-[
-    { "kitty =>": { "Cat.new()": { "name": "The Kitteh" }}},
-    { "print": "${kitty}" },
-    { "kitty.meow()": {} },
-    { "Player.addItem()": {} }
-]

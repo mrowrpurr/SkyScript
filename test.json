@@ -1,4 +1,0 @@
-[
-    { "kitty =": { "Cat.new()": { "name": "The Kitteh" }}},
-    { "print": "${kitty}" }
-]

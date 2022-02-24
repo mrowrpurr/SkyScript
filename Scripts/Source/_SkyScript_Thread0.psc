@@ -1,1 +1,0 @@
-scriptName _SkyScript_Thread0 extends _SkyScript_Thread

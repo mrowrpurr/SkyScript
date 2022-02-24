@@ -1,4 +1,0 @@
-[
-  { "kitty =>": { "new": "Cat", "name": "Cat Name" } },
-  { "print": "Kitteh: ${kitty}" }
-]
