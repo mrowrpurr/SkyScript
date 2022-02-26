@@ -4,6 +4,7 @@
   "dependencies": [
     "commonlibsse",
     "oatpp",
-    "ryml"
+    "ryml",
+    "gtest"
   ]
 }

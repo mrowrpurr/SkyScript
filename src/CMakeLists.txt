@@ -18,6 +18,8 @@ set(SOURCE_FILES
 
 	"${SOURCE_DIR}/Events.h"
 
+	"${SOURCE_DIR}/SkyScript.h"
+
 	"${SOURCE_DIR}/Papyrus.h"
 	"${SOURCE_DIR}/Papyrus/Ini.h"
 	"${SOURCE_DIR}/Papyrus/DateTime.h"
