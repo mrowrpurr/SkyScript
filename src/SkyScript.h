@@ -9,7 +9,7 @@ namespace SkyScript {
             std::string ReturnSomethingFromSomewhere() {
                 auto path = fs::current_path();
                 return std::format(
-                    "Hello from SkyScript's C++ library. You are currently in folder {}",
+                    "Hi from SkyScript's C++ library. You are currently in folder {}",
                     path.string()
                 );
             }

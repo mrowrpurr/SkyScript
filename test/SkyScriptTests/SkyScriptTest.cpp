@@ -4,8 +4,9 @@
 TEST(HelloTest, BasicAssertions) {
   auto something = new SkyScript::Whatever();
   auto text = something->ReturnSomethingFromSomewhere();
-  EXPECT_STREQ(text.data(), "world");
-  EXPECT_EQ(7 * 6, 42);
+  EXPECT_NE(text.find("Hello"), std::string::npos);
+  EXPECT_NE(text.find("From"), std::string::npos);
+  EXPECT_NE(text.find("Array"), std::string::npos);
 }
 
 
