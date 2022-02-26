@@ -1,6 +1,3 @@
-// #include "foo.h"
-// #include "SkyScriptTests.h"
-
 #include <gtest/gtest.h>
 #include <SkyScript.h>
 
