@@ -96,7 +96,7 @@ endif()
 
 target_include_directories(
 	"${PROJECT_NAME}"
-	PRIVATE
+	PUBLIC
 		"${CMAKE_CURRENT_BINARY_DIR}/src"
 		"${SOURCE_DIR}"
 )

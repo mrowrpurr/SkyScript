@@ -3,6 +3,7 @@
 #include <iostream>
 #include <format>
 
+#include "SkyScript.h"
 #include "Web/dtos/TestDto.hpp"
 
 #include "oatpp/web/server/api/ApiController.hpp"
@@ -19,7 +20,9 @@ public:
   
   ENDPOINT("GET", "/", root) {
     auto now = std::chrono::system_clock::now();
-    return response(std::format("Hi Skyrim, I am C++. The time is currently {}", now));
+    auto something = new SkyScript::Whatever();
+    return response(something->ReturnSomethingFromSomewhere());
+    // return response(std::format("Hi Skyrim, I am C++. The time is currently {}", now));
   }
   
   ENDPOINT("GET", "/spells/{spellName}", searchSpells, PATH(String, spellName)) {
