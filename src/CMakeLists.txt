@@ -103,6 +103,10 @@ target_include_directories(
 find_package(oatpp 1.3.0 REQUIRED)
 target_link_libraries("${PROJECT_NAME}" PRIVATE PUBLIC oatpp::oatpp)
 
+# YAML
+find_package(ryml CONFIG REQUIRED)
+target_link_libraries("${PROJECT_NAME}" PRIVATE ryml::ryml)
+
 ###################################################
 # TODO Set this up for AE, SE, and VR
 ###################################################
