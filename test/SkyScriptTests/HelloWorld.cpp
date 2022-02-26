@@ -1,5 +1,5 @@
 // #include "foo.h"
-// #include "testfoo.h"
+// #include "SkyScriptTests.h"
 
 #include <gtest/gtest.h>
 

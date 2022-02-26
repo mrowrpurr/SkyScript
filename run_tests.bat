@@ -1,2 +1,2 @@
 cls
-build\test\testfoo\Debug\testfoo.exe
+build\test\SkyScriptTests\Debug\SkyScriptTests.exe
