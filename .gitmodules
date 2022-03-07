@@ -19,3 +19,6 @@
 [submodule "SkyUnit"]
 	path = SkyUnit
 	url = https://github.com/mrowrpurr/SkyUnit.git
+[submodule "external/rapidyaml"]
+	path = external/rapidyaml
+	url = git@github.com:mrowrpurr/rapidyaml.git

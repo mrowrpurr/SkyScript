@@ -7,13 +7,26 @@ using namespace snowhouse;
 
 class VariablesDeclarationTest : public SkyScriptTestBase {};
 
-TEST_F(VariablesDeclarationTest, AssignStringVariabel) {
-	const auto* yaml = "hello =: world";
-	auto folder = MkDir("Hello");
-	auto file = WriteToFile("Hello\\Script.yaml", yaml);
-	auto path = Path("Hello\\Script.yaml");
+TEST_F(VariablesDeclarationTest, AssignStringVariable) {
 	auto context = new SkyScript::Context();
-//	auto evaluator = SkyScript::Evaluator();
 
 	ASSERT_EQ(0, context->GetLocalVariables().size());
+
+	auto evaluator = new SkyScript::Evaluator();
+	evaluator->Evaluate(*context, "hello: world");
+
+	ASSERT_EQ(1, context->GetLocalVariables().size());
+	ASSERT_TRUE(context->GetLocalVariables().contains("hello"));
 }
+
+
+
+
+
+
+
+// PRINT OUT THE VARS!
+//const auto& vars = context->GetLocalVariables();
+//for (const auto& [key, val] : vars) {
+//std::cout << std::format("KEY: {} VAL: {}", key, val);
+//}

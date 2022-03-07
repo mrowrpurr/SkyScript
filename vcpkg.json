@@ -9,6 +9,6 @@
     "oatpp",
     "inja",
     "snowhouse",
-    "ryml"
+    "yaml-cpp"
   ]
 }

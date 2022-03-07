@@ -10,11 +10,16 @@ namespace SkyScript {
 	 */
 	class Context {
 	private:
-		std::unordered_map<std::string_view, std::string_view> _localVariables;
+		std::unordered_map<std::string, std::string> _localVariables;
 
 	public:
-		std::unordered_map<std::string_view, std::string_view>& GetLocalVariables() {
+		std::unordered_map<std::string, std::string>& GetLocalVariables() {
 			return _localVariables;
+		}
+
+		// Will have type etc...
+		void SetLocalVariable(std::string name, std::string value) {
+			_localVariables[name] = value;
 		}
 	};
 }

@@ -45,6 +45,9 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 # SkyUnit
 add_subdirectory("SkyUnit")
 
+# Rapid YAML
+#add_subdirectory("external/rapidyaml")
+
 # Process the CMakeLists.txt in the src/ folder
 add_subdirectory(src)
 add_subdirectory(test)
