@@ -6,7 +6,7 @@
 
 class TypeInfoTest : public SkyScriptUnitTest {};
 
-TEST_F(TypeInfoTest, HasImmutableName) {
+TEST_F(TypeInfoTest, TypeInfoHasName) {
 	auto dogInfo = TypeInfo("Dog");
 	auto catInfo = TypeInfo("Cat");
 
@@ -14,7 +14,7 @@ TEST_F(TypeInfoTest, HasImmutableName) {
 	ASSERT_EQ(catInfo.GetName(), "Cat");
 }
 
-TEST_F(TypeInfoTest, HasNamespace) {
+TEST_F(TypeInfoTest, TypeInfoHasNamespace) {
 	auto dogInfo = TypeInfo("Dog");
 	auto catInfo = TypeInfo("Cat", "Animals");
 
