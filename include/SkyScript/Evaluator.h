@@ -15,7 +15,7 @@ namespace SkyScript {
 			if (yaml.IsMap()) {
 				for (YAML::const_iterator it = yaml.begin(); it != yaml.end(); ++it) {
 					const auto key = it->first.as<std::string>();
-					const auto value = it->first.as<std::string>();
+					const auto value = it->second.as<std::string>();
 					context.SetLocalVariable(key, value);
 				}
 			}
