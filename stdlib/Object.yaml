@@ -1,0 +1,16 @@
+define_primitive:
+  :name: Object
+  ::
+    Base Object which all other objects in SkyScript inherit from when using `define_type()`.
+
+  string toString():
+    ::
+
+  bool equals():
+    :: This is the description
+    other: string = "foo"
+    another:
+      :: desc
+      type: string
+      default: "foo"
+    ->: return false

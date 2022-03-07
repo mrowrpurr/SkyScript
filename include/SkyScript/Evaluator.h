@@ -1,6 +1,6 @@
 #pragma once
 
-#include <yaml-cpp/yaml.h>
+#include <ryml/ryml.hpp>
 
 namespace SkyScript {
 
@@ -11,14 +11,14 @@ namespace SkyScript {
 	class Evaluator {
 	public:
 		void Evaluate(SkyScript::Context& context, const std::string& yamlText) {
-			auto yaml = YAML::Load(yamlText);
-			if (yaml.IsMap()) {
-				for (YAML::const_iterator it = yaml.begin(); it != yaml.end(); ++it) {
-					const auto key = it->first.as<std::string>();
-					const auto value = it->second.as<std::string>();
-					context.SetLocalVariable(key, value);
-				}
-			}
+//			auto yaml = YAML::Load(yamlText);
+//			if (yaml.IsMap()) {
+//				for (YAML::const_iterator it = yaml.begin(); it != yaml.end(); ++it) {
+//					const auto key = it->first.as<std::string>();
+//					const auto value = it->second.as<std::string>();
+//					context.SetLocalVariable(key, value);
+//				}
+//			}
 		}
 	};
 }

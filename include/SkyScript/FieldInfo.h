@@ -1,0 +1,5 @@
+#prama once
+
+namespace SkyScript {
+
+}

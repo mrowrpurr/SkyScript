@@ -7,7 +7,7 @@ file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/
 
 # Get header files from include/
 set(INCLUDE_DIR "${ROOT_DIR}/include")
-file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h")
+file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h" "${INCLUDE_DIR}/SkyScript/Types/*.h")
 
 # Plugin.h
 set(VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h")
@@ -44,14 +44,15 @@ target_compile_features(
 		cxx_std_23
 )
 
+add_compile_definitions(
+		UNICODE
+		_UNICODE
+#		NOMINMAX
+		WIN32_LEAN_AND_MEAN
+		_CRT_USE_BUILTIN_OFFSETOF # Fixes MSVC being non-compliant with offsetof behavior by default.
+)
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-	add_compile_definitions(
-            UNICODE
-            _UNICODE
-            NOMINMAX
-            WIN32_LEAN_AND_MEAN
-            _CRT_USE_BUILTIN_OFFSETOF # Fixes MSVC being non-compliant with offsetof behavior by default.
-    )
 
 	target_compile_options(
 		"${PROJECT_NAME}"
@@ -86,6 +87,7 @@ target_include_directories(
 		"${SOURCE_DIR}"
 		"${CMAKE_CURRENT_BINARY_DIR}/include"
 		"${CMAKE_CURRENT_BINARY_DIR}/include/SkyScript"
+		"${CMAKE_CURRENT_BINARY_DIR}/include/SkyScript/Types"
 		"${INCLUDE_DIR}"
 )
 
@@ -125,11 +127,11 @@ find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
 target_include_directories("${PROJECT_NAME}" PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
 
 # Rapid YAML
-#find_package(ryml CONFIG REQUIRED)
-#target_link_libraries("${PROJECT_NAME}" PUBLIC ryml::ryml)
+find_package(ryml CONFIG REQUIRED)
+target_link_libraries("${PROJECT_NAME}" PUBLIC ryml::ryml)
 
-find_package(yaml-cpp CONFIG REQUIRED)
-target_link_libraries("${PROJECT_NAME}" PUBLIC yaml-cpp)
+#find_package(yaml-cpp CONFIG REQUIRED)
+#target_link_libraries("${PROJECT_NAME}" PUBLIC yaml-cpp)
 
 # Precompiled Headers (PCH)
 target_precompile_headers(

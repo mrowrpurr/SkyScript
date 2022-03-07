@@ -9,6 +9,8 @@
     "oatpp",
     "inja",
     "snowhouse",
-    "yaml-cpp"
-  ]
+    { "name": "c4core", "version>=": "2021-06-26" },
+    "ryml"
+  ],
+  "builtin-baseline":"495a0a04ce30a17f26de33ba4a070212fed76940"
 }
