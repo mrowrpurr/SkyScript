@@ -20,7 +20,11 @@
 #include <filesystem>
 #include <fstream>
 
+#include <SkyScript/Script.h>
+
 namespace fs = std::filesystem;
+
+using namespace SkyScript;
 
 class SkyScriptTestBase : public ::testing::Test {
 protected:

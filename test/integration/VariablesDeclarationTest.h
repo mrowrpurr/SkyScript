@@ -1,11 +1,9 @@
 #pragma once
 
 #include "TestHelper.h"
-#include <snowhouse/snowhouse.h>
+
 #include <SkyScript/Context.h>
 #include <SkyScript/Evaluator.h>
-
-using namespace snowhouse;
 
 class VariablesDeclarationTest : public SkyScriptIntegrationTest {};
 
