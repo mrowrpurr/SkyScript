@@ -3,11 +3,11 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 # Get *.cpp and *.h source files
 set(SOURCE_DIR "${ROOT_DIR}/src")
-file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/SkyScript/*.cpp")
+file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/SkyScript/*.cpp" "${SOURCE_DIR}/SkyScript/*.h")
 
 # Get header files from include/
 set(INCLUDE_DIR "${ROOT_DIR}/include")
-file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h" "${INCLUDE_DIR}/SkyScript/Types/*.h")
+file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h")
 
 # Plugin.h
 set(VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h")
@@ -47,7 +47,7 @@ target_compile_features(
 add_compile_definitions(
 		UNICODE
 		_UNICODE
-#		NOMINMAX
+		NOMINMAX
 		WIN32_LEAN_AND_MEAN
 		_CRT_USE_BUILTIN_OFFSETOF # Fixes MSVC being non-compliant with offsetof behavior by default.
 )
