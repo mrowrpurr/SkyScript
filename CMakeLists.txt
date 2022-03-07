@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.21)
 
 # Set your SKSE plugin name and version.
 project(
-	ExampleProject
+	SkyScript
 	VERSION 1.0.0
 	LANGUAGES CXX
 )
@@ -11,15 +11,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add options for specifying the version
 # Only one version may be provided at a time
-option(SKYRIM_AE "Compile plugin for Skyrim AE" OFF)
+option(SKYRIM_AE "Compile plugin for Skyrim AE" ON)
 option(SKYRIM_SE "Compile plugin for Skyrim SE" OFF)
 option(SKYRIM_VR "Compile plugin for Skyrim VR" OFF)
 
 # Exit if no Skyrim version was specified
-if(NOT ${SKYRIM_AE} AND NOT ${SKYRIM_SE} AND NOT ${SKYRIM_VR})
-	message(FATAL_ERROR "Run cmake using one of the build/ .bat files for building Skyrim")
-	return()
-endif()
+# if(NOT ${SKYRIM_AE} AND NOT ${SKYRIM_SE} AND NOT ${SKYRIM_VR})
+# 	message(FATAL_ERROR "Run cmake using one of the build/ .bat files for building Skyrim")
+# 	return()
+# endif()
 
 # Add support for #ifdef for SKYRIM_AE, SKYRIM_SE, and SKYRIM_VR
 if(${SKYRIM_AE})
@@ -41,6 +41,9 @@ enable_testing()
 
 # Process the .in templates in the cmake/ folder for Plugin.h and version.rc
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# SkyUnit
+add_subdirectory("SkyUnit")
 
 # Process the CMakeLists.txt in the src/ folder
 add_subdirectory(src)

@@ -5,6 +5,10 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 set(SOURCE_DIR "${ROOT_DIR}/src")
 file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")
 
+# Get header files from include/
+set(INCLUDE_DIR "${ROOT_DIR}/include")
+file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h")
+
 # Plugin.h
 set(VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h")
 configure_file(
@@ -26,6 +30,7 @@ add_library(
 	"${PROJECT_NAME}"
 	SHARED
 	${SOURCE_FILES}
+	${INCLUDE_FILES}
 	"${VERSION_HEADER}"
 	"${CMAKE_CURRENT_BINARY_DIR}/version.rc"
 	"${ROOT_DIR}/.clang-format"
@@ -67,28 +72,32 @@ endif()
 # Default output directory for compiled files
 target_include_directories(
 	"${PROJECT_NAME}"
-	PRIVATE
+	PUBLIC
 		"${CMAKE_CURRENT_BINARY_DIR}/src"
+		"${CMAKE_CURRENT_BINARY_DIR}/src/SkyScript"
 		"${SOURCE_DIR}"
+		"${CMAKE_CURRENT_BINARY_DIR}/include"
+		"${CMAKE_CURRENT_BINARY_DIR}/include/SkyScript"
+		"${INCLUDE_DIR}"
 )
 
 # CommonLib
 if(${SKYRIM_AE})
-	add_subdirectory("${ROOT_DIR}/CommonLib/AE" CommonLibSSE EXCLUDE_FROM_ALL)
+	# add_subdirectory("${ROOT_DIR}/CommonLib/AE" CommonLibSSE EXCLUDE_FROM_ALL)
     target_link_libraries(
         "${PROJECT_NAME}"
         PUBLIC
             CommonLibSSE::CommonLibSSE
     )
 elseif(${SKYRIM_SE})
-	add_subdirectory("${ROOT_DIR}/CommonLib/SE" CommonLibSSE EXCLUDE_FROM_ALL)
+	# add_subdirectory("${ROOT_DIR}/CommonLib/SE" CommonLibSSE EXCLUDE_FROM_ALL)
     target_link_libraries(
         "${PROJECT_NAME}"
         PUBLIC
             CommonLibSSE::CommonLibSSE
     )
 elseif(${SKYRIM_VR})
-	add_subdirectory("${ROOT_DIR}/CommonLib/VR" CommonLibVR EXCLUDE_FROM_ALL)
+	# add_subdirectory("${ROOT_DIR}/CommonLib/VR" CommonLibVR EXCLUDE_FROM_ALL)
     target_link_libraries(
         "${PROJECT_NAME}"
         PUBLIC
@@ -99,6 +108,17 @@ endif()
 # Include spdlog
 find_package(spdlog CONFIG REQUIRED)
 target_link_libraries("${PROJECT_NAME}" PUBLIC spdlog::spdlog)
+
+# SkyUnit
+target_link_libraries("${PROJECT_NAME}" PUBLIC SkyUnit)
+
+# Snowhouse
+find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
+target_include_directories("${PROJECT_NAME}" PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
+
+# Rapid YAML
+find_package(ryml CONFIG REQUIRED)
+target_link_libraries("${PROJECT_NAME}" PRIVATE ryml::ryml)
 
 # Precompiled Headers (PCH)
 target_precompile_headers(

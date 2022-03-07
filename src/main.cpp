@@ -1,4 +1,5 @@
 #include <format>
+#include "Tests.h"
 
 namespace {
 	void InitializeLog() {
@@ -22,8 +23,7 @@ namespace {
 	void OnEvent(SKSE::MessagingInterface::Message* event) {
 		// kDataLoaded
 		if (event->type == SKSE::MessagingInterface::kDataLoaded) {
-			auto* consoleLog = RE::ConsoleLog::GetSingleton();
-			consoleLog->Print("Hello from Example SKSE plugin!");
+			Tests::RunAll();
 		}
 	}
 
@@ -32,7 +32,7 @@ namespace {
 	}
 
 	bool PapyrusFunctions(RE::BSScript::IVirtualMachine* vm) {
-		vm->RegisterFunction("HelloWorld", "MyPapyrusScript", HelloPapyrus);
+		vm->RegisterFunction("HelloWorld", "MyPapyrusScript2", HelloPapyrus);
 		return true;
 	}
 }
@@ -62,6 +62,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	// ...
 	SKSE::GetMessagingInterface()->RegisterListener(OnEvent);
+
+	// SKSE::GetMessagingInterface()->GetEventDispatcher()
 
 	// ...
 	SKSE::GetPapyrusInterface()->Register(PapyrusFunctions);

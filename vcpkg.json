@@ -5,6 +5,10 @@
     "boost-stl-interfaces",
     "rsm-binary-io",
     "spdlog",
-    "gtest"
+    "gtest",
+    "oatpp",
+    "inja",
+    "snowhouse",
+    "ryml"
   ]
 }
