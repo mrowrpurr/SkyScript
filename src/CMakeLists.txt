@@ -3,7 +3,7 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 # Get *.cpp and *.h source files
 set(SOURCE_DIR "${ROOT_DIR}/src")
-file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")
+file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/SkyScript/*.cpp")
 
 # Get header files from include/
 set(INCLUDE_DIR "${ROOT_DIR}/include")
