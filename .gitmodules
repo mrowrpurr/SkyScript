@@ -16,3 +16,6 @@
 [submodule "CommonLib/VR"]
 	path = CommonLib/VR
 	url = https://github.com/mrowrpurr/CommonLibVR.git
+[submodule "SkyUnit"]
+	path = SkyUnit
+	url = https://github.com/mrowrpurr/SkyUnit.git
