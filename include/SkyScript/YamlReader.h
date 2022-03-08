@@ -14,10 +14,12 @@ namespace SkyScript {
 	class YamlReader : public IDocumentReader {
 	private:
 		c4::yml::Tree _tree;
+		c4::yml::NodeRef _currentLocation;
 
 	public:
 		explicit YamlReader(std::string yamlText) {
 			_tree = ryml::parse(ryml::to_substr((yamlText)));
+			_currentLocation = _tree;
 		}
 
 		bool IsMap() override {

@@ -23,14 +23,14 @@ namespace SkyScript::Evaluator {
 	}
 
 	void Evaluate(Context& context, IDocumentNode* node) {
-//		switch (node->GetType()) {
-//		case IDocumentNode::NodeType::FunctionInvocation:
-//			InvokeFunction(context, node->GetFunctionName());
-//			break;
-//		default:
-//			// Nothing ...
-//			break;
-//		}
+		switch (node->GetType()) {
+		case IDocumentNode::NodeType::FunctionInvocation:
+			InvokeFunction(context, node->GetFunctionName());
+			break;
+		default:
+			// Nothing ...
+			break;
+		}
 	}
 
 	void Evaluate(Context& context, IDocumentReader& reader) {

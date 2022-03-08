@@ -2,8 +2,10 @@
 
 #include <utility>
 
-#include "TypeSet.h"
+#include "FunctionInfo.h"
+#include "FunctionSet.h"
 #include "TypeInfo.h"
+#include "TypeSet.h"
 
 namespace SkyScript {
 
@@ -16,18 +18,22 @@ namespace SkyScript {
 	class Context {
 	private:
 		TypeSet _types;
+		FunctionSet _functions;
 
 	public:
+		// TODO accumulate total with parent contexts as well
 		size_t GetTypeCount() {
 			return _types.Count();
 		}
 
+		// TODO search parent contexts as well
 		bool TypeExists(std::string typeName) {
 			return _types.HasType(std::move(typeName));
 		}
 
+		// TODO search parent contexts as well
 		bool FunctionExists(const std::string& functionName) {
-			return false;
+			return _functions.HasFunction(functionName);
 		}
 	};
 }
