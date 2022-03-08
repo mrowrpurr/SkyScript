@@ -1,24 +1,52 @@
 #pragma once
 
-#include <ryml/ryml.hpp>
+#include <format>
 
-namespace SkyScript {
+#include "Context.h"
+#include "IDocumentReader.h"
+#include "IDocumentNode.h"
+#include "YamlReader.h"
 
-	/*
-	 * Responsible for evaluating simple expressions, e.g. provided by YAML
-	 * Expressions are evaluated in the context of a Context
-	 */
-	class Evaluator {
-	public:
-		void Evaluate(SkyScript::Context& context, const std::string& yamlText) {
-//			auto yaml = YAML::Load(yamlText);
-//			if (yaml.IsMap()) {
-//				for (YAML::const_iterator it = yaml.begin(); it != yaml.end(); ++it) {
-//					const auto key = it->first.as<std::string>();
-//					const auto value = it->second.as<std::string>();
-//					context.SetLocalVariable(key, value);
-//				}
-//			}
+/*
+ * Responsible for evaluating simple expressions, e.g. provided by YAML
+ * Expressions are evaluated in the context of a Context
+ */
+namespace SkyScript::Evaluator {
+
+	void InvokeFunction(Context& context, const std::string& functionName) {
+		if (context.FunctionExists(functionName)) {
+			std::cout << std::format("FUNCTION EXISTS {}", functionName);
+		} else {
+			// Nothing ...
+			std::cout << std::format("FUNCTION *does not* EXIST {}", functionName);
 		}
-	};
+	}
+
+	void Evaluate(Context& context, IDocumentNode* node) {
+//		switch (node->GetType()) {
+//		case IDocumentNode::NodeType::FunctionInvocation:
+//			InvokeFunction(context, node->GetFunctionName());
+//			break;
+//		default:
+//			// Nothing ...
+//			break;
+//		}
+	}
+
+	void Evaluate(Context& context, IDocumentReader& reader) {
+		auto node = (IDocumentNode*) &reader;
+		Evaluate(context, node);
+	}
+
+	Context EvaluateYAML(Context context, const std::string& yamlText) {
+		auto reader = YamlReader(yamlText);
+		Evaluate(context, reader);
+		return context;
+	}
+
+	Context EvaluateYAMLtoNewContext(const std::string& yamlText) {
+		auto context = Context();
+		EvaluateYAML(context, yamlText);
+		return context;
+	}
 }

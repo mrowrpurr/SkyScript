@@ -17,12 +17,9 @@ namespace SkyScript {
 			return _localVariables;
 		}
 
+		// Will have type etc...
 		void SetLocalVariable(std::string name, std::string value) {
 			_localVariables[name] = value;
-		}
-
-		bool FunctionExists(const std::string& functionName) {
-			return false;
 		}
 	};
 }

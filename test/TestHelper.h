@@ -12,15 +12,18 @@
 
 #include <ShlObj_core.h>
 #include <Psapi.h>
-#include <stdio.h>
 #include <stdexcept>
-
 #include <format>
-#include <gtest/gtest.h>
 #include <filesystem>
 #include <fstream>
+#include <utility>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <SkyScript/Script.h>
+#include <gtest/gtest.h>
+
+#include <SkyScript/Context.h>
+#include <SkyScript/Evaluator.h>
 
 namespace fs = std::filesystem;
 
@@ -36,6 +39,14 @@ protected:
          fs::remove_all(_testTempFolder);
       }
    }
+
+//	Context Eval(Context& context, std::string yamlText) {
+//		return context;
+//	}
+//
+//   Context Eval(std::string yamlText) {
+//	   return Evaluator::EvaluateYAMLtoNewContext(yamlText);
+//   }
 
    std::string CurrentFolder() {
       return GetTestTempFolderPath().string();
@@ -65,17 +76,19 @@ protected:
       return filePath.string();
    }
 
-   std::string Path(std::string relativePath) {
+   std::string Path(const std::string& relativePath) {
 	   return GetTestTempFolderPath().append(relativePath).string();
    }
 
 private:
 
-   fs::path GetTestTempFolderPath() {
-      if (! fs::is_directory(_testTempFolder)) {
-         _testTempFolder = std::tmpnam(nullptr);
-         fs::create_directory(_testTempFolder);
-      }
-      return fs::path(_testTempFolder);
-   }
+	fs::path GetTestTempFolderPath() {
+		if (! fs::is_directory(_testTempFolder)) {
+			char buffer[256];
+			tmpnam_s(buffer, sizeof(buffer));
+			_testTempFolder = buffer;
+			fs::create_directory(_testTempFolder);
+		}
+		return {_testTempFolder};
+	}
 };

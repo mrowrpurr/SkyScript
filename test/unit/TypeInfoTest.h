@@ -24,3 +24,11 @@ TEST_F(TypeInfoTest, TypeInfoHasNamespace) {
 	ASSERT_EQ(catInfo.GetName(), "Cat");
 	ASSERT_EQ(catInfo.GetNamespace(), "Animals");
 }
+
+TEST_F(TypeInfoTest, TypeInfoHasDocString) {
+//	auto dogInfo = TypeInfo("Dog");
+//	auto catInfo = TypeInfo("Cat");
+//
+//	ASSERT_EQ(dogInfo.GetName(), "Dog");
+//	ASSERT_EQ(catInfo.GetName(), "Cat");
+}
