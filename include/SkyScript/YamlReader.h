@@ -17,11 +17,6 @@ namespace SkyScript {
 	public:
 		explicit YamlReader(std::string yamlText) {
 			_root = YAML::Load(yamlText);
-			std::cout << std::format("YAML TEXT: '{}'", yamlText);
-			std::cout << std::format("IS MAP? {}", _root.IsMap());
-			for(YAML::const_iterator node = _root.begin(); node != _root.end(); ++node) {
-				std::cout << std::format("LINE: {} KEY: {} VALUE: {}", node->first.Mark().line, node->first.as<std::string>(), node->second.as<std::string>());
-			}
 		}
 
 		bool IsMap() override {

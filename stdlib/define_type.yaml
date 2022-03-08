@@ -1,0 +1,4 @@
+stdlib::define_type():
+  :native:
+  ::
+    x

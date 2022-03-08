@@ -1,0 +1,9 @@
+define_type:
+  :name: stdlib::object
+  ::
+    Base Object which all other objects in SkyScript inherit from when using `define_type()`.
+
+  virtual string toString():
+
+  virtual bool equals():
+    other: stdlib::Object

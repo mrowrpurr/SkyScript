@@ -1,0 +1,5 @@
+stdlib::class():
+  :native:
+  ::
+    Top-level function for defining types.
+    All classes automatically inherit from Object()

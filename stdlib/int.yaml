@@ -1,0 +1,7 @@
+class:
+  :name: stdlib::int
+  _value: _int_
+  override toString() -> : _value
+  override equals():
+    :native:
+    other: stdlib::int

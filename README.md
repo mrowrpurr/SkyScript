@@ -1,7 +1,16 @@
-# SkyUnit C++ Example
+# SkyScript
 
-> Example project using SkyUnit for writing C++ SKSE plugin tests 
+> Port to C++
+
+_This is a work in progress, mostly a learning project!_
 
 ---
 
-`<` _Development in progress ~ using this to test `SkyUnit` for development_ `>`
+# Next things todo...
+
+- [ ] Register native functions with callbacks (with dll export for linking)
+- [ ] Implement `define_type` function
+- [ ] Implement `class` function
+- [ ] Provide `class` function out-of-the-box (_unless `strict: true`_)
+- [ ] ... class loading ...
+- [ ] Implement `string.equals()`
