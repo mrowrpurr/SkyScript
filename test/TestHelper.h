@@ -30,23 +30,23 @@ namespace fs = std::filesystem;
 using namespace SkyScript;
 
 class SkyScriptTestBase : public ::testing::Test {
+private:
+	std::string _testTempFolder;
+
 protected:
-
-   std::string _testTempFolder;
-
    void TearDown() override {
       if (fs::is_directory(_testTempFolder)) {
          fs::remove_all(_testTempFolder);
       }
    }
 
-//	Context Eval(Context& context, std::string yamlText) {
-//		return context;
-//	}
-//
-//   Context Eval(std::string yamlText) {
-//	   return Evaluator::EvaluateYAMLtoNewContext(yamlText);
-//   }
+	Context Eval(Context& context, const std::string& yamlText) {
+		return context;
+	}
+
+   Context Eval(const std::string& yamlText) {
+	   return Evaluator::EvaluateYAMLtoNewContext(yamlText);
+   }
 
    std::string CurrentFolder() {
       return GetTestTempFolderPath().string();

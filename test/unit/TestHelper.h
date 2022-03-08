@@ -2,4 +2,4 @@
 
 #include "../TestHelper.h"
 
-class SkyScriptUnitTest : public ::testing::Test {};
+class SkyScriptUnitTest : public SkyScriptTestBase {};

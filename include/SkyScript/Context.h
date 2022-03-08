@@ -1,5 +1,10 @@
 #pragma once
 
+#include <utility>
+
+#include "TypeSet.h"
+#include "TypeInfo.h"
+
 namespace SkyScript {
 
 	/*
@@ -10,15 +15,15 @@ namespace SkyScript {
 	 */
 	class Context {
 	private:
-		std::unordered_map<std::string, std::string> _localVariables;
+		TypeSet _types;
 
 	public:
-		std::unordered_map<std::string, std::string>& GetLocalVariables() {
-			return _localVariables;
+		size_t GetTypeCount() {
+			return _types.Count();
 		}
 
-		void SetLocalVariable(std::string name, std::string value) {
-			_localVariables[name] = value;
+		bool TypeExists(std::string typeName) {
+			return _types.HasType(std::move(typeName));
 		}
 
 		bool FunctionExists(const std::string& functionName) {
