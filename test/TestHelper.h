@@ -40,8 +40,8 @@ protected:
       }
    }
 
-	Context Eval(Context& context, const std::string& yamlText) {
-		return context;
+	void Eval(Context& context, const std::string& yamlText) {
+		Evaluator::Evaluate(context, yamlText);
 	}
 
    Context Eval(const std::string& yamlText) {

@@ -1,27 +1,57 @@
 #pragma once
 
 #include <format>
+#include <iostream>
+
+#include <yaml-cpp/yaml.h>
 
 #include "Context.h"
 
-/*
- * Responsible for evaluating simple expressions, e.g. provided by YAML
- * Expressions are evaluated in the context of a Context
- */
 namespace SkyScript::Evaluator {
 
-	void InvokeFunction(Context& context, const std::string& functionName) {
-//		if (context.FunctionExists(functionName)) {
-//			std::cout << std::format("FUNCTION EXISTS {}", functionName);
-//		} else {
-//			// Nothing ...
-//			std::cout << std::format("FUNCTION *does not* EXIST {}", functionName);
-//		}
+	namespace {
+		// https://stackoverflow.com/a/874160
+		bool StringEndsWith(const std::string &fullString, const std::string &ending) {
+			if (fullString.length() >= ending.length()) {
+				return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+			} else {
+				return false;
+			}
+		}
+
+		std::string GetFunctionName(const std::string &fullString) {
+			return fullString.substr(0, fullString.size() - 2);
+		}
+
+		void AddFunctionInfo(Context& context, const std::string &functionName, const YAML::Node& functionBody) {
+			auto functionInfo = FunctionInfo();
+			functionInfo.Name = functionName;
+			functionInfo.Body = functionBody;
+			context.FunctionInfos.emplace(functionName, functionInfo);
+		}
 	}
 
-	Context Evaluate(Context context, const std::string& yamlText) {
-//		auto reader = YamlReader(yamlText);
-//		Evaluate(context, reader);
+	Context Evaluate(Context &context, const std::string &yamlText) {
+		auto node = YAML::Load(yamlText);
+
+		// LAZY NONSENSE HERE! #ftw
+
+		// Function definition:
+		if (node.IsMap() && node.size() == 1) {
+			auto keyName = node.begin()->first.Scalar();
+			if (StringEndsWith(keyName, "()")) {
+				auto functionName = GetFunctionName(keyName);
+				AddFunctionInfo(context, functionName, node.begin()->second);
+			} else {
+				std::cout << std::format("{} is not a function", keyName);
+			}
+		} else {
+			std::cout << std::format("Dunno what to do with this YAML {}", yamlText);
+		}
+
 		return context;
 	}
 }
+
+//for (YAML::const_iterator iterator = node.begin(); iterator != node.end(); ++iterator) {
+//}
