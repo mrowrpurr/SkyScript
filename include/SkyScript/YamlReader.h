@@ -23,6 +23,10 @@ namespace SkyScript {
 			return false;
 		}
 
+		bool IsSeq() override {
+			return false;
+		}
+
 		NodeType GetType() override {
 			return IDocumentNode::NodeType::FunctionInvocation;
 		}

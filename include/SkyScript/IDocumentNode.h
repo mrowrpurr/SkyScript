@@ -8,6 +8,8 @@ namespace SkyScript {
 		};
 
 		virtual bool IsMap() = 0;
+		virtual bool IsSeq() = 0;
+
 		virtual NodeType GetType() = 0;
 		virtual std::string GetFunctionName() = 0;
 	};

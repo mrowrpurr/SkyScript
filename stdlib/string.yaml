@@ -3,5 +3,5 @@ class:
   _value: _string_
   override toString() -> : _value
   override equals():
-    :native:
+    :native: stdlib::String::equals
     other: stdlib::String
