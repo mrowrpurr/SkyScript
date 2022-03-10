@@ -7,6 +7,10 @@
 
 #include <utility>
 
+#include <ryml/ryml_std.hpp>
+#include <ryml/ryml.hpp>
+#include <map>
+
 class ExpandoFromYamlTest : public SkyScriptIntegrationTest {
 protected:
 	static Expando YAMLtoExpando(std::string yamlText) {
@@ -27,7 +31,7 @@ hello: world
 	// Verify hello map!
 	ASSERT_TRUE(helloMap.IsMap());
 //	ASSERT_TRUE(helloMap.HasKey("hello"));
-	 ASSERT_FALSE(helloMap.IsSeq());
+	ASSERT_FALSE(helloMap.IsSeq());
 
 	// Verify foo list!
 	ASSERT_FALSE(fooList.IsMap());

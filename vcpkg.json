@@ -9,7 +9,7 @@
     "oatpp",
     "inja",
     "snowhouse",
-    "yaml-cpp"
+    "ryml"
   ],
   "builtin-baseline":"495a0a04ce30a17f26de33ba4a070212fed76940"
 }

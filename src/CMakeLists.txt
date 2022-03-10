@@ -127,11 +127,11 @@ find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
 target_include_directories("${PROJECT_NAME}" PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
 
 # Rapid YAML
-#find_package(ryml CONFIG REQUIRED)
-#target_link_libraries("${PROJECT_NAME}" PUBLIC ryml::ryml)
+find_package(ryml CONFIG REQUIRED)
+target_link_libraries("${PROJECT_NAME}" PUBLIC ryml::ryml)
 
-find_package(yaml-cpp CONFIG REQUIRED)
-target_link_libraries("${PROJECT_NAME}" PUBLIC yaml-cpp)
+#find_package(yaml-cpp CONFIG REQUIRED)
+#target_link_libraries("${PROJECT_NAME}" PUBLIC yaml-cpp)
 
 # Precompiled Headers (PCH)
 target_precompile_headers(

@@ -8,6 +8,7 @@ namespace SkyScript::ExpandoDocumentReader {
 	void ReadDocumentNodeIntoExpando(Expando& expando, IDocumentNode* node) {
 		if (node->IsMap()) {
 			expando.SetType(ExpandoType::MAP);
+
 		} else if (node->IsSeq()) {
 			expando.SetType(ExpandoType::SEQ);
 		}
