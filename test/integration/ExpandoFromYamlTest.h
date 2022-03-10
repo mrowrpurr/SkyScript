@@ -16,10 +16,21 @@ protected:
 };
 
 TEST_F(ExpandoFromYamlTest, ExpandoFromYamlTest_Foo) {
-	ASSERT_EQ("Hello", "World");
-	auto expando = YAMLtoExpando(R"(
+	auto helloMap = YAMLtoExpando(R"(
 hello: world
 )");
+	auto fooList = YAMLtoExpando(R"(
+- foo
+- bar
+)");
 
-	ASSERT_TRUE(expando.IsMap());
+	// Verify hello map!
+	ASSERT_TRUE(helloMap.IsMap());
+//	ASSERT_TRUE(helloMap.HasKey("hello"));
+	 ASSERT_FALSE(helloMap.IsSeq());
+
+	// Verify foo list!
+	ASSERT_FALSE(fooList.IsMap());
+//	ASSERT_FALSE(fooList.HasKey("hello"));
+	ASSERT_TRUE(fooList.IsSeq());
 }

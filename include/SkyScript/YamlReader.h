@@ -1,5 +1,6 @@
 #pragma once
 
+#include <format>
 #include <yaml-cpp/yaml.h>
 
 #include "Context.h"
@@ -13,18 +14,20 @@ namespace SkyScript {
 	class YamlReader : public IDocumentReader {
 	private:
 		YAML::Node _root;
+		std::string _text;
 
 	public:
 		explicit YamlReader(std::string yamlText) {
+			_text = yamlText;
 			_root = YAML::Load(yamlText);
 		}
 
 		bool IsMap() override {
-			return false;
+			return _root.IsMap();
 		}
 
 		bool IsSeq() override {
-			return false;
+			return _root.IsSequence();
 		}
 
 		NodeType GetType() override {
