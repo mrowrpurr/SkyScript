@@ -45,7 +45,8 @@ protected:
 	}
 
    Context Eval(const std::string& yamlText) {
-	   return Evaluator::EvaluateYAMLtoNewContext(yamlText);
+	   auto context = Context();
+	   return Evaluator::Evaluate(context, yamlText);
    }
 
    std::string CurrentFolder() {

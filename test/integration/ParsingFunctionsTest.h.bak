@@ -3,3 +3,12 @@
 #include "TestHelper.h"
 
 class ParsingFunctionsTest : public SkyScriptIntegrationTest {};
+
+TEST_F(ParsingFunctionsTest, ParseSimpleFunction) {
+	auto context = Eval(R"(
+myFunctions::hello():
+)");
+
+	ASSERT_EQ(context.GetVariableCount(), 1);
+	ASSERT_TRUE(context.VariableExists("myFunctions::hello"));
+}
