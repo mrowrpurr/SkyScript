@@ -82,19 +82,12 @@ target_include_directories(
 	"${PROJECT_NAME}"
 	PUBLIC
 		"${INCLUDE_DIR}"
-#		"${INCLUDE_DIR}/SkyScript"
-#		"${INCLUDE_DIR}/SkyScript/Reflection"
-#		"${INCLUDE_DIR}/SkyScript/NativeFunctions"
-#		"${INCLUDE_DIR}/SkyScript/Parsing"
-		"${SOURCE_DIR}"
-#		"${SOURCE_DIR}/SkyScript"
-#		"${SOURCE_DIR}/SkyScript/Parsing"
 )
 
-set_target_properties(
-		"${PROJECT_NAME}" PROPERTIES
-		"INTERFACE_INCLUDE_DIRECTORIES" "${INCLUDE_DIR}"
-)
+#set_target_properties(
+#		"${PROJECT_NAME}" PROPERTIES
+#		"INTERFACE_INCLUDE_DIRECTORIES" "${INCLUDE_DIR}" "${SOURCE_DIR}/SkyScript/Parsing"
+#)
 
 # CommonLib
 if(${SKYRIM_AE})
@@ -128,8 +121,8 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC spdlog::spdlog)
 target_link_libraries("${PROJECT_NAME}" PUBLIC SkyUnit)
 
 # Snowhouse
-find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
-target_include_directories("${PROJECT_NAME}" PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
+#find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
+#target_include_directories("${PROJECT_NAME}" PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
 
 # Rapid YAML
 #find_package(ryml CONFIG REQUIRED)

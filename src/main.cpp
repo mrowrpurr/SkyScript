@@ -1,10 +1,13 @@
 #include <format>
 
 // Hmmmm...
-#include "SkyScript/Parsing/YAMLtoScriptNode.h"
+//#include "main.h"
+//#include "SkyScript/Parsing/YAMLtoScriptNode.h"
 
 namespace {
 	void InitializeLog() {
+//		SkyScript::Parsing::YAML::YAMLtoScriptNode("hello");
+
 		auto path = logger::log_directory();
 		if (!path) {
 			util::report_and_fail("Failed to find standard logging directory"sv);

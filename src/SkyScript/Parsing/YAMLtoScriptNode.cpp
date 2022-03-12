@@ -2,26 +2,32 @@
 
 #include "SkyScript/Parsing/YAMLtoScriptNode.h"
 
-namespace SkyScript::Parsing::YAML {
-	ScriptNodeImpl YAMLtoScriptNode(std::string yamlText) {
-		return ScriptNodeImpl();
-	}
-	ScriptNodeImpl YAMLNodeToScriptNode(const ::YAML::Node& yaml) {
-		return ScriptNodeImpl();
-	}
-	ScriptNodeImpl YAMLMapToScriptNode(const ::YAML::Node& yaml) {
-		return ScriptNodeImpl();
-	}
-	ScriptNodeImpl YAMLSequenceToScriptNode(const ::YAML::Node& yaml) {
-		return ScriptNodeImpl();
-	}
-	ScriptNodeImpl YAMLValueToScriptNode(const ::YAML::Node& yaml) {
-		return ScriptNodeImpl();
-	}
-	ScriptNodeImpl YAMLNullToScriptNode(const ::YAML::Node& yaml) {
-		return ScriptNodeImpl();
-	}
+void SkyScript::Parsing::YAML::Hello() {
+	//
 }
+
+
+
+
+//	ScriptNodeImpl YAMLtoScriptNode(std::string yamlText) {
+//		return ScriptNodeImpl();
+//	}
+//	ScriptNodeImpl YAMLNodeToScriptNode(const ::YAML::Node& yaml) {
+//		return ScriptNodeImpl();
+//	}
+//	ScriptNodeImpl YAMLMapToScriptNode(const ::YAML::Node& yaml) {
+//		return ScriptNodeImpl();
+//	}
+//	ScriptNodeImpl YAMLSequenceToScriptNode(const ::YAML::Node& yaml) {
+//		return ScriptNodeImpl();
+//	}
+//	ScriptNodeImpl YAMLValueToScriptNode(const ::YAML::Node& yaml) {
+//		return ScriptNodeImpl();
+//	}
+//	ScriptNodeImpl YAMLNullToScriptNode(const ::YAML::Node& yaml) {
+//		return ScriptNodeImpl();
+//	}
+//}
 
 //SkyScript::ScriptNodeImpl SkyScript::Parsing::YAML::YAMLMapToScriptNode(const ::YAML::Node& yaml) {
 //	auto node = SkyScript::ScriptNodeImpl();

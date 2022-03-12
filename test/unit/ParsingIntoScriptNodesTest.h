@@ -14,9 +14,16 @@ protected:
 };
 
 TEST_F(ParsingIntoScriptNodesTest, SimpleString_ParsingIntoScriptNodesTest) {
-	auto node = SkyScript::ScriptNodeImpl();
 
-	auto x = SkyScript::Parsing::YAML::YAMLtoScriptNode("yaml");
+	SkyScript::Parsing::YAML::Hello();
+
+
+	ASSERT_TRUE(true);
+
+
+
+//	auto node = SkyScript::ScriptNodeImpl();
+//	auto x = SkyScript::Parsing::YAML::YAMLtoScriptNode("yaml");
 
 //	auto node = Parse(R"(
 //hello: world
