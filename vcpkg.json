@@ -10,16 +10,18 @@
         {
             "name": "vcpkg-cmake-config",
             "host": true
-        }
+        },
+        "bandit",
+        "snowhouse"
     ],
     "features": {
         "skyscript-parser": {
-            "description": "",
-            "dependencies": []
+            "description": "Build the parser",
+            "dependencies": ["yaml-cpp"]
         },
-        "skyscript-interpreter": {
-            "description": "",
-            "dependencies": []
+        "skyscript-parser-test": {
+            "description": "Build the parser tests",
+            "dependencies": ["bandit"]
         }
     }
 }
