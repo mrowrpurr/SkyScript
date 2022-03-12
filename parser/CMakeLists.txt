@@ -1,0 +1,5 @@
+file(GLOB_RECURSE PARSER_SOURCE_FILES *.h)
+add_library(SkyScriptParser INTERFACE ${PARSER_SOURCE_FILES})
+target_include_directories(SkyScriptParser INTERFACE .)
+include(yaml)
+setupYamlDependencies(SkyScriptParser INTERFACE)

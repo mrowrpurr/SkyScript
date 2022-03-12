@@ -12,7 +12,8 @@
             "host": true
         },
         "bandit",
-        "snowhouse"
+        "snowhouse",
+        "yaml-cpp"
     ],
     "features": {
         "skyscript-parser": {
