@@ -5,9 +5,10 @@
 
 namespace SkyScript {
 
-	class FunctionInfo {
+	class FunctionParameterInfo {
 	public:
 		std::string Name;
-		YAML::Node Body;
+		std::string DocString;
+		std::string Type;
 	};
 }

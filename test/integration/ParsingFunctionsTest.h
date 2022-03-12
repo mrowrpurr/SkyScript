@@ -14,12 +14,15 @@ TEST_F(ParsingFunctionsTest, ParseSimpleFunction) {
 
 	Eval(context, R"(
 sayHello():
-  message: string
-  -> : print ${message}
+	:: This is a function
+	message: string
+	-> : print ${message}
 )");
 
 	ASSERT_EQ(context.FunctionInfos.size(), 1);
 	ASSERT_TRUE(context.FunctionInfos.contains("sayHello"));
 
-	// Then assert body stuffs and types and things...
+	auto functionInfo = context.FunctionInfos["sayHello"];
+	ASSERT_EQ(functionInfo.GetName(), "sayHello");
+//	ASSERT_EQ(functionInfo.)
 }

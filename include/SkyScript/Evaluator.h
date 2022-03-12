@@ -3,6 +3,7 @@
 #include <format>
 #include <iostream>
 
+// TODO replace all YAML direct references with using ScriptNode
 #include <yaml-cpp/yaml.h>
 
 #include "Context.h"
@@ -24,10 +25,10 @@ namespace SkyScript::Evaluator {
 		}
 
 		void AddFunctionInfo(Context& context, const std::string &functionName, const YAML::Node& functionBody) {
-			auto functionInfo = FunctionInfo();
-			functionInfo.Name = functionName;
-			functionInfo.Body = functionBody;
-			context.FunctionInfos.emplace(functionName, functionInfo);
+//			auto functionInfo = FunctionInfo();
+//			functionInfo.Name = functionName;
+//			// functionInfo.DocumentExpression = functionBody;
+//			context.FunctionInfos.emplace(functionName, functionInfo);
 		}
 	}
 

@@ -3,11 +3,11 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 # Get *.cpp and *.h source files
 set(SOURCE_DIR "${ROOT_DIR}/src")
-file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/SkyScript/*.cpp" "${SOURCE_DIR}/SkyScript/*.h")
+file(GLOB_RECURSE SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")
 
 # Get header files from include/
 set(INCLUDE_DIR "${ROOT_DIR}/include")
-file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h" "${INCLUDE_DIR}/SkyScript/*.h")
+file(GLOB_RECURSE INCLUDE_FILES "${INCLUDE_DIR}/*.cpp" "${INCLUDE_DIR}/*.h")
 
 # Plugin.h
 set(VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h")
@@ -78,17 +78,22 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	)
 endif()
 
-# Default output directory for compiled files
 target_include_directories(
 	"${PROJECT_NAME}"
 	PUBLIC
-		"${CMAKE_CURRENT_BINARY_DIR}/src"
-		"${CMAKE_CURRENT_BINARY_DIR}/src/SkyScript"
-		"${SOURCE_DIR}"
-		"${CMAKE_CURRENT_BINARY_DIR}/include"
-		"${CMAKE_CURRENT_BINARY_DIR}/include/SkyScript"
-		"${CMAKE_CURRENT_BINARY_DIR}/include/SkyScript/Types"
 		"${INCLUDE_DIR}"
+#		"${INCLUDE_DIR}/SkyScript"
+#		"${INCLUDE_DIR}/SkyScript/Reflection"
+#		"${INCLUDE_DIR}/SkyScript/NativeFunctions"
+#		"${INCLUDE_DIR}/SkyScript/Parsing"
+		"${SOURCE_DIR}"
+#		"${SOURCE_DIR}/SkyScript"
+#		"${SOURCE_DIR}/SkyScript/Parsing"
+)
+
+set_target_properties(
+		"${PROJECT_NAME}" PROPERTIES
+		"INTERFACE_INCLUDE_DIRECTORIES" "${INCLUDE_DIR}"
 )
 
 # CommonLib

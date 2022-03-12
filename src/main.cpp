@@ -1,5 +1,7 @@
 #include <format>
-#include "Tests.h"
+
+// Hmmmm...
+#include "SkyScript/Parsing/YAMLtoScriptNode.h"
 
 namespace {
 	void InitializeLog() {
@@ -23,7 +25,7 @@ namespace {
 	void OnEvent(SKSE::MessagingInterface::Message* event) {
 		// kDataLoaded
 		if (event->type == SKSE::MessagingInterface::kDataLoaded) {
-			Tests::RunAll();
+//			Tests::RunAll();
 		}
 	}
 

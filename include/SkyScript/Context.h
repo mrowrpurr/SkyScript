@@ -3,8 +3,8 @@
 #include <utility>
 #include <unordered_map>
 
-#include "FunctionInfo.h"
-#include "TypeInfo.h"
+#include "Reflection/FunctionInfo.h"
+#include "Reflection/TypeInfo.h"
 
 namespace SkyScript {
 
