@@ -1,0 +1,25 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "name": "sky-script",
+    "version-string": "0.0.1",
+    "description": "Minimal typed scripting language with scripts authored in YAML or JSON (intended for Skyrim)",
+    "homepage": "https://github.com/mrowrpurr/SkyScript/",
+    "license": "MIT",
+    "supports": "windows & x64",
+    "dependencies": [
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ],
+    "features": {
+        "skyscript-parser": {
+            "description": "",
+            "dependencies": []
+        },
+        "skyscript-interpreter": {
+            "description": "",
+            "dependencies": []
+        }
+    }
+}
