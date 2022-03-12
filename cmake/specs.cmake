@@ -1,0 +1,6 @@
+function(setupSpecDependencies target)
+    find_path(BANDIT_INCLUDE_DIRS "bandit/adapters.h")
+    find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
+    target_include_directories(${target} PRIVATE ${BANDIT_INCLUDE_DIRS})
+    target_include_directories(${target} PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
+endfunction()
