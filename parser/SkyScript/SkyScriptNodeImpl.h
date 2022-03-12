@@ -24,7 +24,7 @@ namespace SkyScript {
 		}
 		~SkyScriptNodeImpl() override = default;
 
-		bool IsMap() override { return true; } // return _type == SkyScriptNodeType::MAP; }
+		bool IsMap() override { return _type == SkyScriptNodeType::MAP; }
 		bool IsVector() override { return _type == SkyScriptNodeType::VECTOR; }
 		bool IsValue() override { return _type == SkyScriptNodeType::VALUE; }
 		void SetType(SkyScriptNodeType type) { _type = type; }

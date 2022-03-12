@@ -9,7 +9,6 @@ namespace SkyScript::Parsers::YAML {
     SkyScriptNodeImpl YAMLNodeToSkyScriptNode(const ::YAML::Node& yaml) {
         auto node = SkyScript::SkyScriptNodeImpl();
         auto type = yaml.Type();
-
         switch (type) {
             case ::YAML::NodeType::value::Map:
                 node.SetType(SkyScript::SkyScriptNodeType::MAP);
@@ -19,13 +18,8 @@ namespace SkyScript::Parsers::YAML {
                     auto valueNode = YAMLNodeToSkyScriptNode(value);
                     node.AddMapNode(key, valueNode);
                 }
-            case ::YAML::NodeType::value::Sequence:
-            case ::YAML::NodeType::value::Scalar:
-            case ::YAML::NodeType::value::Null:
-            case ::YAML::NodeType::value::Undefined:
-            default:
-                return {};
         }
+        return node;
     }
 
     SkyScriptNodeImpl Parse(const std::string& yamlText) {
