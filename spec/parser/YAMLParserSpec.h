@@ -1,3 +1,5 @@
+#pragma once
+
 #include "specHelper.h"
 
 #include <SkyScript/Parsers/YAML.h>

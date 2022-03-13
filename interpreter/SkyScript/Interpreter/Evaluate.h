@@ -5,5 +5,7 @@
 #include "SkyScript/Interpreter/ContextImpl.h"
 
 namespace SkyScript::Interpreter {
-    bool Evaluate(SkyScriptNode&, ContextImpl&);
+    bool Evaluate(SkyScriptNode&, ContextImpl&) {
+        return true;
+    }
 }
