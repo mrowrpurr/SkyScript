@@ -13,7 +13,15 @@ namespace SkyScript::Interpreter {
         std::unordered_map<std::string, int64_t> _functionIdByFullName;
 
     public:
-        size_t FunctionCount() { return _functionsById.size(); }
+        ContextImpl() = default;
+        ContextImpl(const ContextImpl& node) {
+            _functionIdCounter = node._functionIdCounter;
+            _functionsById = node._functionsById;
+            _functionIdByName = node._functionIdByName;
+            _functionIdByFullName = node._functionIdByFullName;
+        }
+
+            size_t FunctionCount() { return _functionsById.size(); }
         bool FunctionExists(const std::string& name) { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
         void AddFunction(FunctionInfoImpl info) {
             auto id = _functionIdCounter++;
