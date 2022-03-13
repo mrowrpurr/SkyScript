@@ -16,7 +16,20 @@ hello():
             AssertThat(context.FunctionCount(), Equals(1));
             AssertThat(context.FunctionExists("hello"), IsTrue());
         });
-        xit("can define void function with a namespace", [&](){});
+        it("can define void function with a namespace", [&](){
+            auto context = ContextImpl();
+            AssertThat(context.FunctionCount(), Equals(0));
+            AssertThat(context.FunctionExists("hello"), IsFalse());
+            AssertThat(context.FunctionExists("greetings::hello"), IsFalse());
+
+            Eval(context, R"(
+greetings::hello():
+)");
+
+            AssertThat(context.FunctionCount(), Equals(1));
+            AssertThat(context.FunctionExists("hello"), IsTrue());
+            AssertThat(context.FunctionExists("greetings::hello"), IsTrue());
+        });
         xit("can define void function with a description (docstring)", [&](){});
         xit("can define void function with a parameter", [&](){});
         xit("can define void function with multiple parameters", [&](){});
