@@ -21,5 +21,6 @@ hello():
         xit("can define void function with a parameter", [&](){});
         xit("can define void function with multiple parameters", [&](){});
         xit("can define void function with body", [&](){});
+        xit("can define function with return type", [&](){});
     });
 });
