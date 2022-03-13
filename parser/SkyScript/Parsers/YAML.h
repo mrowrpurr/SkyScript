@@ -18,11 +18,25 @@ namespace SkyScript::Parsers::YAML {
                     auto valueNode = YAMLNodeToSkyScriptNode(value);
                     node.AddMapNode(key, valueNode);
                 }
+                break;
+            case ::YAML::NodeType::value::Sequence:
+                node.SetType(SkyScript::SkyScriptNodeType::ARRAY);
+                for (const auto & i : yaml) {
+                    auto value = i;
+                    auto valueNode = YAMLNodeToSkyScriptNode(value);
+                    node.AddArrayNode(valueNode);
+                }
+                break;
+            case ::YAML::NodeType::value::Scalar:
+                node.SetType(SkyScript::SkyScriptNodeType::VALUE);
+                node.SetStringValue(yaml.Scalar());
+                // TODO: get Tag and set whether it's an explicitly defined string, like DefinedAsString()
+                break;
         }
         return node;
     }
 
     SkyScriptNodeImpl Parse(const std::string& yamlText) {
-         return YAMLNodeToSkyScriptNode(::YAML::Load(yamlText));
+        return YAMLNodeToSkyScriptNode(::YAML::Load(yamlText));
     }
 }

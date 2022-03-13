@@ -25,15 +25,19 @@ namespace SkyScript {
 		~SkyScriptNodeImpl() override = default;
 
 		bool IsMap() override { return _type == SkyScriptNodeType::MAP; }
-		bool IsVector() override { return _type == SkyScriptNodeType::VECTOR; }
+		bool IsArray() override { return _type == SkyScriptNodeType::ARRAY; }
 		bool IsValue() override { return _type == SkyScriptNodeType::VALUE; }
 		void SetType(SkyScriptNodeType type) { _type = type; }
+        const std::string& GetStringValue() override { return _value; }
+        bool ContainsKey(const std::string& key) override { return _map.contains(key); }
+        SkyScriptNode& operator [] (const std::string& key) override { return _map[key]; }
+        SkyScriptNode& operator [] (int index) override { return _vector[index]; }
 
 		size_t Size() override {
 			switch (_type) {
 			case SkyScriptNodeType::MAP:
 				return _map.size();
-			case SkyScriptNodeType::VECTOR:
+			case SkyScriptNodeType::ARRAY:
 				return _vector.size();
 			case SkyScriptNodeType::VALUE:
 				return _value.size();
@@ -42,8 +46,12 @@ namespace SkyScript {
 			}
 		}
 
-		void AddMapNode(const std::string& key, SkyScriptNodeImpl node) {
-			_map.try_emplace(key, node);
-		}
-	};
+        ///////////////////////////////////////////////
+        // Private Non-Virtual Override Functions Below
+        ///////////////////////////////////////////////
+
+		void AddMapNode(const std::string& key, SkyScriptNodeImpl node) { _map.try_emplace(key, node); }
+        void AddArrayNode(const SkyScriptNodeImpl& node) { _vector.emplace_back(node); }
+        void SetStringValue(const std::string& value) { _value = value; }
+    };
 }
