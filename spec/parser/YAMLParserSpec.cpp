@@ -1,4 +1,4 @@
-#include "../specHelper.h"
+#include "specHelper.h"
 
 #include <SkyScript/Parsers/YAML.h>
 
@@ -194,5 +194,3 @@ false: >
         });
     });
 });
-
-int main(int argc, char* argv[]) { return runBandit(argc, argv); }
