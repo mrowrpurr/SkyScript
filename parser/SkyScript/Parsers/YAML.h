@@ -29,8 +29,8 @@ namespace SkyScript::Parsers::YAML {
                 break;
             case ::YAML::NodeType::value::Scalar:
                 node.SetType(SkyScript::SkyScriptNodeType::VALUE);
-                node.SetStringValue(yaml.Scalar());
-                // TODO: get Tag and set whether it's an explicitly defined string, like DefinedAsString()
+                bool isQuotedString = yaml.Tag() == "!";
+                node.SetValue(yaml.Scalar(), isQuotedString);
                 break;
         }
         return node;
