@@ -16,6 +16,10 @@ hello():
             AssertThat(context.FunctionCount(), Equals(1));
             AssertThat(context.FunctionExists("hello"), IsTrue());
         });
+        xit("can define void function with a namespace", [&](){});
+        xit("can define void function with a description (docstring)", [&](){});
+        xit("can define void function with a parameter", [&](){});
+        xit("can define void function with multiple parameters", [&](){});
         xit("can define void function with body", [&](){});
     });
 });

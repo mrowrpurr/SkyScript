@@ -36,6 +36,8 @@ namespace SkyScript {
         bool ContainsKey(const std::string& key) override { return _map.contains(key); }
         SkyScriptNode& operator [] (const std::string& key) override { return _map[key]; }
         SkyScriptNode& operator [] (int index) override { return _vector[index]; }
+        SkyScriptNode& Get(const std::string& key) override { return _map[key]; }
+        SkyScriptNode& Get(int index) override { return _vector[index]; }
 
 		size_t Size() override {
 			switch (_type) {
@@ -49,6 +51,24 @@ namespace SkyScript {
 				return 0;
 			}
 		}
+
+        std::string toString() override {
+            std::string out{};
+            if (IsMap()) {
+                for (const auto& key : GetKeys()) {
+                    auto value = _map[key];
+                    out += std::format("{}: {}\n", key, value.toString());
+                }
+            } else if (IsArray()) {
+                for (int i = 0; i < Size(); i++) {
+                    auto value = _vector[i];
+                    out += std::format("- {}\n", value.toString());
+                }
+            } else if (IsValue()) {
+                out += _stringValue;
+            }
+            return out;
+        }
 
         std::string GetSingleKey() override {
             if (IsMap() && Size() == 1) {
@@ -93,4 +113,8 @@ namespace SkyScript {
             return SkyScriptNodeValueType::STRING;
         }
     };
+
+    std::ostream& operator << (std::ostream &os, SkyScriptNode &node) {
+        return (os << node.toString());
+    }
 }
