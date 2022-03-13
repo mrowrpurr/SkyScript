@@ -50,6 +50,23 @@ namespace SkyScript {
 			}
 		}
 
+        std::string GetSingleKey() override {
+            if (IsMap() && Size() == 1) {
+                return _map.begin()->first;
+            } else {
+                return "";
+            }
+        }
+
+        // Hack until making a custom iterator
+        std::vector<std::string> GetKeys() override {
+            std::vector<std::string> keys{};
+            for (const auto& [key, value] : _map) {
+                keys.emplace_back(key);
+            }
+            return keys;
+        }
+
         ///////////////////////////////////////////////
         // Private Non-Virtual Override Functions Below
         ///////////////////////////////////////////////
@@ -61,6 +78,9 @@ namespace SkyScript {
             _stringValue = value;
             if (! isQuotedString)
                 _valueType = DetermineScalarValue();
+
+
+            auto x = _map.begin();
         }
         SkyScriptNodeValueType DetermineScalarValue() {
             if (_stringValue == "true" || _stringValue == "false") {

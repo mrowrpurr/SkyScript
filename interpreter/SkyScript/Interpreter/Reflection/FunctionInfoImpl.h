@@ -2,8 +2,10 @@
 
 #include <utility>
 
+#include "SkyScript/Reflection/FunctionInfo.h"
+
 namespace SkyScript::Interpreter::Reflection {
-    class FunctionInfoImpl {
+    class FunctionInfoImpl : public SkyScript::Reflection::FunctionInfo {
         std::string _namespace;
         std::string _name;
 
@@ -16,8 +18,12 @@ namespace SkyScript::Interpreter::Reflection {
             _name = fn._name;
         }
 
-            std::string GetName() { return _name; }
-        std::string GetNamespace() { return _namespace; }
-        std::string GetFullName() { return _namespace + "::" + _name; }
+        std::string GetName() override { return _name; }
+        std::string GetNamespace() override { return _namespace; }
+        std::string GetFullName() override { return _namespace + "::" + _name; }
+
+        ///////////////////////////////////////////////
+        // Private Non-Virtual Override Functions Below
+        ///////////////////////////////////////////////
     };
 }

@@ -193,4 +193,42 @@ false: >
             AssertThat(node["false"].IsString(), IsTrue());
         });
     });
+
+    describe("Accessing Data in ScriptNodes", [](){
+        it("can iterate through map nodes", [&](){
+            auto node = SkyScript::Parsers::YAML::Parse(R"(
+hello: world
+foo: bar
+)");
+            bool foundHello = false;
+            bool foundFoo = false;
+            bool foundSomethingElse = false;
+            for (const auto& key : node.GetKeys()) {
+                if (key == "hello") {
+                    foundHello = true;
+                } else if (key == "foo") {
+                    foundFoo = true;
+                } else {
+                    foundSomethingElse = true;
+                }
+            }
+
+            AssertThat(foundHello, IsTrue());
+            AssertThat(foundFoo, IsTrue());
+            AssertThat(foundSomethingElse, IsFalse());
+        });
+        xit("can iterate through array nodes", [&](){});
+        it("can get the first key of a map node", [&](){
+            auto node = SkyScript::Parsers::YAML::Parse(R"(
+hello: world
+)");
+            AssertThat(node.GetSingleKey(), Equals("hello"));
+
+            auto nodeWithMultipleKeys = SkyScript::Parsers::YAML::Parse(R"(
+hello: world
+foo: bar
+)");
+            AssertThat(nodeWithMultipleKeys.GetSingleKey(), Equals(""));
+        });
+    });
 });

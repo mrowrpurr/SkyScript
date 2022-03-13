@@ -1,28 +1,34 @@
 #pragma once
 
-#include <SkyScript/Interpreter/Reflection/FunctionInfoImpl.h>
+#include "SkyScript/Reflection/Context.h"
+#include "SkyScript/Interpreter/Reflection/FunctionInfoImpl.h"
 
 using namespace SkyScript::Interpreter::Reflection;
 
 namespace SkyScript::Interpreter {
-    class ContextImpl {
+    class ContextImpl : public SkyScript::Reflection::Context {
         // Function storage
-        std::atomic<int64_t> _functionIdCounter = 0;
+        std::atomic<int> _functionIdCounter{};
         std::unordered_map<int64_t, FunctionInfoImpl> _functionsById;
         std::unordered_map<std::string, int64_t> _functionIdByName;
         std::unordered_map<std::string, int64_t> _functionIdByFullName;
 
     public:
         ContextImpl() = default;
-        ContextImpl(const ContextImpl& node) {
-            _functionIdCounter = node._functionIdCounter;
-            _functionsById = node._functionsById;
-            _functionIdByName = node._functionIdByName;
-            _functionIdByFullName = node._functionIdByFullName;
+        ContextImpl(const ContextImpl& context) {
+            _functionIdCounter.exchange(context._functionIdCounter);
+            _functionsById = context._functionsById;
+            _functionIdByName = context._functionIdByName;
+            _functionIdByFullName = context._functionIdByFullName;
         }
 
-            size_t FunctionCount() { return _functionsById.size(); }
-        bool FunctionExists(const std::string& name) { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
+        size_t FunctionCount() override { return _functionsById.size(); }
+        bool FunctionExists(const std::string& name) override { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
+
+        ///////////////////////////////////////////////
+        // Private Non-Virtual Override Functions Below
+        ///////////////////////////////////////////////
+
         void AddFunction(FunctionInfoImpl info) {
             auto id = _functionIdCounter++;
             _functionsById.insert_or_assign(id, info);
