@@ -1,0 +1,5 @@
+file(GLOB_RECURSE RUNNER_FILES *.cpp *.h)
+add_executable(skyscript-runner ${RUNNER_FILES})
+target_include_directories(skyscript-runner PRIVATE ${SKYSCRIPT_ROOT_DIR}/parser ${SKYSCRIPT_ROOT_DIR}/interpreter)
+include(yaml)
+setupYamlDependencies(skyscript-runner PRIVATE)

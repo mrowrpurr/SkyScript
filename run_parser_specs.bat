@@ -1,4 +1,4 @@
-echo off
+@echo off
 
 set argCount=0
 for %%x in (%*) do set /A argCount+=1

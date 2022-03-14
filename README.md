@@ -17,3 +17,4 @@
 | `skyrim`       | Standard library of provided types and functions (_specifically created for Skyrim_) |
 | `skse`         | Skyrim SKSE plugin runtime |
 | `papyrus`      | Papyrus scripts for running SkyScripts as well as expending the language with Papyrus functions |
+| `runner`       | Run .yaml and .json scripts on the Desktop for testing outside of Skyrim |

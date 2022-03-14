@@ -19,6 +19,7 @@ if (MSVC)
     )
 endif()
 
-enable_testing()
+add_subdirectory(runner)
 
+enable_testing()
 add_subdirectory(spec)
