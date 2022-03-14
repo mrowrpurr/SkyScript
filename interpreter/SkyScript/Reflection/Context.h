@@ -9,9 +9,12 @@ namespace SkyScript::Reflection {
         virtual bool HasError() = 0;
         virtual std::optional<Exceptions::EvaluationError> GetError() = 0;
 
-        // See below for ideas for refactoring Variables + Functions APIs
+        // See below for ideas for refactoring Variables + Functions + Types APIs
         virtual size_t VariableCount() = 0;
         virtual bool VariableExists(const std::string& variableName) = 0;
+
+        virtual size_t TypeCount() = 0;
+        virtual bool TypeExists(const std::string& typeName) = 0;
 
         // TODO: make this more idiomatic by returning an iterator instead
         //       of having FunctionExists() and then GetFunctionInfo.

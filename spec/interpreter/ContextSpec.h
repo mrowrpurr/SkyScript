@@ -7,8 +7,8 @@
 using namespace SkyScript::Reflection::Exceptions;
 
 go_bandit([](){
-    describe("Interpreter Context", [](){
-        it("can add functions", [&](){
+    describe("Context", [](){
+        it("has functions", [&](){
             auto fn = FunctionInfoImpl("myNamespace", "myFunction");
 
             auto context = ContextImpl();
@@ -24,16 +24,30 @@ go_bandit([](){
             AssertThat(context.FunctionExists("myFunction"), IsTrue());
             AssertThat(context.FunctionExists("thisDoesNotExist"), IsFalse());
         });
-        it("can add variables", [&](){
+        it("has variables", [&](){
+        xit("has types", [&](){
+                             auto context = ContextImpl();
+                             AssertThat(context.VariableCount(), Equals(0));
+                             AssertThat(context.VariableExists("SomeVariable"), IsFalse());
+
+                             auto var = VariableImpl("SomeVariable", "SomeType");
+                             context.AddVariable(var);
+
+                             AssertThat(context.VariableCount(), Equals(1));
+                             AssertThat(context.VariableExists("SomeVariable"), IsTrue());
+                             });
             auto context = ContextImpl();
-            AssertThat(context.VariableCount(), Equals(0));
-            AssertThat(context.VariableExists("SomeVariable"), IsFalse());
-
-            auto var = VariableImpl("SomeVariable", "SomeType");
-            context.AddVariable(var);
-
-            AssertThat(context.VariableCount(), Equals(1));
-            AssertThat(context.VariableExists("SomeVariable"), IsTrue());
+//            AssertThat(context.TypeCount(), Equals(0));
+//            AssertThat(context.TypeExists("SomeType"), IsFalse());
+//
+//            auto type = TypeImpl("SomeNamespace", "SomeType");
+//            context.AddType(var);
+//
+//            AssertThat(context.TypeCount(), Equals(1));
+//            AssertThat(context.TypeExists("SomeType"), IsTrue());
+//
+//            AssertThat(context.TypeCount(), Equals(1));
+//            AssertThat(context.TypeExists("SomeType"), IsTrue());
         });
         it("GetFunctionInfo() throws an exception when not found", [&](){
             auto functionName = "This Does Not Exist!";

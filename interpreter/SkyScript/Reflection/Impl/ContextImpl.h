@@ -4,6 +4,7 @@
 #include "SkyScript/Reflection/Exceptions.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
 #include "SkyScript/Reflection/Impl/FunctionInfoImpl.h"
+#include "SkyScript/Reflection/Impl/TypeImpl.h"
 #include "SkyScript/Reflection/Impl/VariableImpl.h"
 
 using namespace SkyScript::Reflection::Impl;
@@ -19,6 +20,15 @@ namespace SkyScript::Interpreter {
 
         // Variable storage
         std::unordered_map<std::string, VariableImpl> _variables;
+
+        // THEN TypesSpec with functions and fields (and properties later) (and constructors etc)
+
+        // Types storage
+        // TODO!!!! MAKE THIS BUT FOR TYPES :) for full name w/ namespace and simple name lookup :)
+//        std::atomic<int> _functionIdCounter{};
+//        std::unordered_map<int64_t, FunctionInfoImpl> _functionsById;
+//        std::unordered_map<std::string, int64_t> _functionIdByName;
+//        std::unordered_map<std::string, int64_t> _functionIdByFullName;
 
         // Evaluation error
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> _error;
@@ -39,6 +49,9 @@ namespace SkyScript::Interpreter {
 
         size_t VariableCount() override { return _variables.size(); }
         bool VariableExists(const std::string& variableName) override { return _variables.contains(variableName); }
+
+        size_t TypeCount() override { return 0; }
+        bool TypeExists(const std::string&) override { return false; }
 
         bool HasError() override { return _error.has_value(); }
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> GetError() override { return _error; }
@@ -69,5 +82,9 @@ namespace SkyScript::Interpreter {
         void AddVariable(VariableImpl var) {
             _variables.insert_or_assign(var.GetName(), var);
         }
+
+//        void AddType(TypeImpl type) {
+//            _types.insert_or_assign(type.GetName(), var);
+//        }
     };
 }
