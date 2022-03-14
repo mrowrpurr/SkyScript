@@ -15,6 +15,9 @@ function(setupSpecs suiteName INCLUDES)
     find_path(SNOWHOUSE_INCLUDE_DIRS "snowhouse/assert.h")
     target_include_directories(${executableName} PRIVATE ${SNOWHOUSE_INCLUDE_DIRS})
 
+    # spdlog for logging
+    target_link_libraries(${executableName} PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
+
     # If additional INCLUDES were provided, add them to a list of folders to add as include directories
     set(SPEC_INCLUDE_DIRS "")
     foreach(dir IN LISTS ARGN)

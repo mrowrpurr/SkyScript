@@ -13,7 +13,8 @@
         },
         "bandit",
         "snowhouse",
-        "yaml-cpp"
+        "yaml-cpp",
+        "spdlog"
     ],
     "features": {
         "skyscript-parser": {

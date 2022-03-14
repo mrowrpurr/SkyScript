@@ -3,6 +3,7 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <spdlog/spdlog.h>
 #include <SkyScript/Parsers/YAML.h>
 #include <SkyScript/Interpreter/Evaluate.h>
 #include <SkyScript/Reflection/Impl/ContextImpl.h>

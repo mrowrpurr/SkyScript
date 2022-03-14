@@ -73,8 +73,7 @@ namespace SkyScript::Reflection::Impl {
         void SetErrorMessage(const std::string& message) { _error = {message}; }
 
         void AddFunction(FunctionInfoImpl info) {
-            // Replace with a logger! and maybe ifdef for optimization :)
-            std::cout << std::format("Declare function {}::{}()", info.GetNamespace(), info.GetName());
+            spdlog::info("Declare function {}::{}()", info.GetNamespace(), info.GetName());
 
             auto id = _functionIdCounter++;
             _functionsById.insert_or_assign(id, info);

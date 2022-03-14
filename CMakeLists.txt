@@ -19,6 +19,9 @@ if (MSVC)
     )
 endif()
 
+# spdlog available for all packages!
+find_package(spdlog CONFIG REQUIRED)
+
 add_subdirectory(runner)
 
 enable_testing()
