@@ -1,5 +1,7 @@
 #pragma once
 
+#include <spdlog/spdlog.h>
+
 #include "SkyScript/Reflection/Context.h"
 #include "SkyScript/Reflection/Exceptions.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
