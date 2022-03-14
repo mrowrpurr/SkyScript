@@ -14,7 +14,7 @@ foo - bar -> blah whatever - hi: blahhhh
 
             AssertThat(success, IsFalse());
             AssertThat(context.HasError(), IsTrue());
-            AssertThat(context.GetError().GetMessage(), Contains("foo - bar -> blah whatever - hi"));
+            AssertThat(context.GetError().value().GetMessage(), Contains("foo - bar -> blah whatever - hi"));
         });
         xit("invalid yaml return a syntax error", [&](){});
         xit("returns the line number and column number", [&](){});

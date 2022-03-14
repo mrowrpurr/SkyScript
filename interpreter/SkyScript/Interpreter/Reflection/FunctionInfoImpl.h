@@ -10,7 +10,7 @@ namespace SkyScript::Interpreter::Reflection {
         std::string _name;
 
     public:
-        FunctionInfoImpl(std::string  functionNamespace, std::string functionName) :
+        FunctionInfoImpl(std::string functionNamespace, std::string functionName) :
             _namespace(std::move(functionNamespace)),
             _name(std::move(functionName)) {}
         FunctionInfoImpl(const FunctionInfoImpl& fn) {

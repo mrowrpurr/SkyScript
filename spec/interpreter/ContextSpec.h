@@ -2,6 +2,10 @@
 
 #include "specHelper.h"
 
+#include <SkyScript/Reflection/Exceptions.h>
+
+using namespace SkyScript::Reflection::Exceptions;
+
 go_bandit([](){
     describe("Interpreter Context", [](){
         it("can add functions", [&](){
@@ -19,6 +23,12 @@ go_bandit([](){
             AssertThat(context.FunctionExists("myNamespace::myFunction"), IsTrue());
             AssertThat(context.FunctionExists("myFunction"), IsTrue());
             AssertThat(context.FunctionExists("thisDoesNotExist"), IsFalse());
+        });
+        it("GetFunctionInfo() throws an exception when not found", [&](){
+            auto functionName = "This Does Not Exist!";
+            auto context = ContextImpl();
+            AssertThrows(FunctionNotFoundException, context.GetFunctionInfo(functionName));
+            AssertThat(LastException<FunctionNotFoundException>().what(), Is().Containing("Function not found 'This Does Not Exist!'"));
         });
     });
 });

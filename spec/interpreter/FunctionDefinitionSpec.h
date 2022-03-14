@@ -30,7 +30,17 @@ greetings::hello():
             AssertThat(context.FunctionExists("hello"), IsTrue());
             AssertThat(context.FunctionExists("greetings::hello"), IsTrue());
         });
-        xit("can define void function with a description (docstring)", [&](){});
+        xit("can define void function with a description (docstring)", [&](){
+            auto context = ContextImpl();
+            AssertThat(context.FunctionCount(), Equals(0));
+
+            Eval(context, R"(
+hello():
+- :: This is the hello function
+)");
+
+//            AssertThat(context.GetFunctionInfo("hello").GetDocString(), Equals("This is the hello function"));
+        });
         xit("can define void function with a parameter", [&](){});
         xit("can define void function with multiple parameters", [&](){});
         xit("can define void function with body", [&](){});
