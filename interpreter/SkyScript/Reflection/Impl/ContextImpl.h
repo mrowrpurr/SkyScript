@@ -1,20 +1,24 @@
 #pragma once
 
-#include "SkyScript/Interpreter/Reflection/FunctionInfoImpl.h"
 #include "SkyScript/Reflection/Context.h"
 #include "SkyScript/Reflection/Exceptions.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
-#include "SkyScript/Interpreter/Reflection/FunctionInfoImpl.h"
+#include "SkyScript/Reflection/Impl/FunctionInfoImpl.h"
+#include "SkyScript/Reflection/Impl/VariableImpl.h"
 
-using namespace SkyScript::Interpreter::Reflection;
+using namespace SkyScript::Reflection::Impl;
 
 namespace SkyScript::Interpreter {
+
     class ContextImpl : public SkyScript::Reflection::Context {
         // Function storage
         std::atomic<int> _functionIdCounter{};
         std::unordered_map<int64_t, FunctionInfoImpl> _functionsById;
         std::unordered_map<std::string, int64_t> _functionIdByName;
         std::unordered_map<std::string, int64_t> _functionIdByFullName;
+
+        // Variable storage
+        std::unordered_map<std::string, VariableImpl> _variables;
 
         // Evaluation error
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> _error;
@@ -27,10 +31,13 @@ namespace SkyScript::Interpreter {
             _functionIdByName = context._functionIdByName;
             _functionIdByFullName = context._functionIdByFullName;
             _error = context._error;
+            _variables = context._variables;
         }
 
         size_t FunctionCount() override { return _functionsById.size(); }
         bool FunctionExists(const std::string& name) override { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
+
+        size_t VariableCount() override { return _variables.size(); }
 
         bool HasError() override { return _error.has_value(); }
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> GetError() override { return _error; }

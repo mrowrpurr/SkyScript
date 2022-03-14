@@ -4,11 +4,11 @@
 
 #include <SkyScript/Parsers/YAML.h>
 #include <SkyScript/Interpreter/Evaluate.h>
-#include <SkyScript/Interpreter/ContextImpl.h>
-#include <SkyScript/Interpreter/Reflection/FunctionInfoImpl.h>
+#include <SkyScript/Reflection/Impl/ContextImpl.h>
+#include <SkyScript/Reflection/Impl/FunctionInfoImpl.h>
 
 using namespace SkyScript::Interpreter;
-using namespace SkyScript::Interpreter::Reflection;
+using namespace SkyScript::Reflection::Impl;
 
 bool Eval(ContextImpl& context, const std::string& yamlText) {
     auto scriptNode = SkyScript::Parsers::YAML::Parse(yamlText);

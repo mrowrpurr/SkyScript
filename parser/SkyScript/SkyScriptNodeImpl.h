@@ -4,7 +4,9 @@
 #include <unordered_map>
 
 #include "SkyScriptNode.h"
-#include "SkyScript/Reflection/Exceptions.h"
+#include "SkyScript/Parsers/Exceptions.h"
+
+using namespace SkyScript::Parsers::Exceptions;
 
 namespace SkyScript {
 
@@ -79,14 +81,14 @@ namespace SkyScript {
             if (IsSingleKeyMap()) {
                 return _map.begin()->first;
             } else {
-                throw SkyScript::Reflection::Exceptions::SkyScriptNodeSingleMapNotFound(toString());
+                throw SkyScriptNodeSingleMapNotFound(toString());
             }
         }
         SkyScriptNode& GetSingleValue() override {
             if (IsSingleKeyMap()) {
                 return _map.begin()->second;
             } else {
-                throw SkyScript::Reflection::Exceptions::SkyScriptNodeSingleMapNotFound(toString());
+                throw SkyScriptNodeSingleMapNotFound(toString());
             }
         }
 

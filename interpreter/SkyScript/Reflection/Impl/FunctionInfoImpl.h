@@ -4,7 +4,8 @@
 
 #include "SkyScript/Reflection/FunctionInfo.h"
 
-namespace SkyScript::Interpreter::Reflection {
+namespace SkyScript::Reflection::Impl {
+
     class FunctionInfoImpl : public SkyScript::Reflection::FunctionInfo {
         std::string _namespace;
         std::string _name;

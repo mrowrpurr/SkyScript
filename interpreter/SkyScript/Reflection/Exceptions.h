@@ -5,9 +5,9 @@
 
 namespace SkyScript::Reflection::Exceptions {
 
+    // This isn't really an "exception" - reorganize / move this... TODO
     class EvaluationError {
         std::string _message;
-
     public:
         EvaluationError() = default;
         explicit EvaluationError(std::string message) : _message(std::move(message)) {}
@@ -19,11 +19,5 @@ namespace SkyScript::Reflection::Exceptions {
     public:
         FunctionNotFoundException(std::string functionName) :
             std::exception(std::format("Function not found '{}'", functionName).c_str()) {}
-    };
-
-    class SkyScriptNodeSingleMapNotFound : public std::exception {
-    public:
-        SkyScriptNodeSingleMapNotFound(const std::string& textRepresentationOfNode) :
-                std::exception(std::format("SkyScript node is not a single map '{}'", textRepresentationOfNode).c_str()) {}
     };
 }

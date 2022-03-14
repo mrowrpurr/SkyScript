@@ -3,6 +3,9 @@
 #include "specHelper.h"
 
 #include <SkyScript/Parsers/YAML.h>
+#include <SkyScript/Parsers/Exceptions.h>
+
+using namespace SkyScript::Parsers::Exceptions;
 
 go_bandit([](){
     describe("Accessing Data in SkyScriptNodes", [](){
@@ -34,14 +37,16 @@ foo: bar
 hello: world
 )");
             AssertThat(node.GetSingleKey(), Equals("hello"));
-            AssertThat(node.GetSingleValue(), Equals("world"));
+            AssertThat(node.GetSingleValue().GetStringValue(), Equals("world"));
 
             auto nodeWithMultipleKeys = SkyScript::Parsers::YAML::Parse(R"(
 hello: world
 foo: bar
 )");
-            AssertThat(nodeWithMultipleKeys.GetSingleKey(), Equals(""));
-            AssertThat(nodeWithMultipleKeys.GetSingleValue(), Equals(""));
+            AssertThrows(SkyScriptNodeSingleMapNotFound, nodeWithMultipleKeys.GetSingleKey());
+            AssertThat(LastException<SkyScriptNodeSingleMapNotFound>().what(), Is().Containing("not a single map"));
+            AssertThrows(SkyScriptNodeSingleMapNotFound, nodeWithMultipleKeys.GetSingleValue());
+            AssertThat(LastException<SkyScriptNodeSingleMapNotFound>().what(), Is().Containing("not a single map"));
         });
     });
 });

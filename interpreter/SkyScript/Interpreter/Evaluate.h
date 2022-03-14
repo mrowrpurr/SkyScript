@@ -3,7 +3,7 @@
 #include <SkyScript/SkyScriptNode.h>
 
 #include "SkyScript/Interpreter/Util.h"
-#include "SkyScript/Interpreter/ContextImpl.h"
+#include "SkyScript/Reflection/Impl/ContextImpl.h"
 
 namespace SkyScript::Interpreter {
 
