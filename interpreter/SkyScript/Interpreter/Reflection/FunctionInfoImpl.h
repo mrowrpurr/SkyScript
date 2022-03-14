@@ -9,7 +9,7 @@ namespace SkyScript::Interpreter::Reflection {
         std::string _namespace;
         std::string _name;
         std::string _docString;
-        bool _isNative;
+        bool _isNative = false;
 
     public:
         FunctionInfoImpl() = default;

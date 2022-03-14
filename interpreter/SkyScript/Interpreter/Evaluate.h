@@ -10,27 +10,30 @@ namespace SkyScript::Interpreter {
     static const std::string_view DOCSTRING_KEY = ":";
     static const std::string_view DOCSTRING_KEY_ALT = ":desc:";
 
+    static const std::string_view NATIVEFN_KEY = ":native";
+    static const std::string_view NATIVEFN_KEY_ALT = ":native:";
+
     namespace {
         bool IsFunctionDefinition(SkyScriptNode& node) {
             return node.IsMap() && node.Size() == 1 && node.GetSingleKey().ends_with("()");
         }
-        std::string GetFunctionDocString(SkyScriptNode& node) {
-            auto& map = node.GetSingleValue();
-            if (map.IsMap()) {
-                auto key = DOCSTRING_KEY.data();
-                if (map.ContainsKey(key) && map[key].IsString()) {
-                    std::string docString = map[key].GetStringValue();
-                    SkyScript::Interpreter::Util::trim(docString);
-                    return docString;
-                }
-                auto altKey = DOCSTRING_KEY_ALT.data();
-                if (map.ContainsKey(altKey) && map[altKey].IsString()) {
-                    std::string docString = map[altKey].GetStringValue();
-                    SkyScript::Interpreter::Util::trim(docString);
-                    return docString;
-                }
+        std::string GetFunctionDocString(SkyScriptNode& map) {
+            auto key = DOCSTRING_KEY.data();
+            if (map.ContainsKey(key) && map[key].IsString()) {
+                std::string docString = map[key].GetStringValue();
+                SkyScript::Interpreter::Util::trim(docString);
+                return docString;
+            }
+            auto altKey = DOCSTRING_KEY_ALT.data();
+            if (map.ContainsKey(altKey) && map[altKey].IsString()) {
+                std::string docString = map[altKey].GetStringValue();
+                SkyScript::Interpreter::Util::trim(docString);
+                return docString;
             }
             return "";
+        }
+        bool GetIsNative(SkyScriptNode& map) {
+            return map.ContainsKey(NATIVEFN_KEY.data()) || map.ContainsKey(NATIVEFN_KEY_ALT.data());
         }
         void AddFunctionToContext(SkyScriptNode& node, ContextImpl& context) {
             std::string functionName;
@@ -47,7 +50,12 @@ namespace SkyScript::Interpreter {
             }
 
             auto functionInfo = FunctionInfoImpl(functionNamespace, functionName);
-            functionInfo.SetDocString(GetFunctionDocString(node));
+
+            auto& map = node.GetSingleValue();
+            if (map.IsMap()) {
+                functionInfo.SetDocString(GetFunctionDocString(map));
+                functionInfo.SetIsNative(GetIsNative(map));
+            }
 
             context.AddFunction(functionInfo);
         }

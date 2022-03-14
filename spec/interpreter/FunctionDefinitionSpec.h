@@ -66,7 +66,7 @@ hello():
             AssertThat(context.FunctionExists("hello"), IsTrue());
             AssertThat(context.FunctionExists("world"), IsTrue());
         });
-        xit("can define void native function", [&](){
+        it("can define void native function", [&](){
             auto context = ContextImpl();
 
             Eval(context, R"(
