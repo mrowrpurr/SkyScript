@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "SkyScript/Reflection/Variable.h"
 
 namespace SkyScript::Reflection::Impl {
@@ -9,7 +11,10 @@ namespace SkyScript::Reflection::Impl {
         std::string _typeName;
 
     public:
+        VariableImpl(std::string name, std::string type) : _name(std::move(name)), _type(std::move(type)) {}
         std::string GetName() override { return _name; }
         std::string GetTypeName() override { return _typeName; }
+
+        std::string _type;
     };
 }

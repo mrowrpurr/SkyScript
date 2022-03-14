@@ -11,6 +11,7 @@ namespace SkyScript::Reflection {
 
         // See below for ideas for refactoring Variables + Functions APIs
         virtual size_t VariableCount() = 0;
+        virtual bool VariableExists(const std::string& variableName) = 0;
 
         // TODO: make this more idiomatic by returning an iterator instead
         //       of having FunctionExists() and then GetFunctionInfo.

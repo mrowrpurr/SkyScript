@@ -38,6 +38,7 @@ namespace SkyScript::Interpreter {
         bool FunctionExists(const std::string& name) override { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
 
         size_t VariableCount() override { return _variables.size(); }
+        bool VariableExists(const std::string& variableName) override { return _variables.contains(variableName); }
 
         bool HasError() override { return _error.has_value(); }
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> GetError() override { return _error; }
@@ -56,6 +57,8 @@ namespace SkyScript::Interpreter {
         // Private Non-Virtual Override Functions Below
         ///////////////////////////////////////////////
 
+        void SetErrorMessage(const std::string& message) { _error = {message}; }
+
         void AddFunction(FunctionInfoImpl info) {
             auto id = _functionIdCounter++;
             _functionsById.insert_or_assign(id, info);
@@ -63,6 +66,8 @@ namespace SkyScript::Interpreter {
             _functionIdByFullName.insert_or_assign(info.GetFullName(), id);
         }
 
-        void SetErrorMessage(const std::string& message) { _error = {message}; }
+        void AddVariable(VariableImpl var) {
+            _variables.insert_or_assign(var.GetName(), var);
+        }
     };
 }

@@ -24,13 +24,16 @@ go_bandit([](){
             AssertThat(context.FunctionExists("myFunction"), IsTrue());
             AssertThat(context.FunctionExists("thisDoesNotExist"), IsFalse());
         });
-        xit("can add variables", [&](){
+        it("can add variables", [&](){
             auto context = ContextImpl();
             AssertThat(context.VariableCount(), Equals(0));
+            AssertThat(context.VariableExists("SomeVariable"), IsFalse());
 
-            // ...
+            auto var = VariableImpl("SomeVariable", "SomeType");
+            context.AddVariable(var);
 
             AssertThat(context.VariableCount(), Equals(1));
+            AssertThat(context.VariableExists("SomeVariable"), IsTrue());
         });
         it("GetFunctionInfo() throws an exception when not found", [&](){
             auto functionName = "This Does Not Exist!";
