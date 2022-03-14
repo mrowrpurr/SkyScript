@@ -6,13 +6,17 @@
 
 using namespace SkyScript::Interpreter;
 
+namespace {
+    NativeFunctionResponse MyFunction(NativeFunctionParams&) { return {}; }
+}
+
 go_bandit([](){
     describe("Native Functions", []() {
         it("can register native functions", [&](){
-            const auto& functions = NativeFunctions::GetSingleton();
+            auto& functions = NativeFunctions::GetSingleton();
             AssertThat(functions.Count(), Equals(0));
 
-            // ...
+            functions.RegisterFunction("my::myfunction", MyFunction);
 
             AssertThat(functions.Count(), Equals(1));
         });
@@ -20,6 +24,7 @@ go_bandit([](){
         xit("can invoke void function with string parameter", [&](){});
         xit("can return primitive string from function", [&](){});
         xit("can return primitive string from function with string parameter", [&](){});
+        xit("can invoke void function with ScriptNode parameter", [&](){});
         xit("stdlib::class function is available", [&](){});
         xit("stdlib::print function is available", [&](){});
     });

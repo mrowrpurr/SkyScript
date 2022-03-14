@@ -1,0 +1,6 @@
+class():
+  :native: stdlib::class
+  :: Define a new SkyScript type
+  params:
+    - :: The full SkyScriptNode that `class` receives is passed along to class using the special `ScriptNode` type
+      body: ScriptNode
