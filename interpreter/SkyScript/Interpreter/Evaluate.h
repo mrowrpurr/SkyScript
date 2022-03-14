@@ -8,7 +8,7 @@
 namespace SkyScript::Interpreter {
 
     static const std::string_view DOCSTRING_KEY = ":";
-    static const std::string_view DOCSTRING_KEY_ALT = ":desc";
+    static const std::string_view DOCSTRING_KEY_ALT = ":desc:";
 
     namespace {
         bool IsFunctionDefinition(SkyScriptNode& node) {
