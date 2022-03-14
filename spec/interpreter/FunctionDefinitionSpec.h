@@ -20,7 +20,6 @@ hello():
         });
         it("can define void function with a namespace", [&](){
             auto context = ContextImpl();
-            AssertThat(context.FunctionCount(), Equals(0));
             AssertThat(context.FunctionExists("hello"), IsFalse());
             AssertThat(context.FunctionExists("greetings::hello"), IsFalse());
 
@@ -36,7 +35,6 @@ greetings::hello():
         });
         it("can define void function with a description (docstring)", [&](){
             auto context = ContextImpl();
-            AssertThat(context.FunctionCount(), Equals(0));
 
             Eval(context, R"(
 hello():
@@ -53,6 +51,32 @@ hello():
     It has multiple lines!
 )");
             AssertThat(context.GetFunctionInfo("hello").GetDocString(), Equals("This is the hello function\n\nIt has multiple lines!"));
+        });
+        it("can define multiple functions", [&]() {
+            auto context = ContextImpl();
+            AssertThat(context.FunctionExists("hello"), IsFalse());
+            AssertThat(context.FunctionExists("world"), IsFalse());
+
+            Eval(context, R"(
+- hello():
+- world():
+)");
+
+            AssertThat(context.FunctionCount(), Equals(2));
+            AssertThat(context.FunctionExists("hello"), IsTrue());
+            AssertThat(context.FunctionExists("world"), IsTrue());
+        });
+        xit("can define void native function", [&](){
+            auto context = ContextImpl();
+
+            Eval(context, R"(
+- hello():
+    :native:
+- world():
+)");
+
+            AssertThat(context.GetFunctionInfo("hello").IsNative(), IsTrue());
+            AssertThat(context.GetFunctionInfo("world").IsNative(), IsFalse());
         });
         xit("can define void function with a parameter", [&](){});
         xit("can define void function with multiple parameters", [&](){});

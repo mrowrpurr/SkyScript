@@ -51,15 +51,39 @@ namespace SkyScript::Interpreter {
 
             context.AddFunction(functionInfo);
         }
+        bool EvaluateMap(SkyScriptNode& node, ContextImpl& context) {
+            if (IsFunctionDefinition(node)) {
+                AddFunctionToContext(node, context);
+            } else {
+                context.SetErrorMessage(std::format("Unknown SkyScript Syntax '{}'", node.toString()));
+                return false;
+            }
+            return true;
+        }
+        bool EvaluateArray(SkyScriptNode& node, ContextImpl& context) {
+            for (int i = 0; i < node.Size(); i++) {
+                auto& child = node[i];
+                if (child.IsMap()) {
+                    EvaluateMap(child, context);
+                } else if (child.IsArray()) {
+                    EvaluateArray(child, context);
+                } else {
+                    context.SetErrorMessage(std::format("Unknown SkyScript Syntax '{}'", child.toString()));
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     bool Evaluate(SkyScriptNode& node, ContextImpl& context) {
-        // Check for function definition
-        if (IsFunctionDefinition(node)) {
-            AddFunctionToContext(node, context);
+        if (node.IsMap()) {
+            return EvaluateMap(node, context);
+        } else if (node.IsArray()) {
+            return EvaluateArray(node, context);
         } else {
             context.SetErrorMessage(std::format("Unknown SkyScript Syntax '{}'", node.toString()));
+            return false;
         }
-        return false;
     }
 }

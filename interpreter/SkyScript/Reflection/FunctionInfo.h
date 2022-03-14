@@ -7,5 +7,6 @@ namespace SkyScript::Reflection {
         virtual std::string GetNamespace() = 0;
         virtual std::string GetFullName() = 0;
         virtual std::string GetDocString() = 0;
+        virtual bool IsNative() = 0;
     };
 }
