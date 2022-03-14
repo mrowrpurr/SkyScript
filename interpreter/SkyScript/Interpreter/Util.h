@@ -26,5 +26,4 @@ namespace SkyScript::Interpreter::Util {
         ltrim(s);
         rtrim(s);
     }
-
 }
