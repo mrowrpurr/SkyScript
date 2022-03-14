@@ -1,6 +1,8 @@
 #include "specHelper.h"
 
 int SpecHelper::runBandit(int argc, char* argv[]) {
+    spdlog::set_level(spdlog::level::off);
+
     // TODO : only add --reporter=spec if --reporter is not already provided as an argument
     auto reporterArgument = "--reporter=spec";
 

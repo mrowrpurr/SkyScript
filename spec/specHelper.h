@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include <spdlog/spdlog.h>
 #include <bandit/bandit.h>
 #include <snowhouse/snowhouse.h>
 
