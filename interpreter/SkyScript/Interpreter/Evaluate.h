@@ -2,13 +2,35 @@
 
 #include <SkyScript/SkyScriptNode.h>
 
+#include "SkyScript/Interpreter/Util.h"
 #include "SkyScript/Interpreter/ContextImpl.h"
 
 namespace SkyScript::Interpreter {
 
+    static const std::string_view DOCSTRING_KEY = ":";
+    static const std::string_view DOCSTRING_KEY_ALT = ":desc";
+
     namespace {
         bool IsFunctionDefinition(SkyScriptNode& node) {
             return node.IsMap() && node.Size() == 1 && node.GetSingleKey().ends_with("()");
+        }
+        std::string GetFunctionDocString(SkyScriptNode& node) {
+            auto& map = node.GetSingleValue();
+            if (map.IsMap()) {
+                auto key = DOCSTRING_KEY.data();
+                if (map.ContainsKey(key) && map[key].IsString()) {
+                    std::string docString = map[key].GetStringValue();
+                    SkyScript::Interpreter::Util::trim(docString);
+                    return docString;
+                }
+                auto altKey = DOCSTRING_KEY_ALT.data();
+                if (map.ContainsKey(altKey) && map[altKey].IsString()) {
+                    std::string docString = map[altKey].GetStringValue();
+                    SkyScript::Interpreter::Util::trim(docString);
+                    return docString;
+                }
+            }
+            return "";
         }
         void AddFunctionToContext(SkyScriptNode& node, ContextImpl& context) {
             std::string functionName;
@@ -25,6 +47,8 @@ namespace SkyScript::Interpreter {
             }
 
             auto functionInfo = FunctionInfoImpl(functionNamespace, functionName);
+            functionInfo.SetDocString(GetFunctionDocString(node));
+
             context.AddFunction(functionInfo);
         }
     }

@@ -21,7 +21,9 @@ namespace SkyScript {
         virtual SkyScriptNode& operator [] (int index) = 0;
         virtual SkyScriptNode& Get(const std::string& key) = 0;
         virtual SkyScriptNode& Get(int index) = 0;
+        virtual bool IsSingleKeyMap() = 0;
         virtual std::string GetSingleKey() = 0;
+        virtual SkyScriptNode& GetSingleValue() = 0;
         virtual std::string toString() = 0;
 
         // Hack until making a custom iterator

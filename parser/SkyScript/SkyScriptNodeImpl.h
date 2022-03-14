@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "SkyScriptNode.h"
+#include "SkyScript/Reflection/Exceptions.h"
 
 namespace SkyScript {
 
@@ -70,11 +71,22 @@ namespace SkyScript {
             return out;
         }
 
+        // TODO: turn this set of functions into an iterator with a key and a value when present.
+        bool IsSingleKeyMap() override {
+            return IsMap() && Size() == 1;
+        }
         std::string GetSingleKey() override {
-            if (IsMap() && Size() == 1) {
+            if (IsSingleKeyMap()) {
                 return _map.begin()->first;
             } else {
-                return "";
+                throw SkyScript::Reflection::Exceptions::SkyScriptNodeSingleMapNotFound(toString());
+            }
+        }
+        SkyScriptNode& GetSingleValue() override {
+            if (IsSingleKeyMap()) {
+                return _map.begin()->second;
+            } else {
+                throw SkyScript::Reflection::Exceptions::SkyScriptNodeSingleMapNotFound(toString());
             }
         }
 

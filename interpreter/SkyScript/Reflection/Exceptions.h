@@ -20,4 +20,10 @@ namespace SkyScript::Reflection::Exceptions {
         FunctionNotFoundException(std::string functionName) :
             std::exception(std::format("Function not found '{}'", functionName).c_str()) {}
     };
+
+    class SkyScriptNodeSingleMapNotFound : public std::exception {
+    public:
+        SkyScriptNodeSingleMapNotFound(const std::string& textRepresentationOfNode) :
+                std::exception(std::format("SkyScript node is not a single map '{}'", textRepresentationOfNode).c_str()) {}
+    };
 }

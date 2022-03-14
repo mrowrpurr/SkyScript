@@ -36,13 +36,13 @@ namespace SkyScript::Interpreter {
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> GetError() override { return _error; }
 
         SkyScript::Reflection::FunctionInfo& GetFunctionInfo(const std::string& functionName) override {
-//            if (_functionIdByFullName.contains(functionName)) {
-//                return _functionsById[_functionIdByFullName[functionName]];
-//            } else if (_functionIdByName.contains(functionName)) {
-//                return _functionsById[_functionIdByName[functionName]];
-//            } else {
+            if (_functionIdByFullName.contains(functionName)) {
+                return _functionsById[_functionIdByFullName[functionName]];
+            } else if (_functionIdByName.contains(functionName)) {
+                return _functionsById[_functionIdByName[functionName]];
+            } else {
                 throw SkyScript::Reflection::Exceptions::FunctionNotFoundException(functionName);
-//            }
+            }
         }
 
         ///////////////////////////////////////////////
