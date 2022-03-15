@@ -110,8 +110,41 @@ hello():
             AssertThat(param.GetTypeName(), Equals("SomeType"));
             AssertThat(param.GetDocString(), Equals("This is the foo param"));
         });
-        xit("can define void function with multiple parameters", [&](){});
-        xit("can define void function with body", [&](){});
+        it("can define void function with multiple parameters", [&](){
+            auto context = ContextImpl();
+
+            Eval(context, R"(
+- hello():
+    params:
+    - foo: FooType
+      :: This is the foo param
+    - bar: BarType
+      :: This is the bar param
+)");
+            auto& fn = context.GetFunctionInfo("hello");
+
+            AssertThat(fn.HasParameters(), IsTrue());
+            AssertThat(fn.GetParameterCount(), Equals(2));
+            AssertThat(fn.GetParameter("foo").GetDocString(), Equals("This is the foo param"));
+            AssertThat(fn.GetParameter("foo").GetTypeName(), Equals("FooType"));
+            AssertThat(fn.GetParameter("bar").GetDocString(), Equals("This is the bar param"));
+            AssertThat(fn.GetParameter("bar").GetTypeName(), Equals("BarType"));
+        });
+        xit("can define void function with parameter default value (string expression)", [&](){});
+        xit("can define void function with parameter default value (node expression)", [&](){});
+        xit("can define void function with splat ... parameter", [&](){});
         xit("can define function with return type", [&](){});
+        xit("can define namespaced function with return type", [&](){});
+        xit("can define void function with body", [&](){
+//            auto context = ContextImpl();
+//
+//            Eval(context, R"(
+//- hello():
+//    :native:
+//    :
+//)");
+//
+//            auto& fn = context.GetFunctionInfo("hello");
+        });
     });
 });

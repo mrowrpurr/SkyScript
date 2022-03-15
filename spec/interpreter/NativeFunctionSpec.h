@@ -56,10 +56,11 @@ go_bandit([](){
 //            AssertThat(response.GetValueType(), Equals("string"));
 //            AssertThat(response.GetValue<std::string>(), Equals("This is the text!"));
         });
-//        xit("can return primitive string from function", [&](){});
-//        xit("can return primitive string from function with string parameter", [&](){});
-//        xit("can invoke void function with ScriptNode parameter", [&](){});
-//        xit("stdlib::class function is available", [&](){});
-//        xit("stdlib::print function is available", [&](){});
+
+        xit("can return primitive Text string from function", [&](){});
+        xit("can return primitive Text string from function with string parameter", [&](){});
+        xit("can invoke void function with ScriptNode parameter", [&](){});
+        xit("stdlib::class function is available", [&](){});
+        xit("stdlib::print function is available", [&](){});
     });
 });

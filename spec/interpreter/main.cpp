@@ -3,6 +3,7 @@
 #include "ContextSpec.h"
 #include "FunctionDefinitionSpec.h"
 #include "NativeFunctionSpec.h"
+#include "PapyrusFunctionSpec.h"
 #include "SyntaxErrorsSpec.h"
 #include "TypedValueSpec.h"
 #include "TypesSpec.h"
