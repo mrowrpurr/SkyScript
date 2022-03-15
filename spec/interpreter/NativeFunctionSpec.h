@@ -20,21 +20,22 @@ go_bandit([](){
         it("can register native functions", [&](){
             auto& functions = NativeFunctions::GetSingleton();
             AssertThat(functions.Count(), Equals(0));
-            AssertThat(functions.HasFunction("my::myfunction"), IsFalse());
+            AssertThat(functions.HasFunction("my::myFunction"), IsFalse());
 
-            functions.RegisterFunction("my::myfunction", MyFunction);
+            functions.RegisterFunction("my::myFunction", MyFunction);
 
             AssertThat(functions.Count(), Equals(1));
-            AssertThat(functions.HasFunction("my::myfunction"), IsTrue());
+            AssertThat(functions.HasFunction("my::myFunction"), IsTrue());
         });
-        it("can invoke void parameterless function", [&](){
-            auto context = ContextImpl();
-            auto functionInfo = FunctionInfoImpl("myFunctions", "coolFunction");
-            auto params = FunctionInvocationParamsImpl(context, functionInfo);
+        it("can return text from a void parameterless function", [&](){
             auto& functions = NativeFunctions::GetSingleton();
-            functions.RegisterFunction("my::myfunction", MyFunction);
-
-            auto response = functions.InvokeFunction("my::myfunction", params);
+            functions.RegisterFunction("my::myFunction", MyFunction);
+            auto context = ContextImpl();
+            Eval(context, R"(
+- hello():
+    :native: my::myFunction
+)");
+            auto response = functions.InvokeFunction("my::myFunction", FunctionInvocationParamsImpl(context, context.GetFunctionInfo("hello")));
 
             AssertThat(response.IsValue(), IsTrue());
             AssertThat(response.GetValueType(), Equals("string"));
@@ -48,9 +49,9 @@ go_bandit([](){
 
             auto params = FunctionInvocationParamsImpl(context, functionInfo);
             auto& functions = NativeFunctions::GetSingleton();
-            functions.RegisterFunction("my::myfunction", MyFunction);
+            functions.RegisterFunction("my::myFunction", MyFunction);
 
-            auto response = functions.InvokeFunction("my::myfunction", params);
+            auto response = functions.InvokeFunction("my::myFunction", params);
 
 //            AssertThat(response.IsValue(), IsTrue());
 //            AssertThat(response.GetValueType(), Equals("string"));

@@ -74,7 +74,7 @@ namespace SkyScript::Interpreter::FunctionParser {
         }
 
         auto functionInfo = FunctionInfoImpl(functionNamespace, functionName);
-        
+
         functionInfo.SetReturnTypeName(functionReturnType);
 
         auto& map = node.GetSingleValue();
