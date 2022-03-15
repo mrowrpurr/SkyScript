@@ -30,5 +30,14 @@ namespace SkyScript::Interpreter {
             spdlog::info("Registering Native Function '{}'", functionName);
             _functions.try_emplace(functionName, functionFn);
         }
+
+        FunctionInvocationResponse InvokeFunction(const std::string& functionName, FunctionInvocationParams& params) {
+            if (HasFunction(functionName)) {
+                auto fn = _functions[functionName];
+                return fn(params);
+            } else {
+                return FunctionInvocationResponse::ReturnFunctionNotFound();
+            }
+        }
     };
 }

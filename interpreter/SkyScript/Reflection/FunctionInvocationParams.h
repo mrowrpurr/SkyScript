@@ -1,11 +1,15 @@
 #pragma once
 
+#include "SkyScript/Reflection/FunctionInvocationParams.h"
+#include "SkyScript/Reflection/Context.h"
+#include "SkyScript/Reflection/FunctionInfo.h"
+
 namespace SkyScript::Reflection {
 
     class FunctionInvocationParams {
-        std::string something;
 
     public:
-        std::string GetSomething() { return something; }
+        virtual Context& GetContext() = 0;
+        virtual FunctionInfo& GetFunction() = 0;
     };
 }
