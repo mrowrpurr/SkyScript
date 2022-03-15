@@ -17,6 +17,7 @@ namespace SkyScript::Reflection {
         virtual std::string GetFullName() = 0;
         virtual std::string GetDocString() = 0;
         virtual bool IsNative() = 0;
+        virtual bool HasParameters() = 0;
         virtual size_t GetParameterCount() = 0;
         virtual std::vector<std::string>& GetParameterNames() = 0;
         virtual FunctionParameterInfo& GetParameter(int index) = 0;

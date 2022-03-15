@@ -87,9 +87,13 @@ hello():
     params:
     - foo: SomeType
       :: This is the foo param
+- noParams():
 )");
+            AssertThat(context.GetFunctionInfo("noParams").HasParameters(), IsFalse());
+
             auto& fn = context.GetFunctionInfo("hello");
 
+            AssertThat(fn.HasParameters(), IsTrue());
             AssertThat(fn.GetDocString(), Equals("This is the hello function"));
             AssertThat(fn.GetParameterCount(), Equals(1));
             AssertThat(fn.HasParameterName("foo"), IsTrue());
@@ -97,9 +101,9 @@ hello():
             AssertThat(fn.GetParameter(0).GetName(), Equals("foo"));
             AssertThat(fn.GetParameter("foo").GetName(), Equals("foo"));
             AssertThrows(FunctionInfo::FunctionParameterNotFound, fn.GetParameter(69));
-            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("???"));
+            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("No parameter of hello found by index 69"));
             AssertThrows(FunctionInfo::FunctionParameterNotFound, fn.GetParameter("sixty nine"));
-            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("sixty nine ????"));
+            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("No parameter of hello found by name 'sixty nine'"));
 
             auto& param = fn.GetParameter("foo");
             AssertThat(param.GetName(), Equals("foo"));

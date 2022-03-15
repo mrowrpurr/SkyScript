@@ -24,7 +24,7 @@ namespace SkyScript::Reflection::Impl {
 
         void SetName(std::string name) { _name = std::move(name); }
         void SetDocString(std::string docString) { _docString = std::move(docString); }
-        void SetTypeName(std::string typeName) { _name = std::move(typeName); }
+        void SetTypeName(std::string typeName) { _typeName = std::move(typeName); }
         void SetDefaultExpression(const SkyScriptNodeImpl& node) { _defaultExpression = node; }
     };
 }

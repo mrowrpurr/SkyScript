@@ -37,6 +37,7 @@ namespace SkyScript::Reflection::Impl {
         std::string GetDocString() override { return _docString; }
         bool IsNative() override { return _isNative; }
 
+        bool HasParameters() override { return !_parameters.empty(); }
         size_t GetParameterCount() override { return _parameters.size(); }
         std::vector<std::string>& GetParameterNames() override { return _parameterNames; }
         bool HasParameterName(const std::string& name) override { return _parameterNameLookup.contains(name); }
