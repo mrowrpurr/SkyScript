@@ -1,6 +1,6 @@
 #pragma once
 
-#include "specHelper.h"
+#include "../specHelper.h"
 
 go_bandit([](){
     describe("class() definition", []() {

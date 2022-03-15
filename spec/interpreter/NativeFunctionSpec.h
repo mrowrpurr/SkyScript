@@ -20,12 +20,15 @@ go_bandit([](){
 
             AssertThat(functions.Count(), Equals(1));
         });
-        xit("can invoke void parameterless function", [&](){});
-        xit("can invoke void function with string parameter", [&](){});
-        xit("can return primitive string from function", [&](){});
-        xit("can return primitive string from function with string parameter", [&](){});
-        xit("can invoke void function with ScriptNode parameter", [&](){});
-        xit("stdlib::class function is available", [&](){});
-        xit("stdlib::print function is available", [&](){});
+
+        // Call it. Read params from the params object. Let it be pretty dynamic! Reusable functions :)
+
+//        xit("can invoke void parameterless function", [&](){});
+//        xit("can invoke void function with string parameter", [&](){});
+//        xit("can return primitive string from function", [&](){});
+//        xit("can return primitive string from function with string parameter", [&](){});
+//        xit("can invoke void function with ScriptNode parameter", [&](){});
+//        xit("stdlib::class function is available", [&](){});
+//        xit("stdlib::print function is available", [&](){});
     });
 });
