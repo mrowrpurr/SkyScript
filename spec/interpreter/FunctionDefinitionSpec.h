@@ -35,7 +35,6 @@ greetings::hello():
         });
         it("can define void function with a description (docstring)", [&](){
             auto context = ContextImpl();
-
             Eval(context, R"(
 hello():
   :: This is the hello function
@@ -68,7 +67,6 @@ hello():
         });
         it("can define void native function", [&](){
             auto context = ContextImpl();
-
             Eval(context, R"(
 - hello():
     :native:
@@ -80,7 +78,6 @@ hello():
         });
         it("can define void function with a parameter", [&](){
             auto context = ContextImpl();
-
             Eval(context, R"(
 - hello():
     :: This is the hello function
@@ -112,7 +109,6 @@ hello():
         });
         it("can define void function with multiple parameters", [&](){
             auto context = ContextImpl();
-
             Eval(context, R"(
 - hello():
     params:
@@ -133,8 +129,19 @@ hello():
         xit("can define void function with parameter default value (string expression)", [&](){});
         xit("can define void function with parameter default value (node expression)", [&](){});
         xit("can define void function with splat ... parameter", [&](){});
-        xit("can define function with return type", [&](){});
-        xit("can define namespaced function with return type", [&](){});
+        it("can define function with return type", [&](){
+            auto context = ContextImpl();
+            Eval(context, R"(
+- hello():
+- void world():
+- string foo():
+- stdlib::string bar():
+)");
+            AssertThat(context.GetFunctionInfo("hello").GetReturnTypeName(), Equals("void"));
+            AssertThat(context.GetFunctionInfo("world").GetReturnTypeName(), Equals("void"));
+            AssertThat(context.GetFunctionInfo("foo").GetReturnTypeName(), Equals("string"));
+            AssertThat(context.GetFunctionInfo("bar").GetReturnTypeName(), Equals("stdlib::string"));
+        });
         xit("can define void function with body", [&](){
 //            auto context = ContextImpl();
 //
