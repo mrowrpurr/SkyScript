@@ -3,11 +3,14 @@
 #include "specHelper.h"
 
 #include <SkyScript/Interpreter/NativeFunctions.h>
+#include <SkyScript/Reflection/FunctionInvocationParams.h>
+#include <SkyScript/Reflection/FunctionInvocationResponse.h>
 
 using namespace SkyScript::Interpreter;
+using namespace SkyScript::Reflection;
 
 namespace {
-    NativeFunctionResponse MyFunction(NativeFunctionParams&) { return {}; }
+    FunctionInvocationResponse MyFunction(FunctionInvocationParams&) { return {}; }
 }
 
 go_bandit([](){
@@ -15,15 +18,17 @@ go_bandit([](){
         it("can register native functions", [&](){
             auto& functions = NativeFunctions::GetSingleton();
             AssertThat(functions.Count(), Equals(0));
+            AssertThat(functions.HasFunction("my::myfunction"), IsFalse());
 
             functions.RegisterFunction("my::myfunction", MyFunction);
 
             AssertThat(functions.Count(), Equals(1));
+            AssertThat(functions.HasFunction("my::myfunction"), IsTrue());
         });
+        xit("can invoke void parameterless function", [&](){
+            auto functionInfo = FunctionInfoImpl();
 
-        // Call it. Read params from the params object. Let it be pretty dynamic! Reusable functions :)
-
-//        xit("can invoke void parameterless function", [&](){});
+        });
 //        xit("can invoke void function with string parameter", [&](){});
 //        xit("can return primitive string from function", [&](){});
 //        xit("can return primitive string from function with string parameter", [&](){});
