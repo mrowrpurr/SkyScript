@@ -4,10 +4,12 @@
 
 #include <SkyScript/Parsers/YAML.h>
 #include <SkyScript/Interpreter/Evaluate.h>
+#include <SkyScript/Reflection/FunctionInfo.h>
 #include <SkyScript/Reflection/Impl/ContextImpl.h>
 #include <SkyScript/Reflection/Impl/FunctionInfoImpl.h>
 
 using namespace SkyScript::Interpreter;
+using namespace SkyScript::Reflection;
 using namespace SkyScript::Reflection::Impl;
 
 bool Eval(ContextImpl& context, const std::string& yamlText) {

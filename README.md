@@ -10,7 +10,8 @@
 
 | | |
 |-|-|
-| `parser`       | Read YAML and JSON files into `SkyScript::ScriptNode` wrappers of std:: library types (_unordered_map, vector, and simple types_) |
+| `deserialization` | Read YAML and JSON files into `DocumentNode` wrappers of std:: library types (_unordered_map, vector, and simple types_) |
+| `reflection`   | Structures representing SkyScript programs. `api` exposes functions for script introspection into these types. |
 | `interpreter`  | Evaluate `SkyScript::ScriptNode` parsed from YAML or JSON files (_includes both type definitions and procedural code_) |
 | `api`          | Dynamically link from other .dlls to extend the `SkyScript` scripting language with native functions |
 | `stdlib`       | Standard library of provided types and functions (_agnostic to runtime environment_) |

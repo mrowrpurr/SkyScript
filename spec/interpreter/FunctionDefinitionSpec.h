@@ -78,7 +78,34 @@ hello():
             AssertThat(context.GetFunctionInfo("hello").IsNative(), IsTrue());
             AssertThat(context.GetFunctionInfo("world").IsNative(), IsFalse());
         });
-        xit("can define void function with a parameter", [&](){});
+        it("can define void function with a parameter", [&](){
+            auto context = ContextImpl();
+
+            Eval(context, R"(
+- hello():
+    :: This is the hello function
+    params:
+    - foo: SomeType
+      :: This is the foo param
+)");
+            auto& fn = context.GetFunctionInfo("hello");
+
+            AssertThat(fn.GetDocString(), Equals("This is the hello function"));
+            AssertThat(fn.GetParameterCount(), Equals(1));
+            AssertThat(fn.HasParameterName("foo"), IsTrue());
+            AssertThat(fn.HasParameterName("thisDoesNotExist"), IsFalse());
+            AssertThat(fn.GetParameter(0).GetName(), Equals("foo"));
+            AssertThat(fn.GetParameter("foo").GetName(), Equals("foo"));
+            AssertThrows(FunctionInfo::FunctionParameterNotFound, fn.GetParameter(69));
+            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("???"));
+            AssertThrows(FunctionInfo::FunctionParameterNotFound, fn.GetParameter("sixty nine"));
+            AssertThat(LastException<FunctionInfo::FunctionParameterNotFound>().what(), Is().Containing("sixty nine ????"));
+
+            auto& param = fn.GetParameter("foo");
+            AssertThat(param.GetName(), Equals("foo"));
+            AssertThat(param.GetTypeName(), Equals("SomeType"));
+            AssertThat(param.GetDocString(), Equals("This is the foo param"));
+        });
         xit("can define void function with multiple parameters", [&](){});
         xit("can define void function with body", [&](){});
         xit("can define function with return type", [&](){});
