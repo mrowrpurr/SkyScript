@@ -1,5 +1,7 @@
 # TODO
 
+### `Functions --> Variables --> Import --> Types`
+
 - [ ] Defining function with non-existing return type explodes with Error
 - [ ] Can get errors (Evaluate -> false)
 - [ ] Default context has primitive types
