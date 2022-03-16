@@ -4,7 +4,7 @@
 
 go_bandit([](){
     describe("Syntax Errors", [](){
-        it("gibberish returns a syntax error", [&](){
+        xit("gibberish returns a syntax error", [&](){
             auto context = ContextImpl();
             AssertThat(context.HasError(), IsFalse());
 

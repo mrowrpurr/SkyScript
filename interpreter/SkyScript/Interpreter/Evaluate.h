@@ -3,6 +3,7 @@
 #include <SkyScript/SkyScriptNode.h>
 
 #include "SkyScript/Interpreter/Util.h"
+#include "SkyScript/Interpreter/FunctionInvocation.h"
 #include "SkyScript/Interpreter/FunctionParser.h"
 #include "SkyScript/Reflection/Impl/ContextImpl.h"
 
@@ -13,9 +14,17 @@ namespace SkyScript::Interpreter {
             return node.IsMap() && node.Size() == 1 && node.GetSingleKey().ends_with("()");
         }
 
+        // TODO
+        bool IsVariableDeclarationOrAssignment(SkyScriptNode& node) {
+            auto key = node.GetSingleKey();
+            return key.find("()") == std::string::npos && key.find("=") == std::string::npos;
+        }
+
         bool EvaluateMap(SkyScriptNode& node, ContextImpl& context) {
             if (IsFunctionDefinition(node)) {
                 SkyScript::Interpreter::FunctionParser::AddFunctionToContext(node, context);
+            } else if (node.IsSingleKeyMap()) {
+                SkyScript::Interpreter::FunctionInvocation::InvokeFunction(node, context);
             } else {
                 context.SetErrorMessage(std::format("Unknown SkyScript Syntax '{}'", node.toString()));
                 return false;

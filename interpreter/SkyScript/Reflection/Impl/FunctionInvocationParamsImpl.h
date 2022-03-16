@@ -6,6 +6,7 @@
 #include "SkyScript/Reflection/Context.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
 #include "SkyScript/Reflection/FunctionInvocationParams.h"
+#include "SkyScript/Reflection/Impl/TypedValueImpl.h"
 
 namespace SkyScript::Reflection::Impl {
 

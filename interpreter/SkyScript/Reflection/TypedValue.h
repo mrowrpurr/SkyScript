@@ -1,5 +1,7 @@
 #pragma once
 
+#include <any>
+
 namespace SkyScript::Reflection {
 
     class TypedValue {

@@ -5,11 +5,11 @@
 #include <SkyScript/NativeFunctions.h>
 #include <SkyScript/Reflection/Impl/FunctionInvocationParamsImpl.h>
 
-using namespace SkyScript::Interpreter;
-using namespace SkyScript::Reflection;
-
 go_bandit([](){
     describe("Function invocation", [](){
+        after_each([&](){
+            NativeFunctions::GetSingleton().Clear();
+        });
         it("can invoke a void native function with no parameters", [&](){
             std::vector<std::string> responses{};
             AssertThat(responses.size(), Equals(0));
@@ -18,7 +18,7 @@ go_bandit([](){
                 responses.emplace_back("Hello!");
                 return FunctionInvocationResponse::ReturnVoid();
             };
-//
+
             NativeFunctions::GetSingleton().RegisterFunction("myFunctions::coolFunction", nativeFunction);
             auto context = ContextImpl();
             auto scriptNode = Eval(context, R"(
@@ -27,10 +27,6 @@ go_bandit([](){
 
 - myFunction:
 )");
-            auto& functionInfo = context.GetFunctionInfo("myFunction");
-            auto params = FunctionInvocationParamsImpl(context, functionInfo, scriptNode);
-
-            NativeFunctions::GetSingleton().InvokeFunction("myFunctions::coolFunction", params);
 
             AssertThat(responses.size(), Equals(1));
             AssertThat(responses[0], Equals("Hello!"));

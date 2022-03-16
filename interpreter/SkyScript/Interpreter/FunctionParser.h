@@ -21,9 +21,23 @@ namespace SkyScript::Interpreter::FunctionParser {
         }
         return "";
     }
+
     bool GetIsNative(SkyScriptNode& map) {
+        spdlog::info("Checking if {} is native...", map.toString());
+        auto isNative = map.ContainsKey(":native") || map.ContainsKey(":native:");
+        spdlog::info("So... is it native?? {} ", isNative);
         return map.ContainsKey(":native") || map.ContainsKey(":native:");
     }
+    std::string GetNativeFunctionName(SkyScriptNode& map) {
+        if (map.ContainsKey(":native")) {
+            return map[":native"].GetStringValue();
+        } else if (map.ContainsKey(":native:")) {
+            return map[":native:"].GetStringValue();
+        } else {
+            return "";
+        }
+    }
+
     void AddParameterToFunction(FunctionInfoImpl& function, SkyScriptNode& paramNode) {
         auto param = FunctionParameterInfoImpl();
         for (const auto& key : paramNode.GetKeys()) {
@@ -35,7 +49,6 @@ namespace SkyScript::Interpreter::FunctionParser {
                 param.SetTypeName(paramNode[key].GetStringValue());
             }
         }
-        std::cout << std::format("PARAM FOUND w/ NAME '{}' ", param.GetName());
         if (! param.GetName().empty()) {
             function.AddParameter(param);
         }
@@ -81,6 +94,7 @@ namespace SkyScript::Interpreter::FunctionParser {
         if (map.IsMap()) {
             functionInfo.SetDocString(GetDocString(map));
             functionInfo.SetIsNative(GetIsNative(map));
+            functionInfo.SetNativeFunctionName(GetNativeFunctionName(map));
             AddParametersToFunction(functionInfo, map);
         }
 
