@@ -2,6 +2,7 @@
 
 #include "ContextSpec.h"
 #include "FunctionDefinitionSpec.h"
+#include "FunctionInvocationSpec.h"
 #include "NativeFunctionSpec.h"
 #include "PapyrusFunctionSpec.h"
 #include "SyntaxErrorsSpec.h"
