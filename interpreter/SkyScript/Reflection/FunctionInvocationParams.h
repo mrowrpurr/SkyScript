@@ -59,6 +59,7 @@ namespace SkyScript::Reflection {
         std::string GetParameterValueText(int index) { return TextForAny(TypeName(index), GetParameterValue(index)); }
         std::string GetParameterValueText(const std::string& name) { return TextForAny(TypeName(name), GetParameterValue(name)); }
         std::string Text(const std::string& name) { return GetParameterValueText(name); }
+        std::string GetText(const std::string& name) { return Text(name); }
 
         template <typename T>
         T GetParameterAs(int index) { return std::any_cast<T>(GetParameterValue(index)); }

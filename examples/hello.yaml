@@ -1,3 +1,12 @@
-- import: [print]
+# Function Definition
+- print():
+    :native: print
+    params:
+      - text: string
 
-- print: hello!
+# Script
+- print: hello world!
+- print:
+    - printed positional argument
+- print:
+    text: printed named argument

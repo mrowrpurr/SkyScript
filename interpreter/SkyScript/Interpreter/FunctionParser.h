@@ -23,9 +23,6 @@ namespace SkyScript::Interpreter::FunctionParser {
     }
 
     bool GetIsNative(SkyScriptNode& map) {
-        spdlog::info("Checking if {} is native...", map.toString());
-        auto isNative = map.ContainsKey(":native") || map.ContainsKey(":native:");
-        spdlog::info("So... is it native?? {} ", isNative);
         return map.ContainsKey(":native") || map.ContainsKey(":native:");
     }
     std::string GetNativeFunctionName(SkyScriptNode& map) {

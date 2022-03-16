@@ -33,7 +33,6 @@ namespace SkyScript::Interpreter::FunctionInvocation {
 }
 
     void AddInlineParameter(FunctionInfo& function, FunctionInvocationParamsImpl& params, SkyScriptNode& node, Reflection::Context& context) {
-        spdlog::info("Add inline param, fn params {} ", function.GetParameterCount());
         if (function.GetParameterCount() == 1) {
             AddParameter(function.GetParameter(0), node, function, params, node, context);
         } else {
@@ -79,13 +78,10 @@ namespace SkyScript::Interpreter::FunctionInvocation {
         if (node.HasSingleValue()) {
             auto& value = node.GetSingleValue();
             if (value.IsValue()) {
-                spdlog::info("- IS VALUE -");
                 AddInlineParameter(fn, params, value, context);
             } else if (value.IsMap()) {
-                spdlog::info("- IS MAP -");
                 AddNamedParameters(fn, params, value, context);
             } else if (value.IsArray()) {
-                spdlog::info("- IS ARRAY -");
                 AddPositionalParameters(fn, params, value, context);
             }
         }
