@@ -34,6 +34,7 @@ namespace SkyScript::Interpreter {
 
         bool EvaluateArray(SkyScriptNode& node, ContextImpl& context) {
             for (int i = 0; i < node.Size(); i++) {
+                spdlog::info("Eval Array Elem {} '{}'", i, node.toString());
                 auto& child = node[i];
                 if (child.IsMap()) {
                     EvaluateMap(child, context);
@@ -49,6 +50,7 @@ namespace SkyScript::Interpreter {
     }
 
     bool Evaluate(SkyScriptNode& node, ContextImpl& context) {
+        spdlog::info("EVALUATE '{}'", node.toString());
         if (node.IsMap()) {
             return EvaluateMap(node, context);
         } else if (node.IsArray()) {

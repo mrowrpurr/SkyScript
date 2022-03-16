@@ -45,6 +45,7 @@ namespace SkyScript::Reflection {
         bool HasParameters() { return Count() > 0; }
         bool Any() { return Count() > 0; }
         std::vector<std::string> ParamNames() { return GetParameterNames(); }
+        std::vector<std::string> Names() { return ParamNames(); }
         TypedValue& Param(int index) { return GetParameter(index); }
         TypedValue& Param(const std::string& name) { return GetParameter(name); }
         std::string TypeName(int index) { return GetParameter(index).GetTypeName(); }

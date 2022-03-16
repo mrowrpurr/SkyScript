@@ -1,0 +1,5 @@
+# Function Definition
+- print():
+    :native: print
+    params:
+      - text: string

@@ -90,6 +90,8 @@ namespace SkyScript::Interpreter::FunctionInvocation {
     }
 
     void InvokeFunction(SkyScriptNode& node, Reflection::Context& context) {
+        spdlog::info("Invoke Function {}", node.toString());
+
         auto functionName = node.GetSingleKey();
         if (! context.FunctionExists(functionName)) {
             // KABOOM

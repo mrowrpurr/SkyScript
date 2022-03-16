@@ -1,12 +1,17 @@
-# Function Definition
-- print():
-    :native: print
+ # Define import (lol - so we can import imports)
+- import():
+    :native: import
     params:
-      - text: string
+      - file: string
+
+- import: C:/Code/mrowrpurr/SkyScript/examples/print.yaml
+# - print: hello world!
+# - import: C:/Code/mrowrpurr/SkyScript/examples/print.yaml
 
 # Script
 - print: hello world!
-- print:
-    - printed positional argument
-- print:
-    text: printed named argument
+- print: hello world!
+#- print:
+#    - printed positional argument
+#- print:
+#    text: printed named argument

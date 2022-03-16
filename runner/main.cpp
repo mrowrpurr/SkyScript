@@ -37,31 +37,49 @@ int main(int argc, char* argv[]) {
         return FunctionInvocationResponse::ReturnVoid();
     };
 
+    // Register an import function!
+    auto importFunction = [](FunctionInvocationParams& params){
+        for (const auto& paramName : params.Names()) {
+            auto path = params.Text(paramName);
+            if (fs::exists(path)) {
+                auto yaml = ReadTextFile(path);
+                auto scriptNode = SkyScript::Parsers::YAML::Parse(yaml);
+                auto* context = (ContextImpl*) &params.Context();
+                std::cout << std::format("import {}\n", path);
+                SkyScript::Interpreter::Evaluate(scriptNode, *context);
+            } else {
+                std::cout << std::format("Import not found {}\n", path);
+            }
+        }
+        return FunctionInvocationResponse::ReturnVoid();
+    };
+
     SkyScript::Interpreter::NativeFunctions::GetSingleton().RegisterFunction("print", printFunction);
+    SkyScript::Interpreter::NativeFunctions::GetSingleton().RegisterFunction("import", importFunction);
 
     // Call the example script directly (for debugging)
-    auto yaml = ReadTextFile(R"(C:\Code\mrowrpurr\SkyScript\examples\hello.yaml)");
-    auto scriptNode = SkyScript::Parsers::YAML::Parse(yaml);
-    auto context = SkyScript::Reflection::Impl::ContextImpl();
-    SkyScript::Interpreter::Evaluate(scriptNode, context);
+//    auto yaml = ReadTextFile(R"(C:\Code\mrowrpurr\SkyScript\examples\hello.yaml)");
+//    auto scriptNode = SkyScript::Parsers::YAML::Parse(yaml);
+//    auto context = SkyScript::Reflection::Impl::ContextImpl();
+//    SkyScript::Interpreter::Evaluate(scriptNode, context);
 
-//    std::vector<std::string> arguments(argv + 1, argv + argc);
-//    for (const auto& arg : arguments) {
-//        if (fs::exists(arg)) {
-//            auto path = fs::path(arg);
-//            auto ext = path.extension();
-//            if (ext == ".yaml" || ext == ".yml") {
-//                auto yaml = ReadTextFile(arg);
-//                auto scriptNode = SkyScript::Parsers::YAML::Parse(yaml);
-//                auto context = SkyScript::Reflection::Impl::ContextImpl();
-//                SkyScript::Interpreter::Evaluate(scriptNode, context);
-//            } else if (ext == ".json") {
-//                std::cout << ".json files are not currently supported";
-//            } else {
-//                std::cout << std::format("Unsupported file extension {}", ext.string());
-//            }
-//        } else {
-//            std::cout << std::format("Script not found: {}", arg);
-//        }
-//    }
+    std::vector<std::string> arguments(argv + 1, argv + argc);
+    for (const auto& arg : arguments) {
+        if (fs::exists(arg)) {
+            auto path = fs::path(arg);
+            auto ext = path.extension();
+            if (ext == ".yaml" || ext == ".yml") {
+                auto yaml = ReadTextFile(arg);
+                auto scriptNode = SkyScript::Parsers::YAML::Parse(yaml);
+                auto context = SkyScript::Reflection::Impl::ContextImpl();
+                SkyScript::Interpreter::Evaluate(scriptNode, context);
+            } else if (ext == ".json") {
+                std::cout << ".json files are not currently supported";
+            } else {
+                std::cout << std::format("Unsupported file extension {}", ext.string());
+            }
+        } else {
+            std::cout << std::format("Script not found: {}", arg);
+        }
+    }
 }
