@@ -19,10 +19,6 @@ namespace SkyScript::Reflection {
         virtual bool HasParameter(const std::string& name) = 0;
         virtual TypedValue& GetParameter(int index) = 0;
         virtual TypedValue& GetParameter(const std::string& name) = 0;
-        virtual std::any& GetParameterValue(int index) = 0;
-        virtual std::any& GetParameterValue(const std::string& name) = 0;
-        virtual std::string GetParameterTypeName(int index) = 0;
-        virtual std::string GetParameterTypeName(const std::string& name) = 0;
 
         // Helper functions / shortcuts:
 
@@ -32,8 +28,10 @@ namespace SkyScript::Reflection {
         TypedValue& Param(const std::string& name) { return GetParameter(name); }
         std::string TypeName(int index) { return GetParameter(index).GetTypeName(); }
         std::string TypeName(const std::string& name) { return GetParameter(name).GetTypeName(); }
-        std::optional<Reflection::Type&> Type(int index) { return GetType(GetParameter(index).GetTypeName()); }
-        std::optional<Reflection::Type&> Type(const std::string& name) { return GetType(GetParameter(name).GetTypeName()); }
+        std::any GetParameterValue(int index) { return GetParameter(index).GetValueAny(); }
+        std::any GetParameterValue(const std::string& name) { return GetParameter(name).GetValueAny(); }
+        std::string GetParameterTypeName(int index) { return GetParameter(index).GetTypeName(); }
+        std::string GetParameterTypeName(const std::string& name) { return GetParameter(name).GetTypeName(); }
         Context& Context() { return GetContext(); }
         FunctionInfo& Function() { return GetFunctionInfo(); }
         SkyScriptNode& Expression() { return GetExpression(); }

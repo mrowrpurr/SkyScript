@@ -2,24 +2,31 @@
 
 #include <utility>
 
-#include "SkyScript/Reflection/FunctionInvocationParams.h.h"
+#include "SkyScript/SkyScriptNode.h"
+#include "SkyScript/Reflection/Context.h"
+#include "SkyScript/Reflection/FunctionInfo.h"
+#include "SkyScript/Reflection/FunctionInvocationParams.h"
 
 namespace SkyScript::Reflection::Impl {
 
     class FunctionInvocationParamsImpl : public FunctionInvocationParams {
-        Context& _context;
+        Reflection::Context& _context;
         FunctionInfo& _functionInfo;
         SkyScriptNode& _expression;
         std::vector<TypedValueImpl> _parameters;
         std::unordered_map<std::string, size_t> _parameterIndicesByName;
 
     public:
-        FunctionInvocationParamsImpl(Context& context, FunctionInfo& functionInfo, SkyScriptNode& expression)
+        FunctionInvocationParamsImpl(Reflection::Context& context, FunctionInfo& functionInfo, SkyScriptNode& expression)
         : _context(context), _functionInfo(functionInfo), _expression(expression) {}
 
-        Context& GetContext() override { return _context; }
+        Reflection::Context& GetContext() override { return _context; }
         FunctionInfo& GetFunctionInfo() override { return _functionInfo; }
         SkyScriptNode& GetExpression() override { return _expression; }
+        size_t GetParameterCount() override { return _parameters.size(); }
+        bool HasParameter(const std::string& name) override { return _parameterIndicesByName.contains(name); }
+        TypedValue& GetParameter(int index) override { return _parameters[index]; }
+        TypedValue& GetParameter(const std::string& name) override { return _parameters[_parameterIndicesByName[name]]; }
 
         ///////////////////////////////////////////////
         // Private Non-Virtual Override Functions Below

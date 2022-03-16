@@ -4,7 +4,7 @@
 
 namespace SkyScript::Reflection {
 
-    std::optional<Type&> GetType(const std::string&) {
-        return Impl::TypeImpl();
-    }
+//    Type& GetType(const std::string&) {
+//        return TypeImpl();
+//    }
 }

@@ -31,33 +31,36 @@ go_bandit([](){
             auto& functions = NativeFunctions::GetSingleton();
             functions.RegisterFunction("my::myFunction", MyFunction);
             auto context = ContextImpl();
-            Eval(context, R"(
+            auto scriptNode = Eval(context, R"(
 - hello():
     :native: my::myFunction
 )");
-            auto response = functions.InvokeFunction("my::myFunction", FunctionInvocationParamsImpl(context, context.GetFunctionInfo("hello")));
+            auto& functionInfo = context.GetFunctionInfo("hello");
+            auto params = FunctionInvocationParamsImpl(context, functionInfo, scriptNode);
+
+            auto response = functions.InvokeFunction("my::myFunction", params);
 
             AssertThat(response.IsValue(), IsTrue());
             AssertThat(response.GetValueType(), Equals("string"));
-            AssertThat(response.GetValue<std::string>(), Equals("This is the text!"));
+            AssertThat(response.GetValue<std::string>(), Equals("Hi from function. No parameters provided."));
         });
-        it("can invoke void function with string parameter", [&](){
-            auto context = ContextImpl();
-
-            auto functionInfo = FunctionInfoImpl("myFunctions", "coolFunction");
-            // TODO ADD SOME PARAMETERS TO THIS FUNCTION INFO :) Use the FunctionInfo unit test (or make one)
-
-            auto params = FunctionInvocationParamsImpl(context, functionInfo);
-            auto& functions = NativeFunctions::GetSingleton();
-            functions.RegisterFunction("my::myFunction", MyFunction);
-
-            auto response = functions.InvokeFunction("my::myFunction", params);
+        xit("can invoke void function with string parameter", [&](){
+//            params.AddParameter("foo", TypedValueImpl("string", "This is the string"));
+//            auto context = ContextImpl();
+//
+//            auto functionInfo = FunctionInfoImpl("myFunctions", "coolFunction");
+//            // TODO ADD SOME PARAMETERS TO THIS FUNCTION INFO :) Use the FunctionInfo unit test (or make one)
+//
+//            auto params = FunctionInvocationParamsImpl(context, functionInfo);
+//            auto& functions = NativeFunctions::GetSingleton();
+//            functions.RegisterFunction("my::myFunction", MyFunction);
+//
+//            auto response = functions.InvokeFunction("my::myFunction", params);
 
 //            AssertThat(response.IsValue(), IsTrue());
 //            AssertThat(response.GetValueType(), Equals("string"));
 //            AssertThat(response.GetValue<std::string>(), Equals("This is the text!"));
         });
-
         xit("can return primitive Text string from function", [&](){});
         xit("can return primitive Text string from function with string parameter", [&](){});
         xit("can invoke void function with ScriptNode parameter", [&](){});

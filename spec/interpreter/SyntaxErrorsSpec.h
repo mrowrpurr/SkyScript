@@ -8,11 +8,10 @@ go_bandit([](){
             auto context = ContextImpl();
             AssertThat(context.HasError(), IsFalse());
 
-            auto success = Eval(context, R"(
+            Eval(context, R"(
 foo - bar -> blah whatever - hi: blahhhh
 )");
 
-            AssertThat(success, IsFalse());
             AssertThat(context.HasError(), IsTrue());
             AssertThat(context.GetError().value().GetMessage(), Contains("foo - bar -> blah whatever - hi"));
         });
