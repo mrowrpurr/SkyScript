@@ -1,5 +1,4 @@
-# Function Definition
 - print():
-    :native: print
+    :native: stdlib::print
     params:
       - text: string
