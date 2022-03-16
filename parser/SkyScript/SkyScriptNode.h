@@ -30,5 +30,21 @@ namespace SkyScript {
 
         // Hack until making a custom iterator
         virtual std::vector<std::string> GetKeys() = 0;
+
+        int64_t GetIntValue() {
+            return std::stoi(GetStringValue());
+        }
+
+        double GetFloatValue() {
+            return std::stod(GetStringValue());
+        }
+
+        bool GetBoolValue() {
+            if (GetStringValue() == "true") {
+                return true;
+            } else {
+                return false;
+            }
+        }
     };
 }

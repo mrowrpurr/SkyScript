@@ -60,9 +60,75 @@ go_bandit([](){
             AssertThat(responses[0], Equals("Received 1 parameters"));
             AssertThat(responses[1], Equals("Param as string: greeting = hello world!"));
         });
-        xit("can invoke a void native function with positional string parameter", [&](){});
-        xit("can invoke a void native function with keyword string parameter", [&](){});
-        xit("can invoke a void native function with full SkyScriptNode body", [&](){});
+        it("can invoke a void native function with positional string parameter", [&](){
+            std::vector<std::string> responses{};
+            AssertThat(responses.size(), Equals(0));
+
+            auto nativeFunction = [&responses](FunctionInvocationParams& params){
+                responses.emplace_back(std::format("Received {} parameters", params.Count()));
+                if (params.Any()) {
+                    for (const auto& paramName : params.ParamNames()) {
+                        responses.emplace_back(std::format("Param {} {} = {}", params.TypeName(paramName), paramName, params.Text(paramName)));
+                    }
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            };
+
+            NativeFunctions::GetSingleton().RegisterFunction("myFunctions::coolFunction", nativeFunction);
+            auto context = ContextImpl();
+            auto scriptNode = Eval(context, R"(
+- myFunction():
+    :native: myFunctions::coolFunction
+    params:
+    - greeting: string
+    - number: int
+
+- myFunction:
+  - hello
+  - 69
+)");
+
+            AssertThat(responses.size(), Equals(3));
+            AssertThat(responses[0], Equals("Received 2 parameters"));
+            AssertThat(responses[1], Equals("Param stdlib::string greeting = hello"));
+            AssertThat(responses[2], Equals("Param stdlib::int number = 69"));
+        });
+        it("can invoke a void native function with keyword string parameter", [&](){
+            std::vector<std::string> responses{};
+            AssertThat(responses.size(), Equals(0));
+
+            auto nativeFunction = [&responses](FunctionInvocationParams& params){
+                responses.emplace_back(std::format("Received {} parameters", params.Count()));
+                if (params.Any()) {
+                    for (const auto& paramName : params.ParamNames()) {
+                        responses.emplace_back(std::format("Param {} {} = {}", params.TypeName(paramName), paramName, params.Text(paramName)));
+                    }
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            };
+
+            NativeFunctions::GetSingleton().RegisterFunction("myFunctions::coolFunction", nativeFunction);
+            auto context = ContextImpl();
+            auto scriptNode = Eval(context, R"(
+- myFunction():
+    :native: myFunctions::coolFunction
+    params:
+    - greeting: string
+    - number: int
+
+- myFunction:
+    greeting: what's up?
+    number: 420
+)");
+
+//            AssertThat(responses.size(), Equals(3));
+            AssertThat(responses[0], Equals("Received 2 parameters"));
+            AssertThat(responses[1], Equals("Param stdlib::string greeting = what's up?"));
+            AssertThat(responses[2], Equals("Param stdlib::int number = 420"));
+        });
+        xit("can invoke a void native function with full SkyScriptNode body", [&](){
+
+        });
 
         //
         xit("can invoke a void native function with string and int parameters", [&](){});

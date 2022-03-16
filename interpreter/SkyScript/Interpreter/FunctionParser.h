@@ -41,7 +41,6 @@ namespace SkyScript::Interpreter::FunctionParser {
     void AddParameterToFunction(FunctionInfoImpl& function, SkyScriptNode& paramNode) {
         auto param = FunctionParameterInfoImpl();
         for (const auto& key : paramNode.GetKeys()) {
-            std::cout << std::format("PARAM KEY '{}' EQUALS '{}'", key, paramNode[key].GetStringValue());
             if (key == ":" || key == ":desc:") {
                 param.SetDocString(GetDocString((paramNode)));
             } else {

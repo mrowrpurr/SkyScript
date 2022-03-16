@@ -73,6 +73,7 @@ namespace SkyScript::Reflection::Impl {
         void AddParameter(FunctionParameterInfoImpl parameterInfo) {
             size_t nextIndex = _parameters.size();
             _parameters.emplace_back(parameterInfo);
+            _parameterNames.emplace_back(parameterInfo.GetName());
             _parameterNameLookup[parameterInfo.GetName()] = nextIndex;
         }
     };

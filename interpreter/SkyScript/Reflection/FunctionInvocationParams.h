@@ -10,6 +10,23 @@
 
 namespace SkyScript::Reflection {
 
+    namespace {
+        std::string TextForAny(const std::string& typeName, std::any value) {
+            if (typeName == "stdlib::string" || typeName == "string") {
+                return std::any_cast<std::string>(value);
+            } else if (typeName == "stdlib::int" || typeName == "int") {
+                return std::to_string(std::any_cast<int64_t>(value));
+            } else if (typeName == "stdlib::float" || typeName == "float") {
+                return std::to_string(std::any_cast<double>(value));
+            } else if (typeName == "stdlib::bool" || typeName == "bool") {
+                return std::to_string(std::any_cast<bool>(value));
+            } else {
+                spdlog::info("Custom types unsupported.");
+                return std::format("CUSTOM TYPES UNSUPPORTED {}", typeName);
+            }
+        }
+    }
+
     class FunctionInvocationParams {
     public:
         virtual Context& GetContext() = 0;
@@ -39,6 +56,9 @@ namespace SkyScript::Reflection {
         Context& Context() { return GetContext(); }
         FunctionInfo& Function() { return GetFunctionInfo(); }
         SkyScriptNode& Expression() { return GetExpression(); }
+        std::string GetParameterValueText(int index) { return TextForAny(TypeName(index), GetParameterValue(index)); }
+        std::string GetParameterValueText(const std::string& name) { return TextForAny(TypeName(name), GetParameterValue(name)); }
+        std::string Text(const std::string& name) { return GetParameterValueText(name); }
 
         template <typename T>
         T GetParameterAs(int index) { return std::any_cast<T>(GetParameterValue(index)); }

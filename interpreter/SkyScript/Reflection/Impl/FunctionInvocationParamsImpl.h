@@ -40,10 +40,30 @@ namespace SkyScript::Reflection::Impl {
         // Private Non-Virtual Override Functions Below
         ///////////////////////////////////////////////
 
-        void AddParameter(const std::string& name, TypedValueImpl value) {
+        void AddParameter(const std::string& name, const TypedValueImpl& value) {
             auto nextIndex = _parameters.size();
             _parameters.emplace_back(value);
             _parameterIndicesByName.try_emplace(name, nextIndex);
+        }
+
+        void AddStringParameter(const std::string& name, const std::string& value) {
+            AddParameter(name, TypedValueImpl("stdlib::string", value));
+        }
+
+        void AddIntParameter(const std::string& name, int64_t value) {
+            AddParameter(name, TypedValueImpl("stdlib::int", value));
+        }
+
+        void AddFloatParameter(const std::string& name, double value) {
+            AddParameter(name, TypedValueImpl("stdlib::float", value));
+        }
+
+        void AddBoolParameter(const std::string& name, bool value) {
+            AddParameter(name, TypedValueImpl("stdlib::bool", value));
+        }
+
+        void AddCustomTypeParameter(const std::string& name, const std::string& typeName, std::any value) {
+            AddParameter(name, TypedValueImpl(typeName, value));
         }
     };
 }
