@@ -11,7 +11,7 @@ using namespace SkyScript::Parsers::Exceptions;
 namespace SkyScript {
 
 	class SkyScriptNodeImpl : public SkyScriptNode {
-		SkyScriptNodeType _type = SkyScriptNodeType::UNDEFINED;
+		SkyScriptNodeType _type = SkyScriptNodeType::NONE;
         SkyScriptNodeValueType _valueType = SkyScriptNodeValueType::STRING;
 		std::unordered_map<std::string, SkyScriptNodeImpl> _map;
 		std::vector<SkyScriptNodeImpl> _vector;
@@ -31,6 +31,7 @@ namespace SkyScript {
 		bool IsMap() override { return _type == SkyScriptNodeType::MAP; }
 		bool IsArray() override { return _type == SkyScriptNodeType::ARRAY; }
 		bool IsValue() override { return _type == SkyScriptNodeType::VALUE; }
+        bool IsNone() override { return _type == SkyScriptNodeType::NONE; }
         bool IsString() override { return _valueType == SkyScriptNodeValueType::STRING; }
         bool IsBool() override { return _valueType == SkyScriptNodeValueType::BOOL; }
         bool IsInteger() override { return _valueType == SkyScriptNodeValueType::INT; }
@@ -90,6 +91,14 @@ namespace SkyScript {
             } else {
                 throw SkyScriptNodeSingleMapNotFound(toString());
             }
+        }
+        bool HasSingleValue() override {
+            if (IsSingleKeyMap()) {
+                if (! _map.begin()->second.IsNone()) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Hack until making a custom iterator

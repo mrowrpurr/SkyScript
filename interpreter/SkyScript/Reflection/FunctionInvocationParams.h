@@ -51,11 +51,5 @@ namespace SkyScript::Reflection {
 
         template <typename T>
         T Get(const std::string& name) { return GetParameterAs<T>(name); }
-
-        template <typename T>
-        T operator [] (int index) { return GetParameterAs<T>(index); }
-
-        template <typename T>
-        T operator [] (const std::string& name) { return GetParameterAs<T>(name); }
     };
 }

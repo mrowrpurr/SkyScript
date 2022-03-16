@@ -1,7 +1,7 @@
 #pragma once
 
 namespace SkyScript {
-    enum SkyScriptNodeType { MAP, ARRAY, VALUE, UNDEFINED };
+    enum SkyScriptNodeType { MAP, ARRAY, VALUE, NONE };
     enum SkyScriptNodeValueType { STRING, INT, FLOAT, BOOL };
 
     class SkyScriptNode {
@@ -10,6 +10,7 @@ namespace SkyScript {
         virtual bool IsMap() = 0;
         virtual bool IsArray() = 0;
         virtual bool IsValue() = 0;
+        virtual bool IsNone() = 0;
         virtual bool IsString() = 0;
         virtual bool IsBool() = 0;
         virtual bool IsInteger() = 0;
@@ -24,6 +25,7 @@ namespace SkyScript {
         virtual bool IsSingleKeyMap() = 0;
         virtual std::string GetSingleKey() = 0;
         virtual SkyScriptNode& GetSingleValue() = 0;
+        virtual bool HasSingleValue() = 0;
         virtual std::string toString() = 0;
 
         // Hack until making a custom iterator

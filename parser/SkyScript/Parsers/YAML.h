@@ -27,6 +27,10 @@ namespace SkyScript::Parsers::YAML {
                     node.AddArrayNode(valueNode);
                 }
                 break;
+            case ::YAML::NodeType::value::Null:
+            case ::YAML::NodeType::value::Undefined:
+                node.SetType(SkyScript::SkyScriptNodeType::NONE);
+                break;
             case ::YAML::NodeType::value::Scalar:
                 node.SetType(SkyScript::SkyScriptNodeType::VALUE);
                 bool isQuotedString = yaml.Tag() == "!";
