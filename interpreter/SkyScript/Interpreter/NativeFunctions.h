@@ -25,6 +25,7 @@ namespace SkyScript::Interpreter {
 
         size_t Count() { return _functions.size(); }
         bool HasFunction(const std::string& functionName) { return _functions.contains(functionName); }
+        void Clear() { _functions.clear(); }
 
         void RegisterFunction(const std::string& functionName, std::function<FunctionInvocationResponse(FunctionInvocationParams&)> functionFn) {
             spdlog::info("Registering Native Function '{}'", functionName);

@@ -19,11 +19,15 @@ namespace SkyScript::Reflection {
         virtual bool HasParameter(const std::string& name) = 0;
         virtual TypedValue& GetParameter(int index) = 0;
         virtual TypedValue& GetParameter(const std::string& name) = 0;
+        virtual std::vector<std::string> GetParameterNames() = 0;
 
         // Helper functions / shortcuts:
 
         size_t Count() { return GetParameterCount(); }
         bool HasParam(const std::string& name) { return HasParameter(name); }
+        bool HasParameters() { return Count() > 0; }
+        bool Any() { return Count() > 0; }
+        std::vector<std::string> ParamNames() { return GetParameterNames(); }
         TypedValue& Param(int index) { return GetParameter(index); }
         TypedValue& Param(const std::string& name) { return GetParameter(name); }
         std::string TypeName(int index) { return GetParameter(index).GetTypeName(); }
@@ -37,16 +41,16 @@ namespace SkyScript::Reflection {
         SkyScriptNode& Expression() { return GetExpression(); }
 
         template <typename T>
-        std::any& GetParameterAs(int index) { return std::any_cast<T>(GetParameterValue(index)); }
+        T GetParameterAs(int index) { return std::any_cast<T>(GetParameterValue(index)); }
 
         template <typename T>
-        std::any& GetParameterAs(const std::string& name) { return std::any_cast<T>(GetParameterValue(name)); }
+        T GetParameterAs(const std::string& name) { return std::any_cast<T>(GetParameterValue(name)); }
 
         template <typename T>
-        std::any& Get(int index) { return GetParameterAs<T>(index); }
+        T Get(int index) { return GetParameterAs<T>(index); }
 
         template <typename T>
-        std::any& Get(const std::string& name) { return GetParameterAs<T>(name); }
+        T Get(const std::string& name) { return GetParameterAs<T>(name); }
 
         template <typename T>
         T operator [] (int index) { return GetParameterAs<T>(index); }

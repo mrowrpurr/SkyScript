@@ -27,6 +27,13 @@ namespace SkyScript::Reflection::Impl {
         bool HasParameter(const std::string& name) override { return _parameterIndicesByName.contains(name); }
         TypedValue& GetParameter(int index) override { return _parameters[index]; }
         TypedValue& GetParameter(const std::string& name) override { return _parameters[_parameterIndicesByName[name]]; }
+        std::vector<std::string> GetParameterNames() override {
+            std::vector<std::string> paramNames;
+            for (const auto& [key, value] : _parameterIndicesByName) {
+                paramNames.emplace_back(key);
+            }
+            return paramNames;
+        }
 
         ///////////////////////////////////////////////
         // Private Non-Virtual Override Functions Below
