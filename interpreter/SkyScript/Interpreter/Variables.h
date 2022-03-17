@@ -25,6 +25,8 @@ namespace SkyScript::Interpreter::Variables {
         auto variableValue = TypedValueImpl(variableType);
         if (variableType == "int" || variableType == "stdlib::int") {
             variableValue.SetValue(nodeValue.GetIntValue());
+        } else if (variableType == "float" || variableType == "stdlib::float") {
+                variableValue.SetValue(nodeValue.GetFloatValue());
         } else {
             variableValue.SetValue(nodeValue.GetStringValue());
         }

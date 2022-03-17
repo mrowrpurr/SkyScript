@@ -44,6 +44,26 @@ go_bandit([](){
             AssertThat(value.GetValue<int64_t>(), Equals(69));
             AssertThat(value.GetIntValue(), Equals(69));
         });
+        it("can declare an float variable", [&](){
+            auto context = ContextImpl();
+            AssertThat(context.VariableCount(), Equals(0));
+            AssertThat(context.VariableExists("foo"), IsFalse());
+
+            Eval(context, R"(
+- float foo =: 69.420
+)");
+            AssertThat(context.VariableCount(), Equals(1));
+            AssertThat(context.VariableExists("foo"), IsTrue());
+
+            auto& variable = context.GetVariable("foo");
+            AssertThat(variable.GetName(), Equals("foo"));
+            AssertThat(variable.GetTypeName(), Equals("float"));
+
+            auto& value = variable.GetTypedValue();
+            AssertThat(value.GetTypeName(), Equals("float"));
+            AssertThat(value.GetValue<double>(), Equals(69.420));
+            AssertThat(value.GetFloatValue(), Equals(69.420));
+        });
         xit("has implicit typing for strings", [&](){});
         xit("has implicit typing for integers", [&](){});
         xit("has implicit typing for floats", [&](){});
