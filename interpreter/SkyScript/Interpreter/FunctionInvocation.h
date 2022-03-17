@@ -25,8 +25,14 @@ namespace SkyScript::Interpreter::FunctionInvocation {
                 typeName = variable.GetTypeName();
                 if (typeName == "string" || typeName == "stdlib::string") {
                     invocationParams.AddStringParameter(paramName, variable.GetTypedValue().GetStringValue());
+                } else if (typeName == "int" || typeName == "stdlib::int") {
+                        invocationParams.AddIntParameter(paramName, variable.GetTypedValue().GetIntValue());
+                } else if (typeName == "float" || typeName == "stdlib::float") {
+                    invocationParams.AddFloatParameter(paramName, variable.GetTypedValue().GetFloatValue());
+                } else if (typeName == "bool" || typeName == "stdlib::bool") {
+                    invocationParams.AddBoolParameter(paramName, variable.GetTypedValue().GetBoolValue());
                 } else {
-                    spdlog::info("Variable type not YET supported {}", typeName);
+                    spdlog::info("Variable type not supported {}", typeName);
                     // TODO
                 }
                 return;
@@ -34,6 +40,8 @@ namespace SkyScript::Interpreter::FunctionInvocation {
                 spdlog::info("Variable not found: {}", paramName);
                 // KABOOM!
             }
+        } else if (stringValue.starts_with("\\\\$")) {
+            stringValue = stringValue.substr(1); // Skip the starting \ character
         } else if (stringValue.starts_with("\\$")) {
             stringValue = stringValue.substr(1); // Skip the starting \ character
         }

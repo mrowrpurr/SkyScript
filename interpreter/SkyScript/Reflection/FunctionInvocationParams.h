@@ -19,7 +19,12 @@ namespace SkyScript::Reflection {
             } else if (typeName == "stdlib::float" || typeName == "float") {
                 return std::to_string(std::any_cast<double>(value));
             } else if (typeName == "stdlib::bool" || typeName == "bool") {
-                return std::to_string(std::any_cast<bool>(value));
+                bool boolValue = std::any_cast<bool>(value);
+                if (boolValue) {
+                    return "true";
+                } else {
+                    return "false";
+                }
             } else {
                 spdlog::info("Custom types unsupported.");
                 return std::format("CUSTOM TYPES UNSUPPORTED {}", typeName);

@@ -151,12 +151,14 @@ go_bandit([](){
 
 - gimmeVariableFn: $someVariable
 - gimmeVariableFn: \$someVariable
+- gimmeVariableFn: \\$someVariable
 )");
-            AssertThat(receivedVariables.size(), Equals(2));
+            AssertThat(receivedVariables.size(), Equals(3));
             AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::string and value 'hello!'"));
             AssertThat(receivedVariables[1], Equals("Received parameter param of type stdlib::string and value '$someVariable'"));
+            AssertThat(receivedVariables[2], Equals("Received parameter param of type stdlib::string and value '\\$someVariable'"));
         });
-        xit("can escape dollary variables", [&](){
+        it("can pass a int variable to a function", [&](){
             std::vector<std::string> receivedVariables;
             auto context = ContextImpl();
             NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
@@ -172,15 +174,85 @@ go_bandit([](){
     params:
     - param: string
 
-- $someVariable =: hello!
+- someNumber =: 69
 
-- gimmeVariableFn: $$someVariable
-- gimmeVariableFn: \$$someVariable
+- gimmeVariableFn: $someNumber
 )");
             AssertThat(receivedVariables.size(), Equals(1));
-            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::string and value 'hello!'"));
+            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::int and value '69'"));
         });
-        xit("can pass a int variable to a function", [&](){});
+        it("can pass a float variable to a function", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
+                for (const auto& paramName : params.ParamNames()) {
+                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
+
+            Eval(context, R"(
+- gimmeVariableFn():
+    :native: gimmeVariableFn
+    params:
+    - param: string
+
+- someNumber =: 69.420
+
+- gimmeVariableFn: $someNumber
+)");
+            AssertThat(receivedVariables.size(), Equals(1));
+            AssertThat(receivedVariables[0], Contains("Received parameter param of type stdlib::float and value '69.420"));
+        });
+        it("can pass a bool variable to a function", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
+                for (const auto& paramName : params.ParamNames()) {
+                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
+
+            Eval(context, R"(
+- gimmeVariableFn():
+    :native: gimmeVariableFn
+    params:
+    - param: string
+
+- thisIsTrue =: true
+- thisIsFalse =: false
+
+- gimmeVariableFn: $thisIsTrue
+- gimmeVariableFn: $thisIsFalse
+)");
+            AssertThat(receivedVariables.size(), Equals(2));
+            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::bool and value 'true'"));
+            AssertThat(receivedVariables[1], Equals("Received parameter param of type stdlib::bool and value 'false'"));
+        });
+        it("can escape dollar variables", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
+                for (const auto& paramName : params.ParamNames()) {
+                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
+
+            Eval(context, R"(
+- gimmeVariableFn():
+    :native: gimmeVariableFn
+    params:
+    - param: string
+
+- $someVariable =: hello from double dollar
+
+- gimmeVariableFn: $$someVariable
+)");
+            AssertThat(receivedVariables.size(), Equals(1));
+            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::string and value 'hello from double dollar'"));
+        });
 
         // Required for class() function:
         xit("can invoke a void native function with full SkyScriptNode body", [&](){
