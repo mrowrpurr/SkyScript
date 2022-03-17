@@ -3,7 +3,10 @@
 #include "specHelper.h"
 
 #include <SkyScript/NativeFunctions.h>
+#include <SkyScript/Reflection/FunctionInvocationParams.h>
 #include <SkyScript/Reflection/Impl/FunctionInvocationParamsImpl.h>
+
+using namespace SkyScript::Reflection;
 
 go_bandit([](){
     describe("Function invocation", [](){
@@ -126,6 +129,60 @@ go_bandit([](){
             AssertThat(responses[1], Equals("Param stdlib::string greeting = what's up?"));
             AssertThat(responses[2], Equals("Param stdlib::int number = 420"));
         });
+
+        // Might move these into an ExpressionsSpec or something:
+        it("can pass a string variable to a function", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
+                for (const auto& paramName : params.ParamNames()) {
+                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
+
+            Eval(context, R"(
+- gimmeVariableFn():
+    :native: gimmeVariableFn
+    params:
+    - param: string
+
+- someVariable =: hello!
+
+- gimmeVariableFn: $someVariable
+- gimmeVariableFn: \$someVariable
+)");
+            AssertThat(receivedVariables.size(), Equals(2));
+            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::string and value 'hello!'"));
+            AssertThat(receivedVariables[1], Equals("Received parameter param of type stdlib::string and value '$someVariable'"));
+        });
+        xit("can escape dollary variables", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
+                for (const auto& paramName : params.ParamNames()) {
+                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
+
+            Eval(context, R"(
+- gimmeVariableFn():
+    :native: gimmeVariableFn
+    params:
+    - param: string
+
+- $someVariable =: hello!
+
+- gimmeVariableFn: $$someVariable
+- gimmeVariableFn: \$$someVariable
+)");
+            AssertThat(receivedVariables.size(), Equals(1));
+            AssertThat(receivedVariables[0], Equals("Received parameter param of type stdlib::string and value 'hello!'"));
+        });
+        xit("can pass a int variable to a function", [&](){});
+
+        // Required for class() function:
         xit("can invoke a void native function with full SkyScriptNode body", [&](){
 
         });

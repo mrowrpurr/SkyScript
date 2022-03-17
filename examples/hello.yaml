@@ -1,1 +1,40 @@
-- print: "Hey ladies and jellyspoons!"
+
+- greeting =: Hello Kirglow
+- number =: 69
+
+- print: [ {$number}, "${greeting}", baz ]
+
+
+[
+  { "greeting =": "hello!" },
+  { "print": ["foo", "greeting", "baz"] }
+]
+
+
+- print ->: greeting
+
+- print =>: greeting
+
+- print: <= greeting
+
+
+- print: Hello Kirglow
+- print: "Hello Kirglow"
+
+
+
+
+
+
+
+
+
+
+- print: [greeting]
+- print: ["greeting"]
+
+
+- print: { foo: bar }
+
+
+- print: Wassssssssup Ladies and Jellyspoons?????

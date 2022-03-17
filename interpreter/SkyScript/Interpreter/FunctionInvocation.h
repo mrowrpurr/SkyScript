@@ -8,19 +8,40 @@
 
 namespace SkyScript::Interpreter::FunctionInvocation {
 
-    void AddParameter(FunctionParameterInfo& functionParam, SkyScriptNode& invocationProvidedValueNode, FunctionInfo&, FunctionInvocationParamsImpl& invocationParams, SkyScriptNode&, Reflection::Context&) {
+    void AddParameter(FunctionParameterInfo& functionParam, SkyScriptNode& invocationProvidedValueNode, FunctionInfo&, FunctionInvocationParamsImpl& invocationParams, SkyScriptNode&, Reflection::Context& context) {
         if (! invocationProvidedValueNode.IsValue()) {
             spdlog::info("Expected param node to be value/scalar! '{}' ", invocationProvidedValueNode.toString());
             // KABOOM!
         }
 
         auto paramName = functionParam.GetName();
-        auto typeName = functionParam.GetTypeName();
+        std::string typeName = functionParam.GetTypeName();
+        std::string stringValue = invocationProvidedValueNode.GetStringValue();
+
+        if (stringValue.starts_with('$')) {
+            auto variableName = invocationProvidedValueNode.GetStringValue().substr(1); // Remove $
+            if (context.VariableExists(variableName)) {
+                auto& variable = context.GetVariable(variableName);
+                typeName = variable.GetTypeName();
+                if (typeName == "string" || typeName == "stdlib::string") {
+                    invocationParams.AddStringParameter(paramName, variable.GetTypedValue().GetStringValue());
+                } else {
+                    spdlog::info("Variable type not YET supported {}", typeName);
+                    // TODO
+                }
+                return;
+            } else {
+                spdlog::info("Variable not found: {}", paramName);
+                // KABOOM!
+            }
+        } else if (stringValue.starts_with("\\$")) {
+            stringValue = stringValue.substr(1); // Skip the starting \ character
+        }
 
         // TODO use context.Types() to lookup type, e.g. privitive typed without namespacing *CAN* be changed in theory
         // But for now, just handle the primitives specifically
         if (typeName == "stdlib::string" || typeName == "string") {
-            invocationParams.AddStringParameter(paramName, invocationProvidedValueNode.GetStringValue());
+            invocationParams.AddStringParameter(paramName, stringValue);
         } else if (typeName == "stdlib::int" || typeName == "int") {
             invocationParams.AddIntParameter(paramName, invocationProvidedValueNode.GetIntValue());
         } else if (typeName == "stdlib::float" || typeName == "float") {
