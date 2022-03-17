@@ -21,8 +21,14 @@ namespace SkyScript::Interpreter::Variables {
             variableName = variableName.substr(rightmostSpace + 1);
         }
 
-        auto value = TypedValueImpl(variableType, node.GetSingleValue().GetStringValue());
-        auto variable = VariableImpl(variableName, variableType, value);
+        auto& nodeValue = node.GetSingleValue();
+        auto variableValue = TypedValueImpl(variableType);
+        if (variableType == "int" || variableType == "stdlib::int") {
+            variableValue.SetValue(nodeValue.GetIntValue());
+        } else {
+            variableValue.SetValue(nodeValue.GetStringValue());
+        }
+        auto variable = VariableImpl(variableName, variableType, variableValue);
 
         context.AddVariable(variable);
     }
