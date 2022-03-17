@@ -11,5 +11,10 @@ namespace SkyScript::Reflection {
 
         template <typename T>
         T GetValue() { return std::any_cast<T>(GetValueAny()); }
+
+        std::string GetStringValue() { return GetValue<std::string>(); }
+        int64_t GetIntValue() { return GetValue<int64_t>(); }
+        double GetFloatValue() { return GetValue<double>(); }
+        bool GetBoolValue() { return GetValue<bool>(); }
     };
 }

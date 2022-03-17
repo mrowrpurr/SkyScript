@@ -25,30 +25,18 @@ go_bandit([](){
             AssertThat(context.FunctionExists("thisDoesNotExist"), IsFalse());
         });
         it("has variables", [&](){
-        xit("has types", [&](){
-                             auto context = ContextImpl();
-                             AssertThat(context.VariableCount(), Equals(0));
-                             AssertThat(context.VariableExists("SomeVariable"), IsFalse());
+            auto variable = VariableImpl("foo", "stdlib::string");
 
-                             auto var = VariableImpl("SomeVariable", "SomeType");
-                             context.AddVariable(var);
-
-                             AssertThat(context.VariableCount(), Equals(1));
-                             AssertThat(context.VariableExists("SomeVariable"), IsTrue());
-                             });
             auto context = ContextImpl();
-//            AssertThat(context.TypeCount(), Equals(0));
-//            AssertThat(context.TypeExists("SomeType"), IsFalse());
-//
-//            auto type = TypeImpl("SomeNamespace", "SomeType");
-//            context.AddType(var);
-//
-//            AssertThat(context.TypeCount(), Equals(1));
-//            AssertThat(context.TypeExists("SomeType"), IsTrue());
-//
-//            AssertThat(context.TypeCount(), Equals(1));
-//            AssertThat(context.TypeExists("SomeType"), IsTrue());
+            AssertThat(context.VariableCount(), Equals(0));
+            AssertThat(context.VariableExists("foo"), IsFalse());
+
+            context.AddVariable(variable);
+
+            AssertThat(context.VariableCount(), Equals(1));
+            AssertThat(context.VariableExists("foo"), IsTrue());
         });
+        xit("has types", [&](){});
         it("GetFunctionInfo() throws an exception when not found", [&](){
             auto functionName = "This Does Not Exist!";
             auto context = ContextImpl();

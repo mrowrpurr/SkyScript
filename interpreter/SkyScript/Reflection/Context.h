@@ -2,6 +2,7 @@
 
 #include "Exceptions.h"
 #include "FunctionInfo.h"
+#include "Variable.h"
 
 namespace SkyScript::Reflection {
     class Context {
@@ -12,6 +13,7 @@ namespace SkyScript::Reflection {
         // See below for ideas for refactoring Variables + Functions + Types APIs
         virtual size_t VariableCount() = 0;
         virtual bool VariableExists(const std::string& variableName) = 0;
+        virtual Variable& GetVariable(const std::string& variableName) = 0;
 
         virtual size_t TypeCount() = 0;
         virtual bool TypeExists(const std::string& typeName) = 0;

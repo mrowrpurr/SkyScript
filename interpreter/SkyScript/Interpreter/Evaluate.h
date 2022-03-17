@@ -5,6 +5,7 @@
 #include "SkyScript/Interpreter/Util.h"
 #include "SkyScript/Interpreter/FunctionInvocation.h"
 #include "SkyScript/Interpreter/FunctionParser.h"
+#include "SkyScript/Interpreter/Variables.h"
 #include "SkyScript/Reflection/Impl/ContextImpl.h"
 
 namespace SkyScript::Interpreter {
@@ -14,15 +15,15 @@ namespace SkyScript::Interpreter {
             return node.IsMap() && node.Size() == 1 && node.GetSingleKey().ends_with("()");
         }
 
-        // TODO
         bool IsVariableDeclarationOrAssignment(SkyScriptNode& node) {
-            auto key = node.GetSingleKey();
-            return key.find("()") == std::string::npos && key.find("=") == std::string::npos;
+            return node.IsMap() && node.Size() == 1 && node.GetSingleKey().ends_with("=");
         }
 
         bool EvaluateMap(SkyScriptNode& node, ContextImpl& context) {
             if (IsFunctionDefinition(node)) {
                 SkyScript::Interpreter::FunctionParser::AddFunctionToContext(node, context);
+            } else if (IsVariableDeclarationOrAssignment(node)) {
+                SkyScript::Interpreter::Variables::AddOrUpdateVariableInContext(node, context);
             } else if (node.IsSingleKeyMap()) {
                 SkyScript::Interpreter::FunctionInvocation::InvokeFunction(node, context);
             } else {

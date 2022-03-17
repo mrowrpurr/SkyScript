@@ -51,6 +51,7 @@ namespace SkyScript::Reflection::Impl {
 
         size_t VariableCount() override { return _variables.size(); }
         bool VariableExists(const std::string& variableName) override { return _variables.contains(variableName); }
+        Variable& GetVariable(const std::string& variableName) override { return _variables[variableName]; }
 
         size_t TypeCount() override { return 0; }
         bool TypeExists(const std::string&) override { return false; }
