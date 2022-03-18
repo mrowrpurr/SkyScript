@@ -43,7 +43,7 @@ namespace SkyScript::Interpreter::Functions::Class {
             auto* context = (ContextImpl*) &params.Context();
             auto typeName = GetTypeName(def);
             auto typeNamespace = GetTypeNamespace(def);
-            auto type = TypeImpl(typeNamespace, typeName);
+            auto type = TypeInfoImpl(typeNamespace, typeName);
             type.SetDocString(GetDocString(def));
 
             context->AddType(type);

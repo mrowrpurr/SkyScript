@@ -5,7 +5,7 @@
 #include "SkyScript/Reflection/Context.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
 #include "SkyScript/Reflection/GetType.h"
-#include "SkyScript/Reflection/Type.h"
+#include "SkyScript/Reflection/TypeInfo.h"
 #include "SkyScript/Reflection/TypedValue.h"
 
 namespace SkyScript::Reflection {

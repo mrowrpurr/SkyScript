@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SkyScript/Reflection/Impl/TypeImpl.h"
+#include "SkyScript/Reflection/Impl/TypeInfoImpl.h"
 
 namespace SkyScript::Reflection {
 

@@ -37,7 +37,7 @@ go_bandit([](){
             AssertThat(context.VariableExists("foo"), IsTrue());
         });
         it("has types", [&](){
-            auto type = TypeImpl("animals", "Dog");
+            auto type = TypeInfoImpl("animals", "Dog");
 
             auto context = ContextImpl();
             AssertThat(context.TypeCount(), Equals(0));

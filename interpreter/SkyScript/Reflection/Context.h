@@ -2,7 +2,7 @@
 
 #include "Exceptions.h"
 #include "FunctionInfo.h"
-#include "Type.h"
+#include "TypeInfo.h"
 #include "Variable.h"
 
 namespace SkyScript::Reflection {
@@ -18,7 +18,7 @@ namespace SkyScript::Reflection {
 
         virtual size_t TypeCount() = 0;
         virtual bool TypeExists(const std::string& typeName) = 0;
-        virtual Type& GetTypeInfo(const std::string& typeName) = 0;
+        virtual TypeInfo& GetTypeInfo(const std::string& typeName) = 0;
 
         // TODO: make this more idiomatic by returning an iterator instead
         //       of having FunctionExists() and then GetFunctionInfo.

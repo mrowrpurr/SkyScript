@@ -6,7 +6,7 @@
 #include "SkyScript/Reflection/Exceptions.h"
 #include "SkyScript/Reflection/FunctionInfo.h"
 #include "SkyScript/Reflection/Impl/FunctionInfoImpl.h"
-#include "SkyScript/Reflection/Impl/TypeImpl.h"
+#include "SkyScript/Reflection/Impl/TypeInfoImpl.h"
 #include "SkyScript/Reflection/Impl/VariableImpl.h"
 
 using namespace SkyScript::Reflection::Impl;
@@ -27,7 +27,7 @@ namespace SkyScript::Reflection::Impl {
 
         // Types storage
         std::atomic<int> _typeIdCounter{};
-        std::unordered_map<int64_t, TypeImpl> _typesById;
+        std::unordered_map<int64_t, TypeInfoImpl> _typesById;
         std::unordered_map<std::string, int64_t> _typeIdByName;
         std::unordered_map<std::string, int64_t> _typeIdByFullName;
 
@@ -80,7 +80,7 @@ namespace SkyScript::Reflection::Impl {
             }
         }
 
-        SkyScript::Reflection::Type& GetTypeInfo(const std::string& typeName) override {
+        SkyScript::Reflection::TypeInfo& GetTypeInfo(const std::string& typeName) override {
             if (_typeIdByFullName.contains(typeName)) {
                 return _typesById[_typeIdByFullName[typeName]];
             } else if (_typeIdByName.contains(typeName)) {
@@ -109,7 +109,7 @@ namespace SkyScript::Reflection::Impl {
             _variables.insert_or_assign(var.GetName(), var);
         }
 
-        void AddType(TypeImpl info) {
+        void AddType(TypeInfoImpl info) {
             spdlog::info("Declare type {}::{}()", info.GetNamespace(), info.GetName());
 
             auto id = _typeIdCounter++;

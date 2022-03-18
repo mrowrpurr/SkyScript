@@ -2,19 +2,19 @@
 
 #include <utility>
 
-#include "SkyScript/Reflection/Type.h"
+#include "SkyScript/Reflection/TypeInfo.h"
 
 namespace SkyScript::Reflection::Impl {
 
-    class TypeImpl : public Type {
+    class TypeInfoImpl : public TypeInfo {
         std::string _name;
         std::string _namespace;
         std::string _docString;
 
     public:
-        TypeImpl() = default;
-        TypeImpl(std::string typeNamespace, std::string typeName) : _name(std::move(typeName)), _namespace(std::move(typeNamespace)) {}
-        TypeImpl(const TypeImpl& type) {
+        TypeInfoImpl() = default;
+        TypeInfoImpl(std::string typeNamespace, std::string typeName) : _name(std::move(typeName)), _namespace(std::move(typeNamespace)) {}
+        TypeInfoImpl(const TypeInfoImpl& type) {
             _name = type._name;
             _namespace = type._namespace;
             _docString = type._docString;

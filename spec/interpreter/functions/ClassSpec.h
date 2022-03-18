@@ -47,7 +47,36 @@ go_bandit([](){
             AssertThat(type.GetDocString(), Equals("Represents a dawg!"));
         });
         xit("can define a type with fields", [&](){
+            Eval(context, R"(
+- class:
+    :name: Dog
+    name: string
+    age: int
+)");
+            auto& type = context.GetTypeInfo("Dog");
+            AssertThat(type.GetName(), Equals("Dog"));
 
+            // Generic Member lookup interface
+//            AssertThat(type.MemberCount(), Equals(2));
+//            AssertThat(type.MemberExists("name"), IsTrue());
+//            AssertThat(type.MemberExists("age"), IsTrue());
+//            AssertThat(type.MemberExists("foo"), IsFalse());
+//            AssertThat(type.GetMemberInfo("name").GetName(), Equals("name"));
+//            AssertThat(type.GetMemberInfo("age").GetName(), Equals("age"));
+//            AssertThat(type.GetMemberInfo("name").GetTypeName(), Equals("string"));
+//            AssertThat(type.GetMemberInfo("age").GetTypeName(), Equals("int"));
+//            // AssertThrows member not found
+//
+//            // Specific Field lookup interface
+//            AssertThat(type.FieldCount(), Equals(2));
+//            AssertThat(type.FieldExists("name"), IsTrue());
+//            AssertThat(type.FieldExists("age"), IsTrue());
+//            AssertThat(type.FieldExists("foo"), IsFalse());
+//            AssertThat(type.GetFieldInfo("name").GetName(), Equals("name"));
+//            AssertThat(type.GetFieldInfo("age").GetName(), Equals("age"));
+//            AssertThat(type.GetFieldInfo("name").GetTypeName(), Equals("string"));
+//            AssertThat(type.GetFieldInfo("age").GetTypeName(), Equals("int"));
+            // AssertThrows field not found
         });
         xit("can define public or private fields", [&](){});
         xit("can define a type with instance methods", [&](){});
