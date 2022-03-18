@@ -57,7 +57,7 @@ go_bandit([](){
             AssertThat(type.GetName(), Equals("Dog"));
 
             // Generic Member lookup interface
-//            AssertThat(type.MemberCount(), Equals(2));
+            AssertThat(type.MemberCount(), Equals(2));
 //            AssertThat(type.MemberExists("name"), IsTrue());
 //            AssertThat(type.MemberExists("age"), IsTrue());
 //            AssertThat(type.MemberExists("foo"), IsFalse());
