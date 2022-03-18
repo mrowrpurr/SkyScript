@@ -1,0 +1,12 @@
+class:
+  :name: Dog
+  :: This is the coolest dog class ever
+
+  bark():
+    ->:
+      - print: Hello!
+
+
+foo():
+  :native: fnName
+  :custom_params:

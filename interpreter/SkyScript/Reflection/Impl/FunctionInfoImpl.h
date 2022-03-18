@@ -13,6 +13,7 @@ namespace SkyScript::Reflection::Impl {
         std::string _docString;
         std::string _returnTypeName = "void";
         bool _isNative = false;
+        bool _customParams = false;
         std::string _nativeFunctionName;
         std::vector<FunctionParameterInfoImpl> _parameters;
         std::vector<std::string> _parameterNames;
@@ -29,6 +30,7 @@ namespace SkyScript::Reflection::Impl {
             _docString = fn._docString;
             _returnTypeName = fn._returnTypeName;
             _isNative = fn._isNative;
+            _customParams = fn._customParams;
             _nativeFunctionName = fn._nativeFunctionName;
             _parameters = fn._parameters;
             _parameterNames = fn._parameterNames;
@@ -62,6 +64,8 @@ namespace SkyScript::Reflection::Impl {
             }
         }
 
+        bool UsesCustomParameters() override { return _customParams; }
+
         ///////////////////////////////////////////////
         // Private Non-Virtual Override Functions Below
         ///////////////////////////////////////////////
@@ -69,6 +73,7 @@ namespace SkyScript::Reflection::Impl {
         void SetDocString(const std::string& docString) { _docString = docString; }
         void SetReturnTypeName(const std::string& typeName) { _returnTypeName = typeName; }
         void SetIsNative(bool isNative) { _isNative = isNative; }
+        void SetUsesCustomParameters(bool usesCustomParameters) { _customParams = usesCustomParameters; }
         void SetNativeFunctionName(const std::string& functionName) { _nativeFunctionName = functionName; }
         void AddParameter(FunctionParameterInfoImpl parameterInfo) {
             size_t nextIndex = _parameters.size();

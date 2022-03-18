@@ -25,5 +25,6 @@ namespace SkyScript::Reflection {
         virtual FunctionParameterInfo& GetParameter(int index) = 0;
         virtual FunctionParameterInfo& GetParameter(const std::string& name) = 0;
         virtual bool HasParameterName(const std::string& name) = 0;
+        virtual bool UsesCustomParameters() = 0;
     };
 }

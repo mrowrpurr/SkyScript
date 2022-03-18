@@ -1,0 +1,18 @@
+{
+  "class": {
+    ":name:": "Foo",
+    ":desc:": "This is the class",
+    "bark()": { "->": [{"print": "Woof!"}] }
+  }
+}
+
+
+class:
+  :name: Dog
+  :: This is the coolest dog class ever
+
+  bark():
+    params:
+    - foo: text
+    ->:
+      - print: Hello!

@@ -2,8 +2,8 @@
 
 - [x] Register native functions
 - [x] Invoke native functions
-- [ ] Primitive variable assignments
-- [ ] Invoke function bodies
+- [x] Primitive variable assignments
 - [ ] Custom type declarations with class
+- [ ] Invoke function bodies
 - [ ] Class instance method invocation
 - [ ] Class static function invocation

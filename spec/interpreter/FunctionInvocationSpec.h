@@ -255,8 +255,39 @@ go_bandit([](){
         });
 
         // Required for class() function:
-        xit("can invoke a void native function with full SkyScriptNode body", [&](){
+        it("can invoke a void native function with full SkyScriptNode body", [&](){
+            std::vector<std::string> receivedVariables;
+            auto context = ContextImpl();
+            NativeFunctions::GetSingleton().RegisterFunction("passCustomParams", [&receivedVariables](FunctionInvocationParams& params){
+                auto& rightHandSide = params.Expression().GetSingleValue();
+                if (rightHandSide.IsValue()) {
+                    receivedVariables.emplace_back(std::format("Passed value '{}'", rightHandSide.GetStringValue()));
+                } else if (rightHandSide.IsArray()) {
+                    receivedVariables.emplace_back(std::format("Passed array '{}'", rightHandSide.toString()));
+                } else if (rightHandSide.IsMap()) {
+                    receivedVariables.emplace_back(std::format("Passed map '{}'", rightHandSide.toString()));
+                }
+                return FunctionInvocationResponse::ReturnVoid();
+            });
 
+            Eval(context, R"(
+- passCustomParams():
+    :native: passCustomParams
+    :custom_params:
+
+- passCustomParams: inline value
+- passCustomParams:
+  - array
+  - of
+  - values
+- passCustomParams:
+    some key: some value
+    another key: another value
+)");
+            AssertThat(receivedVariables[0], Equals("Passed value 'inline value'"));
+            AssertThat(receivedVariables[1], Equals("Passed array '- array\n- of\n- values\n'"));
+            AssertThat(receivedVariables[2], Equals("Passed map 'some key: some value\nanother key: another value\n'"));
+            AssertThat(receivedVariables.size(), Equals(3));
         });
 
         //

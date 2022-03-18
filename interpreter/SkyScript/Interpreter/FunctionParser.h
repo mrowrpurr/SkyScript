@@ -25,6 +25,9 @@ namespace SkyScript::Interpreter::FunctionParser {
     bool GetIsNative(SkyScriptNode& map) {
         return map.ContainsKey(":native") || map.ContainsKey(":native:");
     }
+    bool GetUsesCustomParameters(SkyScriptNode& map) {
+        return map.ContainsKey(":custom_params") || map.ContainsKey(":custom_params:");
+    }
     std::string GetNativeFunctionName(SkyScriptNode& map) {
         if (map.ContainsKey(":native")) {
             return map[":native"].GetStringValue();
@@ -90,6 +93,7 @@ namespace SkyScript::Interpreter::FunctionParser {
         if (map.IsMap()) {
             functionInfo.SetDocString(GetDocString(map));
             functionInfo.SetIsNative(GetIsNative(map));
+            functionInfo.SetUsesCustomParameters(GetUsesCustomParameters(map));
             functionInfo.SetNativeFunctionName(GetNativeFunctionName(map));
             AddParametersToFunction(functionInfo, map);
         }
