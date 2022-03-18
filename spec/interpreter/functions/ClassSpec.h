@@ -2,28 +2,30 @@
 
 #include "../specHelper.h"
 
+#include <SkyScript/Interpreter/Functions/Class.h>
+
 go_bandit([](){
     describe("class() definition", []() {
-        before_each([&](){
-
-        });
-        after_each([&](){
-            NativeFunctions::GetSingleton().Clear();
-        });
-        xit("can define a type with a name", [&](){
+        before_each([&](){ SkyScript::Interpreter::Functions::Class::Register(); });
+        after_each([&](){ NativeFunctions::GetSingleton().Clear(); });
+        it("can define a type with a name", [&](){
             auto context = ContextImpl();
-//            NativeFunctions::GetSingleton().RegisterFunction("gimmeVariableFn", [&receivedVariables](FunctionInvocationParams& params){
-//                for (const auto& paramName : params.ParamNames()) {
-//                    receivedVariables.emplace_back(std::format("Received parameter {} of type {} and value '{}'", paramName, params.TypeName(paramName), params.GetText(paramName)));
-//                }
-//                return FunctionInvocationResponse::ReturnVoid();
-//            });
+            AssertThat(context.TypeCount(), Equals(0));
 
             Eval(context, R"(
+# TODO move this into a helper :)
+- class():
+    :native: stdlib::class
+    :custom_params:
 
+- class:
+    :name: Dog
 )");
+            AssertThat(context.TypeCount(), Equals(1));
+            AssertThat(context.TypeExists("Dog"), IsTrue());
+            AssertThat(context.GetTypeInfo("Dog").GetFullName(), Equals("::Dog"));
         });
-        xit("can define a type with a name and description", [&](){});
+        xit("can define a type with a name, namespace, and description", [&](){});
         xit("can define a type with fields", [&](){});
         xit("can define public or private fields", [&](){});
         xit("can define a type with instance methods", [&](){});
