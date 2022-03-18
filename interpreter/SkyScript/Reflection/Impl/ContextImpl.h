@@ -26,11 +26,10 @@ namespace SkyScript::Reflection::Impl {
         // THEN TypesSpec with functions and fields (and properties later) (and constructors etc)
 
         // Types storage
-        // TODO!!!! MAKE THIS BUT FOR TYPES :) for full name w/ namespace and simple name lookup :)
-//        std::atomic<int> _functionIdCounter{};
-//        std::unordered_map<int64_t, FunctionInfoImpl> _functionsById;
-//        std::unordered_map<std::string, int64_t> _functionIdByName;
-//        std::unordered_map<std::string, int64_t> _functionIdByFullName;
+        std::atomic<int> _typeIdCounter{};
+        std::unordered_map<int64_t, TypeImpl> _typesById;
+        std::unordered_map<std::string, int64_t> _typeIdByName;
+        std::unordered_map<std::string, int64_t> _typeIdByFullName;
 
         // Evaluation error
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> _error;
@@ -53,8 +52,8 @@ namespace SkyScript::Reflection::Impl {
         bool VariableExists(const std::string& variableName) override { return _variables.contains(variableName); }
         Variable& GetVariable(const std::string& variableName) override { return _variables[variableName]; }
 
-        size_t TypeCount() override { return 0; }
-        bool TypeExists(const std::string&) override { return false; }
+        size_t TypeCount() override { return _typesById.size(); }
+        bool TypeExists(const std::string& name) override { return _typeIdByName.contains(name) || _typeIdByFullName.contains(name); }
 
         bool HasError() override { return _error.has_value(); }
         std::optional<SkyScript::Reflection::Exceptions::EvaluationError> GetError() override { return _error; }
@@ -66,6 +65,16 @@ namespace SkyScript::Reflection::Impl {
                 return _functionsById[_functionIdByName[functionName]];
             } else {
                 throw SkyScript::Reflection::Exceptions::FunctionNotFoundException(functionName);
+            }
+        }
+
+        SkyScript::Reflection::Type& GetTypeInfo(const std::string& typeName) override {
+            if (_typeIdByFullName.contains(typeName)) {
+                return _typesById[_typeIdByFullName[typeName]];
+            } else if (_typeIdByName.contains(typeName)) {
+                return _typesById[_typeIdByName[typeName]];
+            } else {
+                throw SkyScript::Reflection::Exceptions::TypeNotFoundException(typeName);
             }
         }
 
@@ -88,8 +97,13 @@ namespace SkyScript::Reflection::Impl {
             _variables.insert_or_assign(var.GetName(), var);
         }
 
-//        void AddType(TypeImpl type) {
-//            _types.insert_or_assign(type.GetName(), var);
-//        }
+        void AddType(TypeImpl info) {
+            spdlog::info("Declare type {}::{}()", info.GetNamespace(), info.GetName());
+
+            auto id = _typeIdCounter++;
+            _typesById.insert_or_assign(id, info);
+            _typeIdByName.insert_or_assign(info.GetName(), id);
+            _typeIdByFullName.insert_or_assign(info.GetFullName(), id);
+        }
     };
 }

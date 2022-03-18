@@ -20,5 +20,6 @@ namespace SkyScript::Reflection::Impl {
 
         std::string GetName() override { return _name; }
         std::string GetNamespace() override { return _namespace; }
+        std::string GetFullName() override { return _namespace + "::" + _name; }
     };
 }

@@ -4,6 +4,7 @@
 
 namespace SkyScript::Reflection {
 
+    // TODO - Rename to VariableInfo
     class Variable {
     public:
         virtual std::string GetName() = 0;

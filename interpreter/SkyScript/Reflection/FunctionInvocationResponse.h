@@ -23,9 +23,7 @@ namespace SkyScript::Reflection {
     public:
         FunctionInvocationResponse() = default;
 
-        static FunctionInvocationResponse ReturnVoid() {
-            return *FunctionInvocationResponse().SetVoid();
-        }
+        static FunctionInvocationResponse ReturnVoid() { return *FunctionInvocationResponse().SetVoid(); }
 
         static FunctionInvocationResponse ReturnFunctionNotFound() {
             return *FunctionInvocationResponse().SetFunctionNotFound();

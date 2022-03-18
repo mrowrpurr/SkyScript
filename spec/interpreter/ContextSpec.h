@@ -36,12 +36,30 @@ go_bandit([](){
             AssertThat(context.VariableCount(), Equals(1));
             AssertThat(context.VariableExists("foo"), IsTrue());
         });
-        xit("has types", [&](){});
+        it("has types", [&](){
+            auto type = TypeImpl("animals", "Dog");
+
+            auto context = ContextImpl();
+            AssertThat(context.TypeCount(), Equals(0));
+            AssertThat(context.TypeExists("Dog"), IsFalse());
+            AssertThat(context.TypeExists("animals::Dog"), IsFalse());
+
+            context.AddType(type);
+
+            AssertThat(context.TypeCount(), Equals(1));
+            AssertThat(context.TypeExists("Dog"), IsTrue());
+            AssertThat(context.TypeExists("animals::Dog"), IsTrue());
+            AssertThat(context.GetTypeInfo("Dog").GetFullName(), Equals("animals::Dog"));
+        });
         it("GetFunctionInfo() throws an exception when not found", [&](){
             auto functionName = "This Does Not Exist!";
             auto context = ContextImpl();
             AssertThrows(FunctionNotFoundException, context.GetFunctionInfo(functionName));
             AssertThat(LastException<FunctionNotFoundException>().what(), Is().Containing("Function not found 'This Does Not Exist!'"));
         });
+        it("can have parent context(s)", [&](){});
+        xit("function lookup traverses parent contexts", [&](){});
+        xit("variable lookup traverses parent contexts", [&](){});
+        xit("type lookup traverses parent contexts", [&](){});
     });
 });
