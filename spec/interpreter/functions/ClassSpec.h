@@ -6,18 +6,21 @@
 
 go_bandit([](){
     describe("class() definition", []() {
-        before_each([&](){ SkyScript::Interpreter::Functions::Class::Register(); });
-        after_each([&](){ NativeFunctions::GetSingleton().Clear(); });
-        it("can define a type with a name", [&](){
-            auto context = ContextImpl();
-            AssertThat(context.TypeCount(), Equals(0));
-
+        ContextImpl context;
+        before_each([&context](){
+            SkyScript::Interpreter::Functions::Class::Register();
+            context.Reset();
             Eval(context, R"(
-# TODO move this into a helper :)
 - class():
     :native: stdlib::class
     :custom_params:
+)");
+        });
+        after_each([&](){ NativeFunctions::GetSingleton().Clear(); });
+        it("can define a type with a name", [&context](){
+            AssertThat(context.TypeCount(), Equals(0));
 
+            Eval(context, R"(
 - class:
     :name: Dog
 )");
@@ -25,16 +28,10 @@ go_bandit([](){
             AssertThat(context.TypeExists("Dog"), IsTrue());
             AssertThat(context.GetTypeInfo("Dog").GetFullName(), Equals("::Dog"));
         });
-        it("can define a type with a name, namespace, and description", [&](){
-            auto context = ContextImpl();
+        it("can define a type with a name, namespace, and description", [&context](){
             AssertThat(context.TypeCount(), Equals(0));
 
             Eval(context, R"(
-# TODO move this into a helper :)
-- class():
-    :native: stdlib::class
-    :custom_params:
-
 - class:
     :name: Dog
     :namespace: animals
@@ -49,7 +46,9 @@ go_bandit([](){
             AssertThat(type.GetFullName(), Equals("animals::Dog"));
             AssertThat(type.GetDocString(), Equals("Represents a dawg!"));
         });
-        xit("can define a type with fields", [&](){});
+        xit("can define a type with fields", [&](){
+
+        });
         xit("can define public or private fields", [&](){});
         xit("can define a type with instance methods", [&](){});
         xit("can define public or private instance methods", [&](){});

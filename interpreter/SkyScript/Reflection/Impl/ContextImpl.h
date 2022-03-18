@@ -45,6 +45,18 @@ namespace SkyScript::Reflection::Impl {
             _variables = context._variables;
         }
 
+        void Reset() {
+            _functionIdCounter.exchange(0);
+            _functionsById.clear();
+            _functionIdByName.clear();
+            _functionIdByFullName.clear();
+            _variables.clear();
+            _typeIdCounter.exchange(0);
+            _typesById.clear();
+            _typeIdByName.clear();
+            _typeIdByFullName.clear();
+        }
+
         size_t FunctionCount() override { return _functionsById.size(); }
         bool FunctionExists(const std::string& name) override { return _functionIdByName.contains(name) || _functionIdByFullName.contains(name); }
 
