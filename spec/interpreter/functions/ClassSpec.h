@@ -25,7 +25,30 @@ go_bandit([](){
             AssertThat(context.TypeExists("Dog"), IsTrue());
             AssertThat(context.GetTypeInfo("Dog").GetFullName(), Equals("::Dog"));
         });
-        xit("can define a type with a name, namespace, and description", [&](){});
+        it("can define a type with a name, namespace, and description", [&](){
+            auto context = ContextImpl();
+            AssertThat(context.TypeCount(), Equals(0));
+
+            Eval(context, R"(
+# TODO move this into a helper :)
+- class():
+    :native: stdlib::class
+    :custom_params:
+
+- class:
+    :name: Dog
+    :namespace: animals
+    :: Represents a dawg!
+)");
+            AssertThat(context.TypeCount(), Equals(1));
+            AssertThat(context.TypeExists("Dog"), IsTrue());
+
+            auto& type = context.GetTypeInfo("Dog");
+            AssertThat(type.GetName(), Equals("Dog"));
+            AssertThat(type.GetNamespace(), Equals("animals"));
+            AssertThat(type.GetFullName(), Equals("animals::Dog"));
+            AssertThat(type.GetDocString(), Equals("Represents a dawg!"));
+        });
         xit("can define a type with fields", [&](){});
         xit("can define public or private fields", [&](){});
         xit("can define a type with instance methods", [&](){});

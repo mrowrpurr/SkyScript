@@ -17,8 +17,23 @@ namespace SkyScript::Interpreter::Functions::Class {
                 return "";
             }
         }
-        std::string GetTypeNamespace(SkyScriptNode&) {
-            return "";
+        std::string GetTypeNamespace(SkyScriptNode& def) {
+            if (def.ContainsKey(":namespace")) {
+                return def[":namespace"].GetStringValue();
+            } else if (def.ContainsKey(":namespace:")) {
+                return def[":namespace:"].GetStringValue();
+            } else {
+                return "";
+            }
+        }
+        std::string GetDocString(SkyScriptNode& def) {
+            if (def.ContainsKey(":")) {
+                return def[":"].GetStringValue();
+            } else if (def.ContainsKey(":desc:")) {
+                return def[":desc:"].GetStringValue();
+            } else {
+                return "";
+            }
         }
     }
 
@@ -29,6 +44,7 @@ namespace SkyScript::Interpreter::Functions::Class {
             auto typeName = GetTypeName(def);
             auto typeNamespace = GetTypeNamespace(def);
             auto type = TypeImpl(typeNamespace, typeName);
+            type.SetDocString(GetDocString(def));
 
             context->AddType(type);
         }
