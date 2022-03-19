@@ -3,8 +3,5 @@
 #include "MemberInfo.h"
 
 namespace SkyScript::Reflection {
-
-    class PropertyInfo : public MemberInfo {
-
-    };
+    class PropertyInfo : public MemberInfo {};
 }

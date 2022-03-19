@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SkyScript/Reflection/Impl/ContextImpl.h"
-#include "SkyScript/Reflection/Impl/VariableImpl.h"
+#include "SkyScript/Reflection/Impl/VariableInfoImpl.h"
 
 namespace SkyScript::Interpreter::Variables {
 
@@ -45,7 +45,7 @@ namespace SkyScript::Interpreter::Variables {
         } else {
             variableValue.SetValue(nodeValue.GetStringValue());
         }
-        auto variable = VariableImpl(variableName, variableType, variableValue);
+        auto variable = VariableInfoImpl(variableName, variableType, variableValue);
 
         context.AddVariable(variable);
     }

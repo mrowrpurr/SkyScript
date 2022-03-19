@@ -1,11 +1,9 @@
 #pragma once
 
-namespace SkyScript::Reflection {
+#include "InfoBase.h"
+#include "InfoWithDocString.h"
+#include "InfoWithMeta.h"
 
-    class MemberInfo {
-    public:
-        virtual std::string GetName() = 0;
-        virtual std::string GetDocString() = 0;
-        virtual std::string GetTypeName() = 0;
-    };
+namespace SkyScript::Reflection {
+    class MemberInfo : InfoBase, InfoWithDocString, InfoWithMeta {};
 }

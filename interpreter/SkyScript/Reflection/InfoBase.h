@@ -1,13 +1,12 @@
 #pragma once
 
-#include "TypedValue.h"
+#include <string>
 
 namespace SkyScript::Reflection {
 
-    class Variable {
+    class InfoBase {
     public:
         virtual std::string GetName() = 0;
         virtual std::string GetTypeName() = 0;
-        virtual TypedValue& GetTypedValue() = 0;
     };
 }

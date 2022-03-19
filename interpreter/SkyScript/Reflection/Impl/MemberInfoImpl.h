@@ -4,22 +4,10 @@
 
 #include "SkyScript/Reflection/MemberInfo.h"
 
+#include "InfoBaseImpl.h"
+#include "InfoWithDocStringImpl.h"
+#include "InfoWithMetaImpl.h"
+
 namespace SkyScript::Reflection::Impl {
-
-    class MemberInfoImpl : public MemberInfo {
-    protected:
-        std::string _name;
-        std::string _docString;
-        std::string _typeName;
-
-    public:
-        std::string GetName() override { return _name; }
-        std::string GetDocString() override { return _docString; }
-        std::string GetTypeName() override { return _typeName; }
-
-        ///////////////////////////////////////////////
-        // Private Non-Virtual Override Functions Below
-        ///////////////////////////////////////////////
-
-    };
+    class MemberInfoImpl : public MemberInfo, public InfoBaseImpl, public InfoWithDocStringImpl, public InfoWithMetaImpl {};
 }

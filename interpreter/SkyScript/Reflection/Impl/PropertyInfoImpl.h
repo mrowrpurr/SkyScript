@@ -1,23 +1,21 @@
 #pragma once
 
-#include <utility>
-
 #include "SkyScript/Reflection/PropertyInfo.h"
-#include "SkyScript/Reflection/Impl/MemberInfoImpl.h"
 
 namespace SkyScript::Reflection::Impl {
-
     class PropertyInfoImpl : public PropertyInfo, public MemberInfoImpl {
     public:
-        PropertyInfoImpl() = default;
+        // Info Base
+        std::string GetName() override { return InfoBaseImpl::GetName(); }
+        std::string GetTypeName() override { return InfoBaseImpl::GetTypeName(); }
 
-        std::string GetName() override { return MemberInfoImpl::GetName(); }
-        std::string GetDocString() override { return MemberInfoImpl::GetDocString(); }
-        std::string GetTypeName() override { return MemberInfoImpl::GetTypeName(); }
+        // With Doc String
+        std::string GetDocString() override { return InfoWithDocStringImpl::GetDocString(); }
 
-        ///////////////////////////////////////////////
-        // Private Non-Virtual Override Functions Below
-        ///////////////////////////////////////////////
-
+        // With Meta
+        std::span<std::string> GetMetaKeys() override { return InfoWithMetaImpl::GetMetaKeys(); }
+        bool HasMetaKey(const std::string& key) override { return InfoWithMetaImpl::HasMetaKey(key); }
+        bool HasMetaValue(const std::string& key) override { return InfoWithMetaImpl::HasMetaValue(key); };
+        std::optional<std::string> GetMetaValue(const std::string& key) override { return InfoWithMetaImpl::GetMetaValue(key); }
     };
 }

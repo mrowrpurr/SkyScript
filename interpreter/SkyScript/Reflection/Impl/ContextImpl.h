@@ -7,7 +7,7 @@
 #include "SkyScript/Reflection/FunctionInfo.h"
 #include "SkyScript/Reflection/Impl/FunctionInfoImpl.h"
 #include "SkyScript/Reflection/Impl/TypeInfoImpl.h"
-#include "SkyScript/Reflection/Impl/VariableImpl.h"
+#include "SkyScript/Reflection/Impl/VariableInfoImpl.h"
 
 using namespace SkyScript::Reflection::Impl;
 
@@ -21,9 +21,7 @@ namespace SkyScript::Reflection::Impl {
         std::unordered_map<std::string, int64_t> _functionIdByFullName;
 
         // Variable storage
-        std::unordered_map<std::string, VariableImpl> _variables;
-
-        // THEN TypesSpec with functions and fields (and properties later) (and constructors etc)
+        std::unordered_map<std::string, VariableInfoImpl> _variables;
 
         // Types storage
         std::atomic<int> _typeIdCounter{};
@@ -62,7 +60,7 @@ namespace SkyScript::Reflection::Impl {
 
         size_t VariableCount() override { return _variables.size(); }
         bool VariableExists(const std::string& variableName) override { return _variables.contains(variableName); }
-        Variable& GetVariable(const std::string& variableName) override { return _variables[variableName]; }
+        VariableInfo& GetVariable(const std::string& variableName) override { return _variables[variableName]; }
 
         size_t TypeCount() override { return _typesById.size(); }
         bool TypeExists(const std::string& name) override { return _typeIdByName.contains(name) || _typeIdByFullName.contains(name); }
@@ -105,7 +103,7 @@ namespace SkyScript::Reflection::Impl {
             _functionIdByFullName.insert_or_assign(info.GetFullName(), id);
         }
 
-        void AddVariable(VariableImpl var) {
+        void AddVariable(VariableInfoImpl var) {
             _variables.insert_or_assign(var.GetName(), var);
         }
 
